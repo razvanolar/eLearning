@@ -1,8 +1,9 @@
 ELearning.iml
-Workspace.xml
+workspace.xml
 misc.xml
 gwt_user.xml
 .idea/workspace.xml
+/.idea/*
 *.project
 *.classpath
 *.class
