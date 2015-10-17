@@ -106,7 +106,7 @@ public class ELearningApp implements EntryPoint {
     subMenuItem2.add(new MenuItem("helloworld.txt"));
 
     MenuItem subMenuNew = new MenuItem("New");
-    MenuItem subMenuFile = new MenuItem("Open File");
+    MenuItem subMenuFile = new MenuItem("Open Files");
     subMenuFile.setSubMenu(subMenuItem2);
 
     Menu menuFile = new Menu();
