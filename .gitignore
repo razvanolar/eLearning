@@ -7,4 +7,3 @@ gwt_user.xml
 *.classpath
 *.class
 war
-war/*
