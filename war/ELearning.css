@@ -1,0 +1,25 @@
+/** Add css rules here for your application. */
+
+.mainContainer {
+  background-color: #6699ee;
+}
+
+.logo {
+  background-color: #2062B8;
+}
+
+.logoRight {
+  background-color: darkslategrey;
+}
+
+.cp {
+  background-color: #424242;
+}
+
+.portlet {
+  background-color: #424242;
+}
+
+.defaultBg {
+  background-color: #424242;
+}

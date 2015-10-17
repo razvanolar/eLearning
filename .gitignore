@@ -6,4 +6,9 @@ gwt_user.xml
 *.project
 *.classpath
 *.class
-war
+war/elearnig/*
+war/WEB-INF/classes/*
+war/WEB-INF/deploy/*
+war/WEB-INF/lib/*
+war/WEB-INF/appengine-web.xml
+war/WEB-INF/logging.properties
