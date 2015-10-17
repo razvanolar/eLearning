@@ -1,0 +1,10 @@
+ELearning.iml
+Workspace.xml
+misc.xml
+gwt_user.xml
+.idea/workspace.xml
+*.project
+*.classpath
+*.class
+war
+war/*
