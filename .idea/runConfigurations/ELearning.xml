@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ELearning" type="GWT.ConfigurationType" factoryName="GWT Configuration">
+    <module name="ELearning" />
+    <option name="RUN_PAGE" value="ELearning.html" />
+    <option name="START_JAVASCRIPT_DEBUGGER" value="true" />
+    <option name="USE_SUPER_DEV_MODE" value="true" />
+    <method />
+  </configuration>
+</component>
