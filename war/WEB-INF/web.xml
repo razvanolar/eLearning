@@ -4,7 +4,16 @@
     "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
-  <!-- Servlets -->
+
+    <!-- Servlets -->
+    <servlet>
+        <servlet-name>com.google.gwt.sample.elearning.ELearning LoginService</servlet-name>
+        <servlet-class>com.google.gwt.sample.elearning.server.LoginServiceImpl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>com.google.gwt.sample.elearning.ELearning LoginService</servlet-name>
+        <url-pattern>/elearning/LoginService</url-pattern>
+    </servlet-mapping>
 
   <!-- Default page to serve -->
   <welcome-file-list>

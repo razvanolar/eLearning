@@ -3,13 +3,22 @@ package com.google.gwt.sample.elearning.client;
 import java.util.Date;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.sample.elearning.client.services.LoginService;
+import com.google.gwt.sample.elearning.client.services.LoginServiceAsync;
+import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.ContentPanel;
+import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.*;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.menu.Item;
 import com.sencha.gxt.widget.core.client.menu.MenuBar;
 import com.sencha.gxt.widget.core.client.menu.MenuBarItem;
@@ -32,8 +41,60 @@ public class ELearningApp implements EntryPoint {
   private VerticalLayoutContainer mainContainer;
   private HorizontalLayoutContainer logoPanel;
 
+  private static LoginServiceAsync loginService = GWT.create(LoginService.class);
+
   /*Entry point method*/
   public void onModuleLoad() {
+    String sessionID = Cookies.getCookie("sid");
+    if(sessionID == null)
+      displayLoginWindow();
+    else
+      displayWindow();
+  }
+
+  private long sID = 0;
+  private void displayLoginWindow() {
+    Viewport viewport = new Viewport();
+    mainContainer = new VerticalLayoutContainer();
+
+    final TextField textField = new TextField();
+    TextButton btn = new TextButton("Login");
+
+    mainContainer.add(textField, new VerticalLayoutContainer.VerticalLayoutData(-1, -1));
+    mainContainer.add(btn, new VerticalLayoutContainer.VerticalLayoutData(-1, -1));
+
+    btn.addSelectHandler(new SelectEvent.SelectHandler() {
+      @Override
+      public void onSelect(SelectEvent event) {
+        String user = textField.getValue();
+        if(user != null) {
+          loginService.loginServer(user, "pwd", new AsyncCallback<String>() {
+            @Override
+            public void onFailure(Throwable caught) {
+              Window.alert("Access denied!");
+            }
+
+            @Override
+            public void onSuccess(String result) {
+              RootPanel.get("stockList").clear();
+              displayWindow();
+
+              String sessionID = "sessionID" + sID;
+              sID++;
+              final long DURATION = 1000 * 60;// * 60 * 24 * 1;
+              Date expires = new Date(System.currentTimeMillis() + DURATION);
+              Cookies.setCookie("sid", sessionID, expires, null, "/", false);
+            }
+          });
+        }
+      }
+    });
+
+    viewport.add(mainContainer);
+    RootPanel.get("stockList").add(viewport);
+  }
+
+  private void displayWindow() {
     Viewport viewport = new Viewport();
     mainContainer = new VerticalLayoutContainer();
     mainContainer.addStyleName("mainContainer");
