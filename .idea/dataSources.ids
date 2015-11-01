@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="MySQL - testdb@localhost" uuid="8fdf5314-59dc-42ba-8032-c28b24e3d5bd">
+    <database-info product="MySQL" version="5.7.9-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
+    <schema name="" catalog="testdb"/>
+    <table name="cursuri" schema="" catalog="testdb" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="denumire" sqlType="VARCHAR" precision="100" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ref_profesor" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="cursuri_ibfk_1" columns="ref_profesor" ref-table="utilizatori" ref-schema="" ref-catalog="testdb" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="studenti_inscrisi_ibfk_2" table="studenti_inscrisi" schema="" catalog="testdb" columns="ref_curs"/>
+      <exported-key name="teme_ibfk_1" table="teme" schema="" catalog="testdb" columns="ref_curs"/>
+      <exported-key name="teste_ibfk_1" table="teste" schema="" catalog="testdb" columns="ref_curs"/>
+    </table>
+    <table name="numere_matricole" schema="" catalog="testdb" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="ref_student" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="nr_matricol" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="numere_matricole_ibfk_1" columns="ref_student" ref-table="utilizatori" ref-schema="" ref-catalog="testdb" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="nr_matricol" unique="true" columns="nr_matricol"/>
+    </table>
+    <table name="studenti_inscrisi" schema="" catalog="testdb" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="ref_student" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="ref_curs" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="studenti_inscrisi_ibfk_1" columns="ref_student" ref-table="utilizatori" ref-schema="" ref-catalog="testdb" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="studenti_inscrisi_ibfk_2" columns="ref_curs" ref-table="cursuri" ref-schema="" ref-catalog="testdb" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+    </table>
+    <table name="teme" schema="" catalog="testdb" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="denumire" sqlType="VARCHAR" precision="100" scale="0" nullable="true" jdbcType="12"/>
+      <column name="timp_start" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <column name="timp_sfarsit" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <column name="ref_curs" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="teme_ibfk_1" columns="ref_curs" ref-table="cursuri" ref-schema="" ref-catalog="testdb" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+    </table>
+    <table name="teste" schema="" catalog="testdb" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="denumire" sqlType="VARCHAR" precision="100" scale="0" nullable="true" jdbcType="12"/>
+      <column name="timp_start" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <column name="timp_sfarsit" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <column name="ref_curs" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="teste_ibfk_1" columns="ref_curs" ref-table="cursuri" ref-schema="" ref-catalog="testdb" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+    </table>
+    <table name="utilizatori" schema="" catalog="testdb" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="userId" sqlType="VARCHAR" precision="100" scale="0" nullable="true" jdbcType="12"/>
+      <column name="parola" sqlType="VARCHAR" precision="100" scale="0" nullable="true" jdbcType="12"/>
+      <column name="nume" sqlType="VARCHAR" precision="100" scale="0" nullable="true" jdbcType="12"/>
+      <column name="prenume" sqlType="VARCHAR" precision="100" scale="0" nullable="true" jdbcType="12"/>
+      <column name="email" sqlType="VARCHAR" precision="40" scale="0" nullable="true" jdbcType="12"/>
+      <column name="rol" sqlType="VARCHAR" precision="10" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <exported-key name="cursuri_ibfk_1" table="cursuri" schema="" catalog="testdb" columns="ref_profesor"/>
+      <exported-key name="numere_matricole_ibfk_1" table="numere_matricole" schema="" catalog="testdb" columns="ref_student"/>
+      <exported-key name="studenti_inscrisi_ibfk_1" table="studenti_inscrisi" schema="" catalog="testdb" columns="ref_student"/>
+      <index name="userId" unique="true" columns="userId"/>
+    </table>
+    <procedure name="addTestData" schema="" catalog="testdb" type="1"/>
+  </data-source>
+</component>
