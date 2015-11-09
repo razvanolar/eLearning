@@ -1,4 +1,4 @@
-package com.google.gwt.sample.elearning.server;
+package com.google.gwt.sample.elearning.server.JDBC;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
