@@ -1,8 +1,8 @@
 package com.google.gwt.sample.elearning.tests.jdbctests;
 
 import com.google.gwt.sample.elearning.server.JDBC.JDBCUtil;
-import org.junit.Before;
-import org.junit.Test;
+//import org.junit.Before;
+//import org.junit.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -14,12 +14,12 @@ public class JDBCUtilTests {
 
     private Connection dbConnection;
 
-    @Before
+//    @Before
     public void build() {
         dbConnection = JDBCUtil.getDbConnection();
     }
 
-    @Test
+//    @Test
     public void testGetDBConnection() {
         try{
             dbConnection.isValid(10);
