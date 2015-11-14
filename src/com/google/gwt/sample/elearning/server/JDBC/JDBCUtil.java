@@ -1,5 +1,7 @@
 package com.google.gwt.sample.elearning.server.JDBC;
 
+import com.google.gwt.sample.elearning.shared.ELearningException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -8,12 +10,13 @@ import java.sql.SQLException;
  * Created by Horea on 01/11/2015.
  */
 public class JDBCUtil {
-    public static Connection getDbConnection() {
+    public static Connection getDbConnection() throws ELearningException {
         try {
-            return DriverManager.getConnection("jdbc:mysql://localhost:3306/testdb", "elearn", "admin");
-        } catch (SQLException e) {
-            e.printStackTrace();
+            Class.forName("com.mysql.jdbc.Driver");
+            return DriverManager.getConnection("jdbc:mysql://localhost/testdb", "elearn", "test");
+        } catch (SQLException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+            throw new ELearningException(ex);
         }
-        return null;
     }
 }

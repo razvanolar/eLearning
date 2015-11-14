@@ -1,25 +1,19 @@
 /** Add css rules here for your application. */
 
-.mainContainer {
+.headerPanel {
+  background-color: #2a6292;
+  border-bottom: 2px dotted gray;
+}
+
+.headerButtonsPanel {
+  background-color: #2d72a5;
+}
+
+.mainELearningContainer {
   background-color: #6699ee;
 }
 
-.logo {
-  background-color: #2062B8;
-}
-
-.logoRight {
-  background-color: darkslategrey;
-}
-
-.cp {
-  background-color: #424242;
-}
-
-.portlet {
-  background-color: #424242;
-}
-
-.defaultBg {
-  background-color: #424242;
+/*ProfileBarView*/
+.buttonsToolbar {
+  background-color: #2a6292;
 }

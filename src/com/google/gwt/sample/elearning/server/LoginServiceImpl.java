@@ -18,7 +18,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
   private static final String USER = "user";
 
   @Override
-  public String loginServer(String user, String pwd) throws ELearningException{
+  public String loginServer(String user, String pwd) throws ELearningException {
     UserJDBCImpl userJDBC = new UserJDBCImpl();
     userJDBC.getLoginData(user,pwd);
     storeUserInSession(user);

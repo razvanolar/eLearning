@@ -15,7 +15,11 @@ public class AuthenticationServiceTests {
 
     @Before
     public void build() {
-        userJDBC = new UserJDBCImpl();
+        try {
+            userJDBC = new UserJDBCImpl();
+        } catch (ELearningException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test

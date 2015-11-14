@@ -15,7 +15,7 @@ import java.sql.SQLException;
 public class UserJDBCImpl {
   Connection dbConnection;
 
-  public UserJDBCImpl() {
+  public UserJDBCImpl() throws ELearningException {
     dbConnection = JDBCUtil.getDbConnection();
   }
 

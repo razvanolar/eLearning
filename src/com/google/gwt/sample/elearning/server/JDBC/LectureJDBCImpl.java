@@ -1,5 +1,7 @@
 package com.google.gwt.sample.elearning.server.JDBC;
 
+import com.google.gwt.sample.elearning.shared.ELearningException;
+
 import java.sql.Connection;
 
 /**
@@ -9,6 +11,10 @@ public class LectureJDBCImpl {
     Connection dbConnection;
 
     public LectureJDBCImpl() {
-        dbConnection = JDBCUtil.getDbConnection();
+        try {
+            dbConnection = JDBCUtil.getDbConnection();
+        } catch (ELearningException e) {
+            e.printStackTrace();
+        }
     }
 }

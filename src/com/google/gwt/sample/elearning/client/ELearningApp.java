@@ -11,9 +11,9 @@ import com.google.gwt.sample.elearning.client.services.LoginServiceAsync;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
+import com.sencha.gxt.core.client.util.Margins;
+import com.sencha.gxt.core.client.util.Padding;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.*;
@@ -45,11 +45,36 @@ public class ELearningApp implements EntryPoint {
 
   /*Entry point method*/
   public void onModuleLoad() {
-    String sessionID = Cookies.getCookie("sid");
-    if(sessionID == null)
-      displayLoginWindow();
-    else
-      displayWindow();
+    Viewport viewport = new Viewport();
+    RootPanel.get("eLearning").add(viewport);
+
+    CenterLayoutContainer centerPanel = new CenterLayoutContainer();
+
+    BoxLayoutContainer.BoxLayoutData flex = new BoxLayoutContainer.BoxLayoutData(new Margins(0, 5, 0, 0));
+    BoxLayoutContainer.BoxLayoutData flex2 = new BoxLayoutContainer.BoxLayoutData(new Margins(0, 5, 0, 0));
+    flex.setFlex(1);
+    flex2.setFlex(3);
+    HBoxLayoutContainer northPanel = new HBoxLayoutContainer();
+    HBoxLayoutContainer buttonsPanel = new HBoxLayoutContainer();
+    northPanel.setHBoxLayoutAlign(HBoxLayoutContainer.HBoxLayoutAlign.MIDDLE);
+    northPanel.setStyleName("headerPanel");
+    buttonsPanel.setHBoxLayoutAlign(HBoxLayoutContainer.HBoxLayoutAlign.MIDDLE);
+    buttonsPanel.setPack(BoxLayoutContainer.BoxLayoutPack.END);
+//    buttonsPanel.setStyleName("headerButtonsPanel");
+    buttonsPanel.setHeight(40);
+    buttonsPanel.setPadding(new Padding(0, 10, 0, 0));
+
+    northPanel.add(new Image(ELearningController.ICONS.logo()), flex);
+    northPanel.add(buttonsPanel, flex2);
+
+    BorderLayoutContainer mainELearningContainer = new BorderLayoutContainer();
+    mainELearningContainer.setNorthWidget(northPanel, new BorderLayoutContainer.BorderLayoutData(50));
+    mainELearningContainer.setCenterWidget(centerPanel);
+
+    mainELearningContainer.setStyleName("mainELearningContainer");
+    viewport.add(mainELearningContainer);
+    ELearningController.getInstance().setViews(mainELearningContainer, buttonsPanel);
+    ELearningController.getInstance().run();
   }
 
   private long sID = 0;
