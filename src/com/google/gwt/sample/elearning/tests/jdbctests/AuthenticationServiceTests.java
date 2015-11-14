@@ -2,8 +2,8 @@ package com.google.gwt.sample.elearning.tests.jdbctests;
 
 import com.google.gwt.sample.elearning.server.IncorrectLoginException;
 import com.google.gwt.sample.elearning.server.JDBC.UserJDBCImpl;
-import com.google.gwt.sample.elearning.server.LoginData;
 import com.google.gwt.sample.elearning.shared.ELearningException;
+import com.google.gwt.sample.elearning.shared.UserData;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,10 +26,10 @@ public class AuthenticationServiceTests {
     public void testAuthenticateAdmin(){
         String user = "admin";
         String pass = "admin";
-        LoginData loginData = null;
+        UserData userData = null;
         try {
-            loginData = userJDBC.getLoginData(user, pass);
-            assert loginData.getUserId().equals(user) && loginData.getPassword().equals(pass);
+            userData = userJDBC.getUserData(user, pass);
+            assert userData.getUserId().equals(user) && userData.getPassword().equals(pass);
         } catch (ELearningException e) {
             e.printStackTrace();
         }
@@ -40,8 +40,8 @@ public class AuthenticationServiceTests {
         String user = "prof";
         String pass = "prof";
         try {
-            LoginData loginData = userJDBC.getLoginData(user, pass);
-            assert loginData.getUserId().equals(user) && loginData.getPassword().equals(pass);
+            UserData userData = userJDBC.getUserData(user, pass);
+            assert userData.getUserId().equals(user) && userData.getPassword().equals(pass);
         } catch (ELearningException e) {
             e.printStackTrace();
         }
@@ -52,8 +52,8 @@ public class AuthenticationServiceTests {
         String user = "abir1234";
         String pass = "student";
         try {
-            LoginData loginData = userJDBC.getLoginData(user, pass);
-            assert loginData.getUserId().equals(user) && loginData.getPassword().equals(pass);
+            UserData userData = userJDBC.getUserData(user, pass);
+            assert userData.getUserId().equals(user) && userData.getPassword().equals(pass);
         } catch (ELearningException e) {
             e.printStackTrace();
         }
@@ -64,7 +64,7 @@ public class AuthenticationServiceTests {
         String user = "abir1234";
         String pass = "wrongPass";
         try {
-            LoginData loginData = userJDBC.getLoginData(user, pass);
+            UserData userData = userJDBC.getUserData(user, pass);
         } catch (ELearningException e) {
             e.printStackTrace();
         }

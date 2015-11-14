@@ -1,6 +1,7 @@
 package com.google.gwt.sample.elearning.client.services;
 
 import com.google.gwt.sample.elearning.shared.ELearningException;
+import com.google.gwt.sample.elearning.shared.UserData;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -10,7 +11,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("LoginService")
 public interface LoginService extends RemoteService {
 
-  String loginServer(String user, String pwd) throws ELearningException;
+  UserData loginServer(String user, String pwd) throws ELearningException;
 
   String loginFromSessionServer();
 

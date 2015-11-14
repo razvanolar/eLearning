@@ -6,32 +6,34 @@ import java.util.List;
 /**
  * Created by Horea on 14/11/2015.
  */
-public class Student extends User {
+public class Student extends UserData {
 
-    long nrMatricol;
-    List<Curs> cursuriInscrise = new ArrayList<Curs>();
+    long registrationNo;
+    List<Lecture> enrolledCourses = new ArrayList<Lecture>();
 
     public Student() {
     }
 
-    public Student(String userid, String nume, String parola, String prenume, String email, long nrMatricol) {
-        super(userid, nume, parola, prenume, email);
-        this.nrMatricol = nrMatricol;
+    public Student(String userId, String password, String firstName, String lastName, String email,
+        long registrationNo) {
+        super(userId, password, firstName, lastName, email);
+        this.registrationNo = registrationNo;
     }
 
-    public long getNrMatricol() {
-        return nrMatricol;
+
+    public long getRegistrationNo() {
+        return registrationNo;
     }
 
-    public List<Curs> getCursuriInscrise() {
-        return cursuriInscrise;
+    public List<Lecture> getEnrolledCourses() {
+        return enrolledCourses;
     }
 
-    public void addCurs(Curs curs) {
-        if(!cursuriInscrise.contains(curs)) {
-            cursuriInscrise.add(curs);
+    public void addCurs(Lecture curs) {
+        if(!enrolledCourses.contains(curs)) {
+            enrolledCourses.add(curs);
         } else {
-            throw new RuntimeException("Sunteti deja inscris la acest curs!");
+            throw new RuntimeException("You are already enrolled to this lecture!");
         }
     }
 }

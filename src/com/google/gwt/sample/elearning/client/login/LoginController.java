@@ -5,6 +5,7 @@ import com.google.gwt.sample.elearning.client.ELearningController;
 import com.google.gwt.sample.elearning.client.eLearningUtils.TextInputValidator;
 import com.google.gwt.sample.elearning.client.services.LoginService;
 import com.google.gwt.sample.elearning.client.services.LoginServiceAsync;
+import com.google.gwt.sample.elearning.shared.UserData;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
@@ -49,17 +50,17 @@ public class LoginController {
         if (TextInputValidator.isEmptySring(user) || TextInputValidator.isEmptySring(password)) {
         /* TODO : show error */
         }
-        loginService.loginServer(user, password, new AsyncCallback<String>() {
+        loginService.loginServer(user, password, new AsyncCallback<UserData>() {
           @Override
           public void onFailure(Throwable caught) {
           /* TODO : show error */
           }
 
           @Override
-          public void onSuccess(String sessionID) {
+          public void onSuccess(UserData userData) {
             final long DURATION = 1000 * 60;// * 60 * 24 * 1;
             Date expires = new Date(System.currentTimeMillis() + DURATION);
-            Cookies.setCookie("sid", sessionID, expires, null, "/", false);
+            Cookies.setCookie("sid", userData.getSessionId(), expires, null, "/", false);
 
             ELearningController.getInstance().onSuccessLogin();
           }

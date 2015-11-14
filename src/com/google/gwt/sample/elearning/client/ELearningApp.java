@@ -8,6 +8,7 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.sample.elearning.client.services.LoginService;
 import com.google.gwt.sample.elearning.client.services.LoginServiceAsync;
+import com.google.gwt.sample.elearning.shared.UserData;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -77,7 +78,6 @@ public class ELearningApp implements EntryPoint {
     ELearningController.getInstance().run();
   }
 
-  private long sID = 0;
   private void displayLoginWindow() {
     Viewport viewport = new Viewport();
     mainContainer = new VerticalLayoutContainer();
@@ -93,22 +93,20 @@ public class ELearningApp implements EntryPoint {
       public void onSelect(SelectEvent event) {
         String user = textField.getValue();
         if(user != null) {
-          loginService.loginServer(user, "pwd", new AsyncCallback<String>() {
+          loginService.loginServer(user, "pwd", new AsyncCallback<UserData>() {
             @Override
             public void onFailure(Throwable caught) {
               Window.alert("Access denied!");
             }
 
             @Override
-            public void onSuccess(String result) {
+            public void onSuccess(UserData result) {
               RootPanel.get("stockList").clear();
               displayWindow();
 
-              String sessionID = "sessionID" + sID;
-              sID++;
               final long DURATION = 1000 * 60;// * 60 * 24 * 1;
               Date expires = new Date(System.currentTimeMillis() + DURATION);
-              Cookies.setCookie("sid", sessionID, expires, null, "/", false);
+              Cookies.setCookie("sid", result.getSessionId(), expires, null, "/", false);
             }
           });
         }
