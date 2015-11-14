@@ -11,7 +11,7 @@ import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 public class ManageUsersView implements ManageUsersController.IManageUsersView {
 
   private BorderLayoutContainer mainContainer;
-  private TextButton createButton
+  private TextButton createButton;
 
   public ManageUsersView() {
     initGUI();
