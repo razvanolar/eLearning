@@ -1,10 +1,11 @@
 package com.google.gwt.sample.elearning.tests.jdbctests;
 
-import com.google.gwt.sample.elearning.shared.ELearningException;
+import com.google.gwt.sample.elearning.server.IncorrectLoginException;
 import com.google.gwt.sample.elearning.server.JDBC.UserJDBCImpl;
 import com.google.gwt.sample.elearning.server.LoginData;
-//import org.junit.Before;
-//import org.junit.Test;
+import com.google.gwt.sample.elearning.shared.ELearningException;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Created by Horea on 09/11/2015.
@@ -12,12 +13,12 @@ import com.google.gwt.sample.elearning.server.LoginData;
 public class AuthenticationServiceTests {
     private UserJDBCImpl userJDBC;
 
-//    @Before
+    @Before
     public void build() {
         userJDBC = new UserJDBCImpl();
     }
 
-//    @Test
+    @Test
     public void testAuthenticateAdmin(){
         String user = "admin";
         String pass = "admin";
@@ -30,7 +31,7 @@ public class AuthenticationServiceTests {
         }
     }
 
-//    @Test
+    @Test
     public void testAuthenticateProfessor(){
         String user = "prof";
         String pass = "prof";
@@ -42,7 +43,7 @@ public class AuthenticationServiceTests {
         }
     }
 
-//    @Test
+    @Test
     public void testAuthenticateStudent(){
         String user = "abir1234";
         String pass = "student";
@@ -54,7 +55,7 @@ public class AuthenticationServiceTests {
         }
     }
 
-//    @Test(expected = IncorrectLoginException.class)
+    @Test(expected = IncorrectLoginException.class)
     public void testAuthenticateFail(){
         String user = "abir1234";
         String pass = "wrongPass";
