@@ -2,11 +2,12 @@ package com.google.gwt.sample.elearning.shared;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-/**
+/***
  * Created by Horea on 14/11/2015.
  */
 public class UserData implements IsSerializable{
-    private String userId;
+    private long id;
+    private String username;
     private String password;
     private String firstName;
     private String lastName;
@@ -16,16 +17,20 @@ public class UserData implements IsSerializable{
     public UserData() {
     }
 
-    public UserData(String userId, String password, String firstName, String lastName, String email) {
-        this.userId = userId;
+    public UserData(String username, String password, String firstName, String lastName, String email) {
+        this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
     }
 
-    public String getUserId() {
-        return userId;
+    public long getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public String getFirstName() {

@@ -29,7 +29,7 @@ public class AuthenticationServiceTests {
         UserData userData = null;
         try {
             userData = userJDBC.getUserData(user, pass);
-            assert userData.getUserId().equals(user) && userData.getPassword().equals(pass);
+            assert userData.getUsername().equals(user) && userData.getPassword().equals(pass);
         } catch (ELearningException e) {
             e.printStackTrace();
         }
@@ -41,7 +41,7 @@ public class AuthenticationServiceTests {
         String pass = "prof";
         try {
             UserData userData = userJDBC.getUserData(user, pass);
-            assert userData.getUserId().equals(user) && userData.getPassword().equals(pass);
+            assert userData.getUsername().equals(user) && userData.getPassword().equals(pass);
         } catch (ELearningException e) {
             e.printStackTrace();
         }
@@ -53,7 +53,7 @@ public class AuthenticationServiceTests {
         String pass = "student";
         try {
             UserData userData = userJDBC.getUserData(user, pass);
-            assert userData.getUserId().equals(user) && userData.getPassword().equals(pass);
+            assert userData.getUsername().equals(user) && userData.getPassword().equals(pass);
         } catch (ELearningException e) {
             e.printStackTrace();
         }
