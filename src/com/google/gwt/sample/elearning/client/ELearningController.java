@@ -46,6 +46,7 @@ public class ELearningController {
   private void displayWindow() {
     ProfileBarController.IProfileBarView profileBarView = new ProfileBarView(true);
     profileController = new ProfileBarController(profileBarView);
+    profileController.bind();
     buttonsContainer.add(profileBarView.asWidget());
     buttonsContainer.forceLayout();
   }

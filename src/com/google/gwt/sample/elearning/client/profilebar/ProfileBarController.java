@@ -1,7 +1,11 @@
 package com.google.gwt.sample.elearning.client.profilebar;
 
+import com.google.gwt.sample.elearning.client.MasterWindow;
+import com.google.gwt.sample.elearning.client.settings.MainSettingsController;
+import com.google.gwt.sample.elearning.client.settings.MainSettingsView;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 
 /***
@@ -34,6 +38,13 @@ public class ProfileBarController {
   }
 
   private void doOnSettingsSelect() {
+    MainSettingsController.IMainSettingsView settingsView = new MainSettingsView();
 
+    MainSettingsController settingsController = new MainSettingsController(settingsView);
+    settingsController.bind();
+
+    MasterWindow window = new MasterWindow();
+    window.setContent(settingsView.asWidget());
+    window.show();
   }
 }
