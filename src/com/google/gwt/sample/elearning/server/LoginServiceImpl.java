@@ -3,6 +3,7 @@ package com.google.gwt.sample.elearning.server;
 import com.google.gwt.sample.elearning.client.services.LoginService;
 import com.google.gwt.sample.elearning.server.JDBC.UserJDBCImpl;
 import com.google.gwt.sample.elearning.shared.ELearningException;
+import com.google.gwt.sample.elearning.shared.IncorrectLoginException;
 import com.google.gwt.sample.elearning.shared.UserData;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -19,7 +20,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
   private static final String USER = "user";
 
   @Override
-  public UserData loginServer(String user, String pwd) throws ELearningException {
+  public UserData loginServer(String user, String pwd) throws ELearningException, IncorrectLoginException {
     UserJDBCImpl userJDBC = new UserJDBCImpl();
     UserData userData = userJDBC.getUserData(user, pwd);
     userData.setSessionId("sessionID" + sessionId++);

@@ -1,6 +1,6 @@
 package com.google.gwt.sample.elearning.tests.jdbctests;
 
-import com.google.gwt.sample.elearning.server.IncorrectLoginException;
+import com.google.gwt.sample.elearning.shared.IncorrectLoginException;
 import com.google.gwt.sample.elearning.server.JDBC.UserJDBCImpl;
 import com.google.gwt.sample.elearning.shared.ELearningException;
 import com.google.gwt.sample.elearning.shared.UserData;
@@ -32,6 +32,8 @@ public class AuthenticationServiceTests {
             assert userData.getUsername().equals(user) && userData.getPassword().equals(pass);
         } catch (ELearningException e) {
             e.printStackTrace();
+        } catch (IncorrectLoginException e) {
+            e.printStackTrace();
         }
     }
 
@@ -43,6 +45,8 @@ public class AuthenticationServiceTests {
             UserData userData = userJDBC.getUserData(user, pass);
             assert userData.getUsername().equals(user) && userData.getPassword().equals(pass);
         } catch (ELearningException e) {
+            e.printStackTrace();
+        } catch (IncorrectLoginException e) {
             e.printStackTrace();
         }
     }
@@ -56,6 +60,8 @@ public class AuthenticationServiceTests {
             assert userData.getUsername().equals(user) && userData.getPassword().equals(pass);
         } catch (ELearningException e) {
             e.printStackTrace();
+        } catch (IncorrectLoginException e) {
+            e.printStackTrace();
         }
     }
 
@@ -66,6 +72,8 @@ public class AuthenticationServiceTests {
         try {
             UserData userData = userJDBC.getUserData(user, pass);
         } catch (ELearningException e) {
+            e.printStackTrace();
+        } catch (IncorrectLoginException e) {
             e.printStackTrace();
         }
     }

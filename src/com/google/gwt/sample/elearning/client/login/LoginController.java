@@ -8,10 +8,13 @@ import com.google.gwt.sample.elearning.client.services.LoginServiceAsync;
 import com.google.gwt.sample.elearning.shared.UserData;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.Container;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.PasswordField;
 import com.sencha.gxt.widget.core.client.form.TextField;
 
@@ -26,6 +29,7 @@ public class LoginController {
     TextField getNameField();
     PasswordField getPasswordField();
     TextButton getLoginButton();
+    FieldLabel getLoginFailedLabel();
     Widget asWidget();
   }
 
@@ -53,7 +57,8 @@ public class LoginController {
         loginService.loginServer(user, password, new AsyncCallback<UserData>() {
           @Override
           public void onFailure(Throwable caught) {
-          /* TODO : show error */
+            view.getLoginFailedLabel().setVisible(true);
+//            view.getLoginFailedLabel().setText("Wrong user or password.");
           }
 
           @Override

@@ -2,6 +2,7 @@ package com.google.gwt.sample.elearning.server;
 
 import com.google.gwt.sample.elearning.server.JDBC.UserJDBCImpl;
 import com.google.gwt.sample.elearning.shared.ELearningException;
+import com.google.gwt.sample.elearning.shared.IncorrectLoginException;
 import com.google.gwt.sample.elearning.shared.UserData;
 
 /**
@@ -15,6 +16,8 @@ public class AuthenticationServiceImpl {
             UserData userData = userJDBC.getUserData(userId, password);
             return password.equals(userData.getPassword());
         } catch (ELearningException e) {
+            e.printStackTrace();
+        } catch (IncorrectLoginException e) {
             e.printStackTrace();
         }
         return false;

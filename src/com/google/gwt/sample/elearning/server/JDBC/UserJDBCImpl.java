@@ -1,8 +1,7 @@
 package com.google.gwt.sample.elearning.server.JDBC;
 
 import com.google.gwt.sample.elearning.shared.ELearningException;
-import com.google.gwt.sample.elearning.server.IncorrectLoginException;
-import com.google.gwt.sample.elearning.server.LoginData;
+import com.google.gwt.sample.elearning.shared.IncorrectLoginException;
 import com.google.gwt.sample.elearning.shared.UserData;
 
 import java.sql.Connection;
@@ -22,7 +21,7 @@ public class UserJDBCImpl {
 
   private PreparedStatement prepareGetLoginDataStatement() throws SQLException {
     return dbConnection
-        .prepareStatement("SELECT userId, parola, nume, prenume, email FROM utilizatori WHERE userId = ? AND parola = ?;");
+        .prepareStatement("SELECT id,userId, parola, nume, prenume, email FROM utilizatori WHERE userId = ? AND parola = ?;");
   }
 
   public UserData getUserData(String userId, String pass) throws IncorrectLoginException, ELearningException {
@@ -34,9 +33,9 @@ public class UserJDBCImpl {
       getLoginDataStatement.setString(2, pass);
       resultSet = getLoginDataStatement.executeQuery();
       if (resultSet.next()) {
-        return new UserData(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
+        return new UserData(Long.parseLong(resultSet.getString(1)), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
       } else {
-        throw new IncorrectLoginException("UserData and password combination is invalid.");
+        throw new IncorrectLoginException("User and password combination is invalid.");
       }
     } catch (SQLException e) {
       throw new ELearningException(e);

@@ -53,7 +53,7 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     ListStore<UserData> store = new ListStore<UserData>(userProperties.key());
 
     /* ADD TEST DATA */
-    store.add(new UserData("username", "", "firstName", "lastName", "email@admin"));
+    store.add(new UserData(0,"username", "", "firstName", "lastName", "email@admin"));
 
     Grid<UserData> userDataGrid = new Grid<UserData>(store, columnModel);
 

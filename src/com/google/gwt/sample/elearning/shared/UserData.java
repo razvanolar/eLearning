@@ -17,7 +17,8 @@ public class UserData implements IsSerializable{
     public UserData() {
     }
 
-    public UserData(String username, String password, String firstName, String lastName, String email) {
+    public UserData(long id, String username, String password, String firstName, String lastName, String email) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.firstName = firstName;

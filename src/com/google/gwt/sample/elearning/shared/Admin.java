@@ -7,8 +7,7 @@ public class Admin extends UserData {
     public Admin() {
     }
 
-    public Admin(String userId, String password, String firstName, String lastName, String email) {
-        super(userId, password, firstName, lastName, email);
+    public Admin(long id, String username, String password, String firstName, String lastName, String email) {
+        super(id, username, password, firstName, lastName, email);
     }
-
 }

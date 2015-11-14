@@ -1,5 +1,6 @@
 package com.google.gwt.sample.elearning.client.login;
 
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.widget.core.client.button.TextButton;
@@ -16,6 +17,7 @@ public class LoginView implements LoginController.ILoginView {
   private TextField nameField;
   private PasswordField passwordField;
   private TextButton loginButton;
+  private FieldLabel loginFailedLabel;
 
   private BorderLayoutContainer mainContainer;
 
@@ -29,6 +31,9 @@ public class LoginView implements LoginController.ILoginView {
     passwordField = new PasswordField();
     loginButton = new TextButton("Login");
     mainContainer = new BorderLayoutContainer();
+    loginFailedLabel = new FieldLabel(new Label("Wrong user or password"));
+    loginFailedLabel.getElement().getStyle().setColor("red");
+    loginFailedLabel.setVisible(false);
     CenterLayoutContainer centerLayoutContainer = new CenterLayoutContainer();
     VBoxLayoutContainer vBoxLayoutContainer = new VBoxLayoutContainer();
     HBoxLayoutContainer buttonsContainer = new HBoxLayoutContainer();
@@ -44,6 +49,7 @@ public class LoginView implements LoginController.ILoginView {
     vBoxLayoutContainer.add(new FieldLabel(nameField, "User"), layoutData);
     vBoxLayoutContainer.add(new FieldLabel(passwordField, "Password"), layoutData);
     vBoxLayoutContainer.add(buttonsContainer, layoutData);
+    vBoxLayoutContainer.add(loginFailedLabel, layoutData);
     centerLayoutContainer.add(vBoxLayoutContainer);
 
     mainContainer.setCenterWidget(centerLayoutContainer);
@@ -68,5 +74,10 @@ public class LoginView implements LoginController.ILoginView {
   @Override
   public Widget asWidget() {
     return mainContainer;
+  }
+
+  @Override
+  public FieldLabel getLoginFailedLabel() {
+    return loginFailedLabel;
   }
 }

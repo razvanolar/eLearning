@@ -14,12 +14,11 @@ public class Student extends UserData {
     public Student() {
     }
 
-    public Student(String userId, String password, String firstName, String lastName, String email,
+    public Student(long id, String username, String password, String firstName, String lastName, String email,
         long registrationNo) {
-        super(userId, password, firstName, lastName, email);
+        super(id, username, password, firstName, lastName, email);
         this.registrationNo = registrationNo;
     }
-
 
     public long getRegistrationNo() {
         return registrationNo;
