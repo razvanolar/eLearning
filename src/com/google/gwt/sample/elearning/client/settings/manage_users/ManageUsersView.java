@@ -1,16 +1,22 @@
 package com.google.gwt.sample.elearning.client.settings.manage_users;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.sample.elearning.client.ELearningController;
 import com.google.gwt.sample.elearning.shared.UserData;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.IdentityValueProvider;
 import com.sencha.gxt.core.client.Style;
+import com.sencha.gxt.core.client.util.Margins;
+import com.sencha.gxt.data.shared.IconProvider;
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.data.shared.TreeStore;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import com.sencha.gxt.widget.core.client.grid.*;
 import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
+import com.sencha.gxt.widget.core.client.tree.Tree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +39,24 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     mainContainer = new BorderLayoutContainer();
     userDataGridView = createGrid();
 
-    mainContainer.setWestWidget(userDataGridView, new BorderLayoutContainer.BorderLayoutData(.5));
+    BorderLayoutContainer.BorderLayoutData layoutData = new BorderLayoutContainer.BorderLayoutData(.5);
+    layoutData.setMargins(new Margins(10));
+    mainContainer.setWestWidget(userDataGridView, layoutData);
+
+    TreeStore<UserData> treeStore = new TreeStore<UserData>(userProperties.key());
+    Tree<UserData, String> tree = new Tree<UserData, String>(treeStore, userProperties.firstName());
+    tree.setIconProvider(new IconProvider<UserData>() {
+      @Override
+      public ImageResource getIcon(UserData model) {
+        return ELearningController.ICONS.chat();
+      }
+    });
+
+    UserData root = new UserData(0, "Root");
+    treeStore.add(root);
+    treeStore.add(root, new UserData(1, "Nume 1"));
+
+    mainContainer.setEastWidget(tree);
   }
 
   private Grid<UserData> createGrid() {

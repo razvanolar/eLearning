@@ -1,0 +1,12 @@
+<target name="war" depends="gwt-compile, jar, copy-resources">
+ <war basedir="war" destfile="${war.name}" webxml="war/WEB-INF/web.xml">
+ <exclude name="WEB-INF/**" />
+ <exclude name="${server.resources.name}/**"/>
+ <webinf dir="war/WEB-INF/">
+ <include name="classes/${server.resources.name}/**" />
+ <include name="**/*.jar" />
+ <exclude name="**/gwt-dev.jar" />
+ <exclude name="**/gwt-user.jar" />
+ </webinf>
+ </war>
+ </target>
