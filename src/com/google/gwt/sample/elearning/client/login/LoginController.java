@@ -30,6 +30,7 @@ public class LoginController {
     PasswordField getPasswordField();
     TextButton getLoginButton();
     FieldLabel getLoginFailedLabel();
+    void setErrorLabelText(String val);
     Widget asWidget();
   }
 
@@ -40,7 +41,6 @@ public class LoginController {
   public LoginController(ILoginView view) {
     this.view = view;
   }
-
   public void bind() {
     addListeners();
   }
@@ -52,13 +52,13 @@ public class LoginController {
         String user = view.getNameField().getText();
         String password = view.getPasswordField().getText();
         if (TextInputValidator.isEmptySring(user) || TextInputValidator.isEmptySring(password)) {
-        /* TODO : show error */
+          view.setErrorLabelText("Invalid input.");
+          return;
         }
         loginService.loginServer(user, password, new AsyncCallback<UserData>() {
           @Override
           public void onFailure(Throwable caught) {
-            view.getLoginFailedLabel().setVisible(true);
-//            view.getLoginFailedLabel().setText("Wrong user or password.");
+            view.setErrorLabelText("Wrong username or password.");
           }
 
           @Override

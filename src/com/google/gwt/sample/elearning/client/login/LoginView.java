@@ -20,6 +20,9 @@ public class LoginView implements LoginController.ILoginView {
   private FieldLabel loginFailedLabel;
 
   private BorderLayoutContainer mainContainer;
+  private VBoxLayoutContainer vBoxLayoutContainer;
+  private BoxLayoutContainer.BoxLayoutData layoutData;
+  private Label label;
 
   public LoginView() {
     initGUI();
@@ -31,11 +34,11 @@ public class LoginView implements LoginController.ILoginView {
     passwordField = new PasswordField();
     loginButton = new TextButton("Login");
     mainContainer = new BorderLayoutContainer();
-    loginFailedLabel = new FieldLabel(new Label("Wrong user or password"));
+    label = new Label("");
+    loginFailedLabel = new FieldLabel(label);
     loginFailedLabel.getElement().getStyle().setColor("red");
-    loginFailedLabel.setVisible(false);
     CenterLayoutContainer centerLayoutContainer = new CenterLayoutContainer();
-    VBoxLayoutContainer vBoxLayoutContainer = new VBoxLayoutContainer();
+    vBoxLayoutContainer = new VBoxLayoutContainer();
     HBoxLayoutContainer buttonsContainer = new HBoxLayoutContainer();
 
     /* buttons container */
@@ -44,7 +47,7 @@ public class LoginView implements LoginController.ILoginView {
     buttonsContainer.add(loginButton, new BoxLayoutContainer.BoxLayoutData(new Margins(0)));
 
     /* form */
-    BoxLayoutContainer.BoxLayoutData layoutData = new BoxLayoutContainer.BoxLayoutData(new Margins(5, 0, 0, 0));
+    layoutData = new BoxLayoutContainer.BoxLayoutData(new Margins(5, 0, 0, 0));
     vBoxLayoutContainer.setVBoxLayoutAlign(VBoxLayoutContainer.VBoxLayoutAlign.STRETCH);
     vBoxLayoutContainer.add(new FieldLabel(nameField, "User"), layoutData);
     vBoxLayoutContainer.add(new FieldLabel(passwordField, "Password"), layoutData);
@@ -72,12 +75,21 @@ public class LoginView implements LoginController.ILoginView {
   }
 
   @Override
-  public Widget asWidget() {
-    return mainContainer;
+  public void setErrorLabelText(String val) {
+    if (vBoxLayoutContainer.getWidgetIndex(loginFailedLabel) >= 0)
+      vBoxLayoutContainer.remove(loginFailedLabel);
+    label.setText(val);
+    vBoxLayoutContainer.add(loginFailedLabel, layoutData);
+    vBoxLayoutContainer.forceLayout();
   }
 
   @Override
   public FieldLabel getLoginFailedLabel() {
     return loginFailedLabel;
+  }
+
+  @Override
+  public Widget asWidget() {
+    return mainContainer;
   }
 }
