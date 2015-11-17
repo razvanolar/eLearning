@@ -1,22 +1,18 @@
 package com.google.gwt.sample.elearning.client.settings.manage_users;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.sample.elearning.client.ELearningController;
 import com.google.gwt.sample.elearning.shared.UserData;
-import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.IdentityValueProvider;
 import com.sencha.gxt.core.client.Style;
 import com.sencha.gxt.core.client.util.Margins;
-import com.sencha.gxt.data.shared.IconProvider;
 import com.sencha.gxt.data.shared.ListStore;
-import com.sencha.gxt.data.shared.TreeStore;
 import com.sencha.gxt.widget.core.client.button.TextButton;
-import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.*;
+import com.sencha.gxt.widget.core.client.form.FieldLabel;
+import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.*;
-import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
-import com.sencha.gxt.widget.core.client.tree.Tree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +25,13 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
   private static UserDataProperties userProperties = GWT.create(UserDataProperties.class);
 
   private BorderLayoutContainer mainContainer;
+  private TextButton addButton, editButton, deleteButton;
   private Grid<UserData> userDataGridView;
+
+  private ManageUsersController.UserViewState state = ManageUsersController.UserViewState.NONE;
+  private TextField firstNameField;
+  private TextField lastNameField;
+  private TextField emailField;
 
   public ManageUsersView() {
     initGUI();
@@ -37,26 +39,40 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
 
   private void initGUI() {
     mainContainer = new BorderLayoutContainer();
+    addButton = new TextButton("Add", ELearningController.ICONS.add());
+    editButton = new TextButton("Edit", ELearningController.ICONS.edit());
+    deleteButton = new TextButton("Delete", ELearningController.ICONS.delete());
+    firstNameField = new TextField();
+    lastNameField = new TextField();
+    emailField = new TextField();
+    CenterLayoutContainer formContainer = new CenterLayoutContainer();
+    VerticalLayoutContainer formPanel = new VerticalLayoutContainer();
+    HBoxLayoutContainer buttonsContainer = new HBoxLayoutContainer(HBoxLayoutContainer.HBoxLayoutAlign.MIDDLE);
     userDataGridView = createGrid();
 
-    BorderLayoutContainer.BorderLayoutData layoutData = new BorderLayoutContainer.BorderLayoutData(.5);
-    layoutData.setMargins(new Margins(10));
+    BoxLayoutContainer.BoxLayoutData hBoxLayoutData = new BoxLayoutContainer.BoxLayoutData(new Margins(5));
+    hBoxLayoutData.setFlex(1);
+    buttonsContainer.add(addButton, hBoxLayoutData);
+    buttonsContainer.add(editButton, hBoxLayoutData);
+    buttonsContainer.add(deleteButton, hBoxLayoutData);
+    buttonsContainer.setStyleName("buttonsBar");
+
+    VerticalLayoutContainer.VerticalLayoutData verticalLayoutData = new VerticalLayoutContainer.VerticalLayoutData(1, -1);
+    formPanel.add(new FieldLabel(firstNameField, "First Name"), verticalLayoutData);
+    formPanel.add(new FieldLabel(lastNameField, "Last Name"), verticalLayoutData);
+    formPanel.add(new FieldLabel(emailField, "Email"), verticalLayoutData);
+    formPanel.add(buttonsContainer, verticalLayoutData);
+
+    formContainer.add(formPanel);
+    formContainer.setStyleName("whiteBackground");
+
+    BorderLayoutContainer.BorderLayoutData layoutData = new BorderLayoutContainer.BorderLayoutData(.6);
+    layoutData.setSplit(true);
+    layoutData.setMargins(new Margins(0, 5, 0, 0));
     mainContainer.setWestWidget(userDataGridView, layoutData);
+    mainContainer.setCenterWidget(formContainer);
 
-    TreeStore<UserData> treeStore = new TreeStore<UserData>(userProperties.key());
-    Tree<UserData, String> tree = new Tree<UserData, String>(treeStore, userProperties.firstName());
-    tree.setIconProvider(new IconProvider<UserData>() {
-      @Override
-      public ImageResource getIcon(UserData model) {
-        return ELearningController.ICONS.chat();
-      }
-    });
-
-    UserData root = new UserData(0, "Root");
-    treeStore.add(root);
-    treeStore.add(root, new UserData(1, "Nume 1"));
-
-    mainContainer.setEastWidget(tree);
+    setState(state);
   }
 
   private Grid<UserData> createGrid() {
@@ -77,6 +93,10 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
 
     /* ADD TEST DATA */
     store.add(new UserData(0,"username", "", "firstName", "lastName", "email@admin"));
+    store.add(new UserData(1,"username1", "", "firstName1", "lastName1", "email1@admin"));
+    store.add(new UserData(2,"test", "", "test", "test", "test@admin"));
+    store.add(new UserData(3,"test1", "", "test1", "test1", "test1@admin"));
+    store.add(new UserData(4, "test2", "", "test2", "test2", "test2@admin"));
 
     Grid<UserData> userDataGrid = new Grid<UserData>(store, columnModel);
 
@@ -85,6 +105,81 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     userDataGrid.setSelectionModel(selectionModel);
 
     return userDataGrid;
+  }
+
+  @Override
+  public void setState(ManageUsersController.UserViewState state) {
+    switch (state) {
+    case ADD:
+      addButton.setEnabled(true);
+      editButton.setEnabled(false);
+      deleteButton.setEnabled(false);
+      break;
+    case EDIT:
+      addButton.setEnabled(false);
+      editButton.setEnabled(true);
+      deleteButton.setEnabled(true);
+      break;
+    case ADDING:
+      addButton.setEnabled(false);
+      editButton.setEnabled(false);
+      deleteButton.setEnabled(false);
+      break;
+    case NONE:
+      addButton.setEnabled(false);
+      editButton.setEnabled(false);
+      deleteButton.setEnabled(false);
+      clearFields();
+      break;
+    }
+  }
+
+  @Override
+  public void loadUserData(UserData userData) {
+    firstNameField.setText(userData.getFirstName());
+    lastNameField.setText(userData.getLastName());
+    emailField.setText(userData.getEmail());
+  }
+
+  private void clearFields() {
+    firstNameField.setText("");
+    lastNameField.setText("");
+    emailField.setText("");
+  }
+
+  @Override
+  public TextButton getAddButton() {
+    return addButton;
+  }
+
+  @Override
+  public TextButton getEditButton() {
+    return editButton;
+  }
+
+  @Override
+  public TextButton getDeleteButton() {
+    return deleteButton;
+  }
+
+  @Override
+  public TextField getFirstNameField() {
+    return firstNameField;
+  }
+
+  @Override
+  public TextField getLastNameField() {
+    return lastNameField;
+  }
+
+  @Override
+  public TextField getEmailField() {
+    return emailField;
+  }
+
+  @Override
+  public Grid<UserData> getGrid() {
+    return userDataGridView;
   }
 
   @Override

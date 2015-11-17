@@ -11,7 +11,7 @@ public class TextInputValidator {
    * @return true - if value is null or empty
    *         false - otherwise
    */
-  public static boolean isEmptySring(String value) {
+  public static boolean isEmptyString(String value) {
     if (value == null)
       return true;
     value = value.trim();

@@ -19,7 +19,8 @@ public class MasterWindow extends Window {
     this.add(mainContainer);
   }
 
-  public void setContent(Widget content) {
+  public void setContent(Widget content, String title) {
     mainContainer.setCenterWidget(content);
+    this.setHeadingHtml(title);
   }
 }

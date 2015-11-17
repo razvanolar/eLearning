@@ -1,7 +1,9 @@
 package com.google.gwt.sample.elearning.client.login;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.*;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.sample.elearning.client.ELearningController;
 import com.google.gwt.sample.elearning.client.eLearningUtils.TextInputValidator;
 import com.google.gwt.sample.elearning.client.services.LoginService;
@@ -9,11 +11,8 @@ import com.google.gwt.sample.elearning.client.services.LoginServiceAsync;
 import com.google.gwt.sample.elearning.shared.UserData;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
-import com.sencha.gxt.widget.core.client.container.Container;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.PasswordField;
@@ -48,7 +47,7 @@ public class LoginController {
   private void login(){
     String user = view.getNameField().getText();
     String password = view.getPasswordField().getText();
-    if (TextInputValidator.isEmptySring(user) || TextInputValidator.isEmptySring(password)) {
+    if (TextInputValidator.isEmptyString(user) || TextInputValidator.isEmptyString(password)) {
       view.setErrorLabelText("Invalid input.");
       return;
     }
@@ -88,7 +87,7 @@ public class LoginController {
     view.getNameField().addKeyDownHandler(new KeyDownHandler() {
       @Override
       public void onKeyDown(KeyDownEvent event) {
-        if(event.getNativeKeyCode() == KeyCodes.KEY_ENTER){
+        if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
           login();
         }
       }
