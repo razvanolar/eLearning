@@ -1,4 +1,4 @@
-package com.google.gwt.sample.elearning.shared;
+package com.google.gwt.sample.elearning.shared.exception;
 
 /***
  * Created by Cristi on 11/13/2015.

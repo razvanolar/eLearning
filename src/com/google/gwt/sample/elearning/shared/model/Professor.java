@@ -1,4 +1,4 @@
-package com.google.gwt.sample.elearning.shared;
+package com.google.gwt.sample.elearning.shared.model;
 
 import java.util.ArrayList;
 import java.util.List;

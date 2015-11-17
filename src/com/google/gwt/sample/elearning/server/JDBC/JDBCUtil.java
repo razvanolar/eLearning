@@ -1,6 +1,6 @@
 package com.google.gwt.sample.elearning.server.JDBC;
 
-import com.google.gwt.sample.elearning.shared.ELearningException;
+import com.google.gwt.sample.elearning.shared.exception.ELearningException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -1,4 +1,4 @@
-package com.google.gwt.sample.elearning.shared;
+package com.google.gwt.sample.elearning.shared.model;
 
 /**
  * Created by Horea on 14/11/2015.

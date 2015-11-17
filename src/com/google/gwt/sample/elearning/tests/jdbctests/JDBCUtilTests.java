@@ -1,7 +1,7 @@
 package com.google.gwt.sample.elearning.tests.jdbctests;
 
 import com.google.gwt.sample.elearning.server.JDBC.JDBCUtil;
-import com.google.gwt.sample.elearning.shared.ELearningException;
+import com.google.gwt.sample.elearning.shared.exception.ELearningException;
 import org.junit.Before;
 import org.junit.Test;
 

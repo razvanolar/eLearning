@@ -1,9 +1,9 @@
 package com.google.gwt.sample.elearning.tests.jdbctests;
 
-import com.google.gwt.sample.elearning.shared.IncorrectLoginException;
+import com.google.gwt.sample.elearning.shared.exception.IncorrectLoginException;
 import com.google.gwt.sample.elearning.server.JDBC.UserJDBCImpl;
-import com.google.gwt.sample.elearning.shared.ELearningException;
-import com.google.gwt.sample.elearning.shared.UserData;
+import com.google.gwt.sample.elearning.shared.exception.ELearningException;
+import com.google.gwt.sample.elearning.shared.model.UserData;
 import org.junit.Before;
 import org.junit.Test;
 

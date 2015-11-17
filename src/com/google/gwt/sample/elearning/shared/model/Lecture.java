@@ -1,4 +1,4 @@
-package com.google.gwt.sample.elearning.shared;
+package com.google.gwt.sample.elearning.shared.model;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 

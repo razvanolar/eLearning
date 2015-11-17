@@ -1,10 +1,10 @@
-package com.google.gwt.sample.elearning.server;
+package com.google.gwt.sample.elearning.server.service;
 
 import com.google.gwt.sample.elearning.client.services.LoginService;
 import com.google.gwt.sample.elearning.server.JDBC.UserJDBCImpl;
-import com.google.gwt.sample.elearning.shared.ELearningException;
-import com.google.gwt.sample.elearning.shared.IncorrectLoginException;
-import com.google.gwt.sample.elearning.shared.UserData;
+import com.google.gwt.sample.elearning.shared.exception.ELearningException;
+import com.google.gwt.sample.elearning.shared.exception.IncorrectLoginException;
+import com.google.gwt.sample.elearning.shared.model.UserData;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import javax.servlet.http.HttpServletRequest;

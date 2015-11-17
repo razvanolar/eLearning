@@ -8,7 +8,7 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.sample.elearning.client.services.LoginService;
 import com.google.gwt.sample.elearning.client.services.LoginServiceAsync;
-import com.google.gwt.sample.elearning.shared.UserData;
+import com.google.gwt.sample.elearning.shared.model.UserData;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;

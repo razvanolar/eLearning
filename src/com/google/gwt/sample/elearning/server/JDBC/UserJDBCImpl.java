@@ -1,8 +1,8 @@
 package com.google.gwt.sample.elearning.server.JDBC;
 
-import com.google.gwt.sample.elearning.shared.ELearningException;
-import com.google.gwt.sample.elearning.shared.IncorrectLoginException;
-import com.google.gwt.sample.elearning.shared.UserData;
+import com.google.gwt.sample.elearning.shared.exception.ELearningException;
+import com.google.gwt.sample.elearning.shared.exception.IncorrectLoginException;
+import com.google.gwt.sample.elearning.shared.model.UserData;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
