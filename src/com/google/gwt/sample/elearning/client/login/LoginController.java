@@ -1,6 +1,7 @@
 package com.google.gwt.sample.elearning.client.login;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.sample.elearning.client.ELearningController;
 import com.google.gwt.sample.elearning.client.eLearningUtils.TextInputValidator;
 import com.google.gwt.sample.elearning.client.services.LoginService;
@@ -44,32 +45,52 @@ public class LoginController {
   public void bind() {
     addListeners();
   }
+  private void login(){
+    String user = view.getNameField().getText();
+    String password = view.getPasswordField().getText();
+    if (TextInputValidator.isEmptySring(user) || TextInputValidator.isEmptySring(password)) {
+      view.setErrorLabelText("Invalid input.");
+      return;
+    }
+    loginService.loginServer(user, password, new AsyncCallback<UserData>() {
+      @Override
+      public void onFailure(Throwable caught) {
+        view.setErrorLabelText("Wrong username or password.");
+      }
+
+      @Override
+      public void onSuccess(UserData userData) {
+        final long DURATION = 1000 * 60;// * 60 * 24 * 1;
+        Date expires = new Date(System.currentTimeMillis() + DURATION);
+        Cookies.setCookie("sid", userData.getSessionId(), expires, null, "/", false);
+
+        ELearningController.getInstance().onSuccessLogin();
+      }
+    });
+  }
 
   private void addListeners() {
     view.getLoginButton().addSelectHandler(new SelectEvent.SelectHandler() {
       @Override
       public void onSelect(SelectEvent event) {
-        String user = view.getNameField().getText();
-        String password = view.getPasswordField().getText();
-        if (TextInputValidator.isEmptySring(user) || TextInputValidator.isEmptySring(password)) {
-          view.setErrorLabelText("Invalid input.");
-          return;
+        login();
+      }
+    });
+
+    view.getPasswordField().addKeyDownHandler(new KeyDownHandler() {
+      @Override
+      public void onKeyDown(KeyDownEvent event) {
+        if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+          login();
+      }
+    });
+
+    view.getNameField().addKeyDownHandler(new KeyDownHandler() {
+      @Override
+      public void onKeyDown(KeyDownEvent event) {
+        if(event.getNativeKeyCode() == KeyCodes.KEY_ENTER){
+          login();
         }
-        loginService.loginServer(user, password, new AsyncCallback<UserData>() {
-          @Override
-          public void onFailure(Throwable caught) {
-            view.setErrorLabelText("Wrong username or password.");
-          }
-
-          @Override
-          public void onSuccess(UserData userData) {
-            final long DURATION = 1000 * 60;// * 60 * 24 * 1;
-            Date expires = new Date(System.currentTimeMillis() + DURATION);
-            Cookies.setCookie("sid", userData.getSessionId(), expires, null, "/", false);
-
-            ELearningController.getInstance().onSuccessLogin();
-          }
-        });
       }
     });
   }

@@ -53,7 +53,6 @@ public class ELearningController {
 
   public void onSuccessLogin() {
     mainELearningContainer.setCenterWidget(null);
-    (new MessageBox("INFO", "BRAVO")).show();
 
     displayWindow();
   }
