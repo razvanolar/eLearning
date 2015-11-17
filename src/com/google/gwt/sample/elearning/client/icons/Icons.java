@@ -25,4 +25,13 @@ public interface Icons extends ClientBundle {
 
   @Source("settings.png")
   ImageResource settings();
+
+  @Source("add.gif")
+  ImageResource add();
+
+  @Source("delete.gif")
+  ImageResource delete();
+
+  @Source("edit.png")
+  ImageResource edit();
 }

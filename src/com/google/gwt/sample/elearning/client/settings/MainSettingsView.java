@@ -19,7 +19,6 @@ public class MainSettingsView implements MainSettingsController.IMainSettingsVie
   private void initGUI() {
     tabPanel = new TabPanel(GWT.<TabPanel.TabPanelAppearance> create(TabPanel.TabPanelBottomAppearance.class));
     tabPanel.setBorders(false);
-//    tabPanel = new TabPanel();
   }
 
   @Override

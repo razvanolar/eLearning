@@ -44,7 +44,7 @@ public class ProfileBarController {
     settingsController.bind();
 
     MasterWindow window = new MasterWindow();
-    window.setContent(settingsView.asWidget());
+    window.setContent(settingsView.asWidget(), "Admin manager");
     window.show();
   }
 }

@@ -17,3 +17,11 @@
 .buttonsToolbar {
   background-color: #2a6292;
 }
+
+.buttonsBar {
+  background-color: rgba(72, 71, 74, 0.62);
+}
+
+.whiteBackground {
+  background-color: white;
+}
