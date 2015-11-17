@@ -68,7 +68,7 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     buttonsContainer.setStyleName("buttonsBar");
 
     VerticalLayoutContainer.VerticalLayoutData verticalLayoutData = new VerticalLayoutContainer.VerticalLayoutData(1, -1);
-    formPanel.add(new FieldLabel(userNameField, "First Name"), verticalLayoutData);
+    formPanel.add(new FieldLabel(userNameField, "User Name"), verticalLayoutData);
     formPanel.add(new FieldLabel(firstNameField, "First Name"), verticalLayoutData);
     formPanel.add(new FieldLabel(lastNameField, "Last Name"), verticalLayoutData);
     formPanel.add(new FieldLabel(emailField, "Email"), verticalLayoutData);

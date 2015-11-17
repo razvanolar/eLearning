@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class Professor extends UserData {
 
-  List<Lecture> teachedLectures = new ArrayList<>();
+  List<Lecture> teachedLectures = new ArrayList<Lecture>();
 
   public Professor() {
   }
@@ -27,5 +27,10 @@ public class Professor extends UserData {
     } else {
       throw new RuntimeException("You are already enrolled to this lecture!");
     }
+  }
+
+  @Override
+  public String toString() {
+    return super.getFirstName() + " " + super.getLastName();
   }
 }

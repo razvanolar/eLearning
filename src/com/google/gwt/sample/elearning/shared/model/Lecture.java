@@ -6,15 +6,17 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * Created by Horea on 14/11/2015.
  */
 public class Lecture implements IsSerializable {
+  long id;
   Professor professor;
   String lectureName;
 
   public Lecture() {
   }
 
-  public Lecture(Professor profesor, String denumire) {
-    this.professor = profesor;
-    this.lectureName = denumire;
+  public Lecture(long id, Professor professor, String lectureName) {
+    this.id = id;
+    this.professor = professor;
+    this.lectureName = lectureName;
   }
 
   public Professor getProfessor() {
@@ -23,5 +25,9 @@ public class Lecture implements IsSerializable {
 
   public String getLectureName() {
     return lectureName;
+  }
+
+  public long getId() {
+    return id;
   }
 }

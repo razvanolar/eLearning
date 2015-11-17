@@ -2,6 +2,8 @@ package com.google.gwt.sample.elearning.client.settings;
 
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.sample.elearning.client.settings.manage_lectures.ManageLecturesController;
+import com.google.gwt.sample.elearning.client.settings.manage_lectures.ManageLecturesView;
 import com.google.gwt.sample.elearning.client.settings.manage_users.ManageUsersController;
 import com.google.gwt.sample.elearning.client.settings.manage_users.ManageUsersView;
 import com.google.gwt.user.client.ui.Widget;
@@ -36,7 +38,12 @@ public class MainSettingsController {
 
   private void setContent() {
     view.addTab(new BorderLayoutContainer(), "Tab 1");
-    view.addTab(new BorderLayoutContainer(), "Tab 2");
+
+    /* Add manage lectures */
+    ManageLecturesController.IManageLecturesView manageLecturesView = new ManageLecturesView();
+    ManageLecturesController manageLecturesController = new ManageLecturesController(manageLecturesView);
+    manageLecturesController.bind();
+    view.addTab(manageLecturesView.asWidget(), "Manage Lectures");
 
     /* Add manage users */
     ManageUsersController.IManageUsersView manageUsersView = new ManageUsersView();
