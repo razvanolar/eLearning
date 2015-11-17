@@ -59,7 +59,7 @@ public class LoginController {
 
       @Override
       public void onSuccess(UserData userData) {
-        final long DURATION = 1000 * 60;// * 60 * 24 * 1;
+        final long DURATION = 1000 * 60 * 10;// * 60 * 24 * 1;
         Date expires = new Date(System.currentTimeMillis() + DURATION);
         Cookies.setCookie("sid", userData.getSessionId(), expires, null, "/", false);
 

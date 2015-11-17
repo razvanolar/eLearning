@@ -6,7 +6,8 @@
   <inherits name='com.sencha.gxt.ui.GXT' />
 
   <inherits name="com.google.gwt.logging.Logging"/>
-  <set-property name="gwt.logging.enabled" value="FALSE"/>
+  <set-property name="gwt.logging.enabled" value="TRUE"/>
+  <set-property name="gwt.logging.popupHandler" value="DISABLED" />
 
   <!--<inherits name='com.sencha.gxt.theme.neptune.Theme' />-->
 

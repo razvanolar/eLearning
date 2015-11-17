@@ -15,6 +15,7 @@ public interface UserDataProperties extends PropertyAccess<UserData> {
   ModelKeyProvider<UserData> key();
 
   ValueProvider<UserData, Long> id();
+  ValueProvider<UserData, String> username();
   ValueProvider<UserData, String> firstName();
   ValueProvider<UserData, String> lastName();
   ValueProvider<UserData, String> email();

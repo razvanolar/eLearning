@@ -22,6 +22,11 @@ public class MainSettingsView implements MainSettingsController.IMainSettingsVie
   }
 
   @Override
+  public TabPanel getTabPanel() {
+    return tabPanel;
+  }
+
+  @Override
   public void addTab(Widget tabContent, String title) {
     tabPanel.add(tabContent, title);
   }

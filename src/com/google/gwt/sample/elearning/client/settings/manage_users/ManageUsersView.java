@@ -20,6 +20,7 @@ import com.sencha.gxt.widget.core.client.toolbar.PagingToolBar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /***
  * Created by razvanolar on 14.11.2015.
@@ -27,24 +28,20 @@ import java.util.List;
 public class ManageUsersView implements ManageUsersController.IManageUsersView {
 
   private static UserDataProperties userProperties = GWT.create(UserDataProperties.class);
-  private final ListStore<UserData> listStore;
-  private final PagingLoader<PagingLoadConfig, PagingLoadResult<UserData>> loader;
-  private final PagingToolBar toolBar;
 
   private BorderLayoutContainer mainContainer;
   private TextButton addButton, editButton, deleteButton;
   private Grid<UserData> userDataGridView;
 
-  private ManageUsersController.UserViewState state = ManageUsersController.UserViewState.NONE;
+  private ManageUsersController.UserViewState state;
+  private TextField userNameField;
   private TextField firstNameField;
   private TextField lastNameField;
   private TextField emailField;
 
-  public ManageUsersView(ListStore<UserData> listStore,
-      PagingLoader<PagingLoadConfig, PagingLoadResult<UserData>> loader, PagingToolBar toolBar) {
-    this.listStore = listStore;
-    this.loader = loader;
-    this.toolBar = toolBar;
+  private Logger log = Logger.getLogger(ManageUsersView.class.getName());
+
+  public ManageUsersView() {
     initGUI();
   }
 
@@ -53,6 +50,7 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     addButton = new TextButton("Add", ELearningController.ICONS.add());
     editButton = new TextButton("Edit", ELearningController.ICONS.edit());
     deleteButton = new TextButton("Delete", ELearningController.ICONS.delete());
+    userNameField = new TextField();
     firstNameField = new TextField();
     lastNameField = new TextField();
     emailField = new TextField();
@@ -70,6 +68,7 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     buttonsContainer.setStyleName("buttonsBar");
 
     VerticalLayoutContainer.VerticalLayoutData verticalLayoutData = new VerticalLayoutContainer.VerticalLayoutData(1, -1);
+    formPanel.add(new FieldLabel(userNameField, "First Name"), verticalLayoutData);
     formPanel.add(new FieldLabel(firstNameField, "First Name"), verticalLayoutData);
     formPanel.add(new FieldLabel(lastNameField, "Last Name"), verticalLayoutData);
     formPanel.add(new FieldLabel(emailField, "Email"), verticalLayoutData);
@@ -78,7 +77,6 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     formContainer.add(formPanel);
     formContainer.setStyleName("whiteBackground");
 
-    gridContainer.setSouthWidget(toolBar, new BorderLayoutContainer.BorderLayoutData(30));
     gridContainer.setCenterWidget(userDataGridView);
 
     BorderLayoutContainer.BorderLayoutData layoutData = new BorderLayoutContainer.BorderLayoutData(.6);
@@ -87,7 +85,7 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     mainContainer.setWestWidget(gridContainer, layoutData);
     mainContainer.setCenterWidget(formContainer);
 
-    setState(state);
+    setState(ManageUsersController.UserViewState.NONE);
   }
 
   private Grid<UserData> createGrid() {
@@ -99,6 +97,7 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
 
     columnConfigList.add(selectionModel.getColumn());
     columnConfigList.add(new ColumnConfig<UserData, Long>(userProperties.id(), 20, "ID"));
+    columnConfigList.add(new ColumnConfig<UserData, String>(userProperties.username(), 100, "Username"));
     columnConfigList.add(new ColumnConfig<UserData, String>(userProperties.firstName(), 100, "First Name"));
     columnConfigList.add(new ColumnConfig<UserData, String>(userProperties.lastName(), 100, "Last Name"));
     columnConfigList.add(new ColumnConfig<UserData, String>(userProperties.email(), 100, "Email"));
@@ -106,17 +105,9 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     ColumnModel<UserData> columnModel = new ColumnModel<UserData>(columnConfigList);
     ListStore<UserData> store = new ListStore<UserData>(userProperties.key());
 
-    /* ADD TEST DATA */
-    store.add(new UserData(0,"username", "", "firstName", "lastName", "email@admin"));
-    store.add(new UserData(1,"username1", "", "firstName1", "lastName1", "email1@admin"));
-    store.add(new UserData(2,"test", "", "test", "test", "test@admin"));
-    store.add(new UserData(3,"test1", "", "test1", "test1", "test1@admin"));
-    store.add(new UserData(4, "test2", "", "test2", "test2", "test2@admin"));
-
     Grid<UserData> userDataGrid = new Grid<UserData>(store, columnModel);
 
     userDataGrid.setLoadMask(true);
-    userDataGrid.setLoader(loader);
 
     userDataGrid.setHideHeaders(false);
     userDataGrid.getView().setAutoFill(true);
@@ -127,26 +118,33 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
 
   @Override
   public void setState(ManageUsersController.UserViewState state) {
+    if (this.state == state)
+      return;
+    this.state = state;
     switch (state) {
     case ADD:
       addButton.setEnabled(true);
       editButton.setEnabled(false);
       deleteButton.setEnabled(false);
+      setEnableFields(true);
       break;
     case EDIT:
       addButton.setEnabled(false);
       editButton.setEnabled(true);
       deleteButton.setEnabled(true);
+      setEnableFields(true);
       break;
     case ADDING:
       addButton.setEnabled(false);
       editButton.setEnabled(false);
       deleteButton.setEnabled(false);
+      setEnableFields(true);
       break;
     case NONE:
       addButton.setEnabled(false);
       editButton.setEnabled(false);
       deleteButton.setEnabled(false);
+//      setEnableFields(false);
       clearFields();
       break;
     }
@@ -154,15 +152,34 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
 
   @Override
   public void loadUserData(UserData userData) {
+    userNameField.setText(userData.getUsername());
     firstNameField.setText(userData.getFirstName());
     lastNameField.setText(userData.getLastName());
     emailField.setText(userData.getEmail());
   }
 
   private void clearFields() {
+    userNameField.setText("");
     firstNameField.setText("");
     lastNameField.setText("");
     emailField.setText("");
+  }
+
+  private void setEnableFields(boolean value) {
+    userNameField.setEnabled(value);
+    firstNameField.setEnabled(value);
+    lastNameField.setEnabled(value);
+    emailField.setEnabled(value);
+  }
+
+  @Override
+  public void mask() {
+    mainContainer.mask();
+  }
+
+  @Override
+  public void unmask() {
+    mainContainer.unmask();
   }
 
   @Override
@@ -178,6 +195,11 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
   @Override
   public TextButton getDeleteButton() {
     return deleteButton;
+  }
+
+  @Override
+  public TextField getUserNameField() {
+    return userNameField;
   }
 
   @Override
