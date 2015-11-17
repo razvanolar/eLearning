@@ -8,11 +8,15 @@ import com.sencha.gxt.core.client.IdentityValueProvider;
 import com.sencha.gxt.core.client.Style;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.data.shared.loader.PagingLoadConfig;
+import com.sencha.gxt.data.shared.loader.PagingLoadResult;
+import com.sencha.gxt.data.shared.loader.PagingLoader;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.*;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.*;
+import com.sencha.gxt.widget.core.client.toolbar.PagingToolBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +27,9 @@ import java.util.List;
 public class ManageUsersView implements ManageUsersController.IManageUsersView {
 
   private static UserDataProperties userProperties = GWT.create(UserDataProperties.class);
+  private final ListStore<UserData> listStore;
+  private final PagingLoader<PagingLoadConfig, PagingLoadResult<UserData>> loader;
+  private final PagingToolBar toolBar;
 
   private BorderLayoutContainer mainContainer;
   private TextButton addButton, editButton, deleteButton;
@@ -33,7 +40,11 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
   private TextField lastNameField;
   private TextField emailField;
 
-  public ManageUsersView() {
+  public ManageUsersView(ListStore<UserData> listStore,
+      PagingLoader<PagingLoadConfig, PagingLoadResult<UserData>> loader, PagingToolBar toolBar) {
+    this.listStore = listStore;
+    this.loader = loader;
+    this.toolBar = toolBar;
     initGUI();
   }
 
@@ -47,6 +58,7 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     emailField = new TextField();
     CenterLayoutContainer formContainer = new CenterLayoutContainer();
     VerticalLayoutContainer formPanel = new VerticalLayoutContainer();
+    BorderLayoutContainer gridContainer = new BorderLayoutContainer();
     HBoxLayoutContainer buttonsContainer = new HBoxLayoutContainer(HBoxLayoutContainer.HBoxLayoutAlign.MIDDLE);
     userDataGridView = createGrid();
 
@@ -66,10 +78,13 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     formContainer.add(formPanel);
     formContainer.setStyleName("whiteBackground");
 
+    gridContainer.setSouthWidget(toolBar, new BorderLayoutContainer.BorderLayoutData(30));
+    gridContainer.setCenterWidget(userDataGridView);
+
     BorderLayoutContainer.BorderLayoutData layoutData = new BorderLayoutContainer.BorderLayoutData(.6);
     layoutData.setSplit(true);
     layoutData.setMargins(new Margins(0, 5, 0, 0));
-    mainContainer.setWestWidget(userDataGridView, layoutData);
+    mainContainer.setWestWidget(gridContainer, layoutData);
     mainContainer.setCenterWidget(formContainer);
 
     setState(state);
@@ -99,6 +114,9 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     store.add(new UserData(4, "test2", "", "test2", "test2", "test2@admin"));
 
     Grid<UserData> userDataGrid = new Grid<UserData>(store, columnModel);
+
+    userDataGrid.setLoadMask(true);
+    userDataGrid.setLoader(loader);
 
     userDataGrid.setHideHeaders(false);
     userDataGrid.getView().setAutoFill(true);

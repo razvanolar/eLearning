@@ -5,6 +5,8 @@ import com.google.gwt.sample.elearning.client.settings.manage_users.ManageUsersV
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 
+import java.util.logging.Logger;
+
 /***
  * Created by razvanolar on 14.11.2015.
  */
@@ -16,7 +18,9 @@ public class MainSettingsController {
     Widget asWidget();
   }
 
-  private final IMainSettingsView view;
+  private IMainSettingsView view;
+
+  private static Logger log = Logger.getLogger(MainSettingsController.class.getName());
 
   public MainSettingsController(IMainSettingsView view) {
     this.view = view;
@@ -28,12 +32,17 @@ public class MainSettingsController {
   }
 
   private void setContent() {
+    log.info("MainSettingsController - setContent");
     view.addTab(new BorderLayoutContainer(), "Tab 1");
     view.addTab(new BorderLayoutContainer(), "Tab 2");
 
     /* Add manage users */
-    ManageUsersController.IManageUsersView manageUsersView = new ManageUsersView();
-    ManageUsersController manageUsersController = new ManageUsersController(manageUsersView);
+    log.info("before controller");
+    ManageUsersController manageUsersController = new ManageUsersController();
+    ManageUsersController.IManageUsersView manageUsersView = new ManageUsersView(manageUsersController.getListStore(),
+        manageUsersController.getLoader(),
+        manageUsersController.getToolBar());
+    manageUsersController.setView(manageUsersView);
     manageUsersController.bind();
     view.addTab(manageUsersView.asWidget(), "Manage Users");
   }
