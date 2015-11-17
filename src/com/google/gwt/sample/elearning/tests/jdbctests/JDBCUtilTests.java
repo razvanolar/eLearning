@@ -2,6 +2,7 @@ package com.google.gwt.sample.elearning.tests.jdbctests;
 
 import com.google.gwt.sample.elearning.server.JDBC.JDBCUtil;
 import com.google.gwt.sample.elearning.shared.exception.ELearningException;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,24 +15,33 @@ import java.sql.SQLException;
  */
 public class JDBCUtilTests {
 
-    private Connection dbConnection;
+  private Connection dbConnection;
 
-    @Before
-    public void build() {
-        try {
-            dbConnection = JDBCUtil.getDbConnection();
-        } catch (ELearningException e) {
-            e.printStackTrace();
-        }
+  @Before
+  public void build() {
+    try {
+      dbConnection = JDBCUtil.getNewConnection();
+    } catch (ELearningException e) {
+      e.printStackTrace();
     }
+  }
 
-    @Test
-    public void testGetDBConnection() {
-        try{
-            dbConnection.isValid(10);
-        } catch (SQLException ex) {
-            assert false;
-        }
+  @Test
+  public void testGetDBConnection() {
+    try {
+      dbConnection.isValid(10);
+    } catch (SQLException ex) {
+      assert false;
     }
+  }
+
+  @After
+  public void closeDBConnection() {
+    try {
+      JDBCUtil.closeConnection(dbConnection);
+    } catch (ELearningException e) {
+      e.printStackTrace();
+    }
+  }
 
 }

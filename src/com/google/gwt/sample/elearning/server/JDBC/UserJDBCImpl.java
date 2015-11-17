@@ -16,24 +16,35 @@ public class UserJDBCImpl {
   Connection dbConnection;
 
   public UserJDBCImpl() throws ELearningException {
-    dbConnection = JDBCUtil.getDbConnection();
   }
 
   private PreparedStatement prepareGetLoginDataStatement() throws SQLException {
     return dbConnection
-        .prepareStatement("SELECT id,userId, parola, nume, prenume, email FROM utilizatori WHERE userId = ? AND parola = ?;");
+            .prepareStatement("SELECT id,userId, parola, nume, prenume, email FROM utilizatori WHERE userId = ? AND parola = ?;");
   }
 
   public UserData getUserData(String userId, String pass) throws IncorrectLoginException, ELearningException {
     ResultSet resultSet;
     PreparedStatement getLoginDataStatement;
     try {
+      dbConnection = JDBCUtil.getNewConnection();
       getLoginDataStatement = prepareGetLoginDataStatement();
       getLoginDataStatement.setString(1, userId);
       getLoginDataStatement.setString(2, pass);
       resultSet = getLoginDataStatement.executeQuery();
+
       if (resultSet.next()) {
-        return new UserData(Long.parseLong(resultSet.getString(1)), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
+        long id = Long.parseLong(resultSet.getString(1));
+        String userName = resultSet.getString(2);
+        String password = resultSet.getString(3);
+        String firstName = resultSet.getString(4);
+        String lastName = resultSet.getString(5);
+        String email = resultSet.getString(6);
+
+        UserData userData = new UserData(id, userName, password, firstName, lastName, email);
+        resultSet.close();
+        getLoginDataStatement.close();
+        return userData;
       } else {
         throw new IncorrectLoginException("User and password combination is invalid.");
       }
@@ -43,6 +54,8 @@ public class UserJDBCImpl {
       throw e;
     } catch (Exception e) {
       throw new ELearningException(e);
+    } finally {
+      JDBCUtil.closeConnection(dbConnection);
     }
 
   }

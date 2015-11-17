@@ -8,13 +8,8 @@ import java.sql.Connection;
  * Created by Horea on 09/11/2015.
  */
 public class TestJDBCImpl {
-    Connection dbConnection;
+  Connection dbConnection;
 
-    public TestJDBCImpl() {
-        try {
-            dbConnection = JDBCUtil.getDbConnection();
-        } catch (ELearningException e) {
-            e.printStackTrace();
-        }
-    }
+  public TestJDBCImpl() {
+  }
 }

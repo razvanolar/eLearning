@@ -8,24 +8,24 @@ import java.util.List;
  */
 public class Professor extends UserData {
 
-    List<Lecture> teachedLectures = new ArrayList<>();
+  List<Lecture> teachedLectures = new ArrayList<>();
 
-    public Professor() {
-    }
+  public Professor() {
+  }
 
-    public Professor(long id, String username, String password, String firstName, String lastName, String email) {
-        super(id, username, password, firstName, lastName, email);
-    }
+  public Professor(long id, String username, String password, String firstName, String lastName, String email) {
+    super(id, username, password, firstName, lastName, email);
+  }
 
-    public List<Lecture> getTeachedLectures() {
-        return teachedLectures;
-    }
+  public List<Lecture> getTeachedLectures() {
+    return teachedLectures;
+  }
 
-    public void addCurs(Lecture curs) {
-        if(!teachedLectures.contains(curs)) {
-            teachedLectures.add(curs);
-        } else {
-            throw new RuntimeException("You are already enrolled to this lecture!");
-        }
+  public void addCurs(Lecture curs) {
+    if (!teachedLectures.contains(curs)) {
+      teachedLectures.add(curs);
+    } else {
+      throw new RuntimeException("You are already enrolled to this lecture!");
     }
+  }
 }
