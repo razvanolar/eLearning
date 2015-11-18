@@ -1,4 +1,4 @@
-package com.google.gwt.sample.elearning.client.services;
+package com.google.gwt.sample.elearning.client.service;
 
 import com.google.gwt.sample.elearning.shared.exception.ELearningException;
 import com.google.gwt.sample.elearning.shared.model.UserData;
@@ -13,4 +13,12 @@ import java.util.List;
 @RemoteServiceRelativePath("UserService")
 public interface UserService extends RemoteService {
   List<UserData> getAllUsers() throws ELearningException;
+
+  UserData getUserById(int id);
+
+  void createUser(UserData user);
+
+  void updateUser(UserData newUser);
+
+  void removeUser(List<String> ids);
 }

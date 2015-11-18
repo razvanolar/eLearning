@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 /***
  * Created by Horea on 01/11/2015.
@@ -60,4 +61,19 @@ public class UserJDBCImpl {
 
   }
 
+  public UserData getUserById(int id) {
+    throw new ELearningException("Not implemented yet");
+  }
+
+  public UserData createUser(UserData user) {
+    throw new ELearningException("Not implemented yet");
+  }
+
+  public UserData updateUser(UserData newUser) {
+    throw new ELearningException("Not implemented yet");
+  }
+
+  public UserData removeUser(List<String> id) {
+    throw new ELearningException("Not implemented yet");
+  }
 }

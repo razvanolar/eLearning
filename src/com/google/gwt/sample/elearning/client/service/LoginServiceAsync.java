@@ -1,4 +1,4 @@
-package com.google.gwt.sample.elearning.client.services;
+package com.google.gwt.sample.elearning.client.service;
 
 import com.google.gwt.sample.elearning.shared.model.UserData;
 import com.google.gwt.user.client.rpc.AsyncCallback;

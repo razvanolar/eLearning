@@ -1,6 +1,6 @@
 package com.google.gwt.sample.elearning.server.service;
 
-import com.google.gwt.sample.elearning.client.services.LoginService;
+import com.google.gwt.sample.elearning.client.service.LoginService;
 import com.google.gwt.sample.elearning.server.JDBC.UserJDBCImpl;
 import com.google.gwt.sample.elearning.shared.exception.ELearningException;
 import com.google.gwt.sample.elearning.shared.exception.IncorrectLoginException;
