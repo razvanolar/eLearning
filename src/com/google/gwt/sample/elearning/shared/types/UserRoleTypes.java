@@ -3,13 +3,13 @@ package com.google.gwt.sample.elearning.shared.types;
 /***
  * Created by razvanolar on 17.11.2015.
  */
-public enum UserRolTypes {
+public enum UserRoleTypes {
 
   ADMIN(1), PROFESSOR(2), USER(3);
 
   long id;
 
-  UserRolTypes(long id) {
+  UserRoleTypes(long id) {
     this.id = id;
   }
 
@@ -17,8 +17,8 @@ public enum UserRolTypes {
     return id;
   }
 
-  public static UserRolTypes getRolById(long id) {
-    for (UserRolTypes type : values())
+  public static UserRoleTypes getRoleById(long id) {
+    for (UserRoleTypes type : values())
       if (type.getId() == id)
         return type;
     return null;

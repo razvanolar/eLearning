@@ -3,6 +3,7 @@ package com.google.gwt.sample.elearning.server.JDBC;
 import com.google.gwt.sample.elearning.shared.exception.ELearningException;
 import com.google.gwt.sample.elearning.shared.exception.IncorrectLoginException;
 import com.google.gwt.sample.elearning.shared.model.UserData;
+import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -74,6 +75,10 @@ public class UserJDBCImpl {
   }
 
   public UserData removeUser(List<String> id) {
+    throw new ELearningException("Not implemented yet");
+  }
+
+  public List<? extends UserData> getAllUsersByRole(UserRoleTypes role) {
     throw new ELearningException("Not implemented yet");
   }
 }

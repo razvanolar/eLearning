@@ -4,6 +4,7 @@ import com.google.gwt.sample.elearning.client.service.UserService;
 import com.google.gwt.sample.elearning.server.JDBC.UserJDBCImpl;
 import com.google.gwt.sample.elearning.shared.exception.ELearningException;
 import com.google.gwt.sample.elearning.shared.model.UserData;
+import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
  */
 public class UserServiceImpl extends RemoteServiceServlet implements UserService {
 
+  UserJDBCImpl userJDBC = new UserJDBCImpl();
   private long id = 0;
 
   @Override
@@ -28,28 +30,30 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
   }
 
   @Override
-  public UserData getUserById(int id) {
+  public List<? extends UserData> getAllUsersByRole(UserRoleTypes role) throws ELearningException {
+    return userJDBC.getAllUsersByRole(role);
+  }
+
+  @Override
+  public UserData getUserById(int id) throws ELearningException {
     UserData userData;
-    UserJDBCImpl userJDBC = new UserJDBCImpl();
+
     userData = userJDBC.getUserById(id);
     return userData;
   }
 
   @Override
-  public void createUser(UserData user) {
-    UserJDBCImpl userJDBC = new UserJDBCImpl();
+  public void createUser(UserData user) throws ELearningException {
     userJDBC.createUser(user);
   }
 
   @Override
-  public void updateUser(UserData newUser) {
-    UserJDBCImpl userJDBC = new UserJDBCImpl();
+  public void updateUser(UserData newUser) throws ELearningException {
     userJDBC.updateUser(newUser);
   }
 
   @Override
-  public void removeUser(List<String> id) {
-    UserJDBCImpl userJDBC = new UserJDBCImpl();
+  public void removeUser(List<String> id) throws ELearningException {
     userJDBC.removeUser(id);
   }
 }

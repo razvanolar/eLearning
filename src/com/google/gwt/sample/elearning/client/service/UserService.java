@@ -2,6 +2,7 @@ package com.google.gwt.sample.elearning.client.service;
 
 import com.google.gwt.sample.elearning.shared.exception.ELearningException;
 import com.google.gwt.sample.elearning.shared.model.UserData;
+import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -14,11 +15,15 @@ import java.util.List;
 public interface UserService extends RemoteService {
   List<UserData> getAllUsers() throws ELearningException;
 
-  UserData getUserById(int id);
+  List<? extends UserData> getAllUsersByRole(UserRoleTypes role) throws ELearningException;
 
-  void createUser(UserData user);
+  UserData getUserById(int id) throws ELearningException;
 
-  void updateUser(UserData newUser);
+  void createUser(UserData user) throws ELearningException;
 
-  void removeUser(List<String> ids);
+  void updateUser(UserData newUser) throws ELearningException;
+
+  void removeUser(List<String> ids) throws ELearningException;
+
+
 }

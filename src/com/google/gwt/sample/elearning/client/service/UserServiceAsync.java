@@ -1,6 +1,7 @@
 package com.google.gwt.sample.elearning.client.service;
 
 import com.google.gwt.sample.elearning.shared.model.UserData;
+import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface UserServiceAsync {
   void updateUser(UserData newUser, AsyncCallback<Void> async);
 
   void removeUser(List<String> ids, AsyncCallback<Void> async);
+
+  void getAllUsersByRole(UserRoleTypes role, AsyncCallback<List<? extends UserData>> async);
 }

@@ -2,6 +2,7 @@ package com.google.gwt.sample.elearning.server.service;
 
 import com.google.gwt.sample.elearning.client.service.LectureService;
 import com.google.gwt.sample.elearning.server.JDBC.LectureJDBCImpl;
+import com.google.gwt.sample.elearning.shared.exception.ELearningException;
 import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -19,7 +20,7 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   }
 
   @Override
-  public List<Lecture> getAllLectures() {
+  public List<Lecture> getAllLectures() throws ELearningException {
     List<Lecture> lectures;
     LectureJDBCImpl lectureJDBC = new LectureJDBCImpl();
     lectures = lectureJDBC.getAllLectures();
@@ -27,7 +28,7 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   }
 
   @Override
-  public List<Lecture> getAllLecturesByProfessor(int idProfessor) {
+  public List<Lecture> getAllLecturesByProfessor(int idProfessor) throws ELearningException {
     List<Lecture> lectures;
     LectureJDBCImpl lectureJDBC = new LectureJDBCImpl();
     lectures = lectureJDBC.getAllLecturesByProfessor(idProfessor);
@@ -35,7 +36,7 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   }
 
   @Override
-  public Lecture getLectureById(int id) {
+  public Lecture getLectureById(int id) throws ELearningException{
     Lecture lecture;
     LectureJDBCImpl lectureJDBC = new LectureJDBCImpl();
     lecture = lectureJDBC.getLectureById(id);
@@ -43,13 +44,13 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   }
 
   @Override
-  public void updateLecture(Lecture lecture) {
+  public void updateLecture(Lecture lecture) throws ELearningException{
     LectureJDBCImpl lectureJDBC = new LectureJDBCImpl();
     lectureJDBC.updateLecture(lecture);
   }
 
   @Override
-  public void removeLecture(int id) {
+  public void removeLecture(int id) throws ELearningException{
     LectureJDBCImpl lectureJDBC;
     lectureJDBC = new LectureJDBCImpl();
     lectureJDBC.removeLecture(id);
