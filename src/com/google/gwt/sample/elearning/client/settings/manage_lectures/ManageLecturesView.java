@@ -18,13 +18,14 @@ import com.sencha.gxt.widget.core.client.form.ComboBox;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.*;
+import com.sencha.gxt.widget.core.client.toolbar.SeparatorToolItem;
 import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-/**
+/***
  * Created by Cristi on 11/17/2015.
  */
 public class ManageLecturesView implements ManageLecturesController.IManageLecturesView {
@@ -34,6 +35,7 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
   private TextButton deleteButton;
   private TextButton addButton;
   private TextButton editButton;
+  private TextButton htmlEditor;
   private ComboBox<Professor> professorComboBox;
   private ListStore<Professor> professorListStore;
 
@@ -58,10 +60,13 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     editButton = new TextButton("Edit", ELearningController.ICONS.edit());
     deleteButton = new TextButton("Delete", ELearningController.ICONS.delete());
     lectureNameField = new TextField();
+    htmlEditor = new TextButton("Create new file");
 
     log.info("test 2");
     ToolBar toolBar = new ToolBar();
     toolBar.add(new FieldLabel(professorComboBox, "Professor"));
+    toolBar.add(new SeparatorToolItem());
+    toolBar.add(htmlEditor);
     CenterLayoutContainer formContainer = new CenterLayoutContainer();
     VerticalLayoutContainer formPanel = new VerticalLayoutContainer();
     HBoxLayoutContainer buttonsContainer = new HBoxLayoutContainer(HBoxLayoutContainer.HBoxLayoutAlign.MIDDLE);
@@ -169,6 +174,11 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
   @Override
   public TextButton getDeleteButton() {
     return this.deleteButton;
+  }
+
+  @Override
+  public TextButton getHtmlEditorButton() {
+    return htmlEditor;
   }
 
   @Override

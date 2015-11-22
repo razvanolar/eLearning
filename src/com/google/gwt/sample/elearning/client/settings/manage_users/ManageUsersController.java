@@ -15,6 +15,7 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.form.SimpleComboBox;
 import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
@@ -40,6 +41,7 @@ public class ManageUsersController implements ISettingsController {
     TextField getFirstNameField();
     TextField getLastNameField();
     TextField getEmailField();
+    SimpleComboBox<UserRoleTypes> getRoleCombo();
     Grid<UserData> getGrid();
     void setState(UserViewState state);
     void loadUserData(UserData userData);

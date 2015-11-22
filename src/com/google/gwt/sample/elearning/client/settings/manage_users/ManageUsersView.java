@@ -3,10 +3,14 @@ package com.google.gwt.sample.elearning.client.settings.manage_users;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.sample.elearning.client.ELearningController;
 import com.google.gwt.sample.elearning.shared.model.UserData;
+import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.cell.core.client.form.ComboBoxCell;
 import com.sencha.gxt.core.client.IdentityValueProvider;
 import com.sencha.gxt.core.client.Style;
+import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.core.client.util.Margins;
+import com.sencha.gxt.data.shared.LabelProvider;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.loader.PagingLoadConfig;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
@@ -14,6 +18,7 @@ import com.sencha.gxt.data.shared.loader.PagingLoader;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.*;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
+import com.sencha.gxt.widget.core.client.form.SimpleComboBox;
 import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.*;
 import com.sencha.gxt.widget.core.client.toolbar.PagingToolBar;
@@ -28,6 +33,7 @@ import java.util.logging.Logger;
 public class ManageUsersView implements ManageUsersController.IManageUsersView {
 
   private static UserDataProperties userProperties = GWT.create(UserDataProperties.class);
+  private UserRoleTypes defaultRole = UserRoleTypes.USER;
 
   private BorderLayoutContainer mainContainer;
   private TextButton addButton, editButton, deleteButton;
@@ -38,6 +44,7 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
   private TextField firstNameField;
   private TextField lastNameField;
   private TextField emailField;
+  private SimpleComboBox<UserRoleTypes> roleComboBox;
 
   private Logger log = Logger.getLogger(ManageUsersView.class.getName());
 
@@ -54,6 +61,11 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     firstNameField = new TextField();
     lastNameField = new TextField();
     emailField = new TextField();
+    roleComboBox = new SimpleComboBox<UserRoleTypes>(new LabelProvider<UserRoleTypes>() {
+      public String getLabel(UserRoleTypes item) {
+        return item.name();
+      }
+    });
     CenterLayoutContainer formContainer = new CenterLayoutContainer();
     VerticalLayoutContainer formPanel = new VerticalLayoutContainer();
     BorderLayoutContainer gridContainer = new BorderLayoutContainer();
@@ -67,11 +79,18 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     buttonsContainer.add(deleteButton, hBoxLayoutData);
     buttonsContainer.setStyleName("buttonsBar");
 
+    roleComboBox.setEditable(false);
+    roleComboBox.setTriggerAction(ComboBoxCell.TriggerAction.ALL);
+    for (UserRoleTypes role : UserRoleTypes.values())
+      roleComboBox.add(role);
+    roleComboBox.setValue(defaultRole);
+
     VerticalLayoutContainer.VerticalLayoutData verticalLayoutData = new VerticalLayoutContainer.VerticalLayoutData(1, -1);
     formPanel.add(new FieldLabel(userNameField, "User Name"), verticalLayoutData);
     formPanel.add(new FieldLabel(firstNameField, "First Name"), verticalLayoutData);
     formPanel.add(new FieldLabel(lastNameField, "Last Name"), verticalLayoutData);
     formPanel.add(new FieldLabel(emailField, "Email"), verticalLayoutData);
+    formPanel.add(new FieldLabel(roleComboBox, "Role"), verticalLayoutData);
     formPanel.add(buttonsContainer, verticalLayoutData);
 
     formContainer.add(formPanel);
@@ -79,7 +98,7 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
 
     gridContainer.setCenterWidget(userDataGridView);
 
-    BorderLayoutContainer.BorderLayoutData layoutData = new BorderLayoutContainer.BorderLayoutData(.6);
+    BorderLayoutContainer.BorderLayoutData layoutData = new BorderLayoutContainer.BorderLayoutData(.65);
     layoutData.setSplit(true);
     layoutData.setMargins(new Margins(0, 5, 0, 0));
     mainContainer.setWestWidget(gridContainer, layoutData);
@@ -101,6 +120,7 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     columnConfigList.add(new ColumnConfig<UserData, String>(userProperties.firstName(), 100, "First Name"));
     columnConfigList.add(new ColumnConfig<UserData, String>(userProperties.lastName(), 100, "Last Name"));
     columnConfigList.add(new ColumnConfig<UserData, String>(userProperties.email(), 100, "Email"));
+    columnConfigList.add(new ColumnConfig<UserData, UserRoleTypes>(userProperties.role(), 100, "Role"));
 
     ColumnModel<UserData> columnModel = new ColumnModel<UserData>(columnConfigList);
     ListStore<UserData> store = new ListStore<UserData>(userProperties.key());
@@ -113,6 +133,22 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     userDataGrid.getView().setAutoFill(true);
     userDataGrid.setSelectionModel(selectionModel);
 
+    userDataGrid.getView().setViewConfig(new GridViewConfig<UserData>() {
+      @Override
+      public String getColStyle(UserData model, ValueProvider<? super UserData, ?> valueProvider, int rowIndex,
+          int colIndex) {
+        if (model.getRole() == UserRoleTypes.PROFESSOR) {
+          log.info("id: " + model.getId() + " | role: " + model.getRole());
+          return "adminRoleBackground";
+        } else
+          return null;
+      }
+
+      @Override
+      public String getRowStyle(UserData model, int rowIndex) {
+        return "adminRoleBackground";
+      }
+    });
     return userDataGrid;
   }
 
@@ -156,6 +192,7 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     firstNameField.setText(userData.getFirstName());
     lastNameField.setText(userData.getLastName());
     emailField.setText(userData.getEmail());
+    roleComboBox.setValue(userData.getRole());
   }
 
   @Override
@@ -164,6 +201,7 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     firstNameField.setText("");
     lastNameField.setText("");
     emailField.setText("");
+    roleComboBox.setValue(defaultRole);
   }
 
   private void setEnableFields(boolean value) {
@@ -216,6 +254,11 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
   @Override
   public TextField getEmailField() {
     return emailField;
+  }
+
+  @Override
+  public SimpleComboBox<UserRoleTypes> getRoleCombo() {
+    return roleComboBox;
   }
 
   @Override

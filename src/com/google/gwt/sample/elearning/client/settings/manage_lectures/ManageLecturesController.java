@@ -5,6 +5,9 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.sample.elearning.client.MasterWindow;
+import com.google.gwt.sample.elearning.client.eLearningUtils.HtmlEditorController;
+import com.google.gwt.sample.elearning.client.eLearningUtils.HtmlEditorView;
 import com.google.gwt.sample.elearning.client.eLearningUtils.TextInputValidator;
 import com.google.gwt.sample.elearning.client.service.*;
 import com.google.gwt.sample.elearning.shared.model.Lecture;
@@ -24,7 +27,7 @@ import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/***
  * Created by Cristi on 11/17/2015.
  */
 public class ManageLecturesController {
@@ -40,19 +43,13 @@ public class ManageLecturesController {
 
   public interface IManageLecturesView {
     TextButton getAddButton();
-
     TextButton getEditButton();
-
     TextButton getDeleteButton();
-
+    TextButton getHtmlEditorButton();
     TextField getLectureNameField();
-
     ComboBox<Professor> getProfessorComboBox();
-
     Grid<Lecture> getGrid();
-
     void setState(LectureViewState state);
-
     void loadLectures(Lecture userData);
 
     void clearFields();
@@ -149,6 +146,24 @@ public class ManageLecturesController {
         onComboProfessorSelection(selectedProfessordId);
       }
     });
+
+    view.getHtmlEditorButton().addSelectHandler(new SelectEvent.SelectHandler() {
+      @Override
+      public void onSelect(SelectEvent event) {
+        onHtmlEditorSelection();
+      }
+    });
+  }
+
+  private void onHtmlEditorSelection() {
+    HtmlEditorController.IHtmlEditorView editorView = new HtmlEditorView();
+    HtmlEditorController controller = new HtmlEditorController(editorView);
+    controller.bind();
+    MasterWindow window = new MasterWindow();
+    window.setContent(editorView.asWidget(), "Html Editor");
+    window.setModal(true);
+    window.setPixelSize(500, 350);
+    window.show();
 
     view.getAddButton().addSelectHandler(new SelectEvent.SelectHandler() {
       @Override

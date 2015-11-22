@@ -3,10 +3,11 @@ package com.google.gwt.sample.elearning.shared.model;
 import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
 
 import javax.jws.soap.SOAPBinding;
+
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/***
  * Created by Horea on 14/11/2015.
  */
 public class Professor extends UserData {

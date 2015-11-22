@@ -2,6 +2,7 @@ package com.google.gwt.sample.elearning.client.settings.manage_users;
 
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.sample.elearning.shared.model.UserData;
+import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.data.shared.PropertyAccess;
@@ -19,4 +20,5 @@ public interface UserDataProperties extends PropertyAccess<UserData> {
   ValueProvider<UserData, String> firstName();
   ValueProvider<UserData, String> lastName();
   ValueProvider<UserData, String> email();
+  ValueProvider<UserData, UserRoleTypes> role();
 }
