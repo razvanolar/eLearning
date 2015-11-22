@@ -11,11 +11,11 @@ public interface LectureServiceAsync {
 
   void getAllLectures(AsyncCallback<List<Lecture>> async);
 
-  void getAllLecturesByProfessor(int idProfessor, AsyncCallback<List<Lecture>> async);
+  void getAllLecturesByProfessor(long idProfessor, AsyncCallback<List<Lecture>> async);
 
-  void getLectureById(int id, AsyncCallback<Lecture> async);
+  void getLectureById(long id, AsyncCallback<Lecture> async);
 
   void updateLecture(Lecture lecture, AsyncCallback<Void> async);
 
-  void removeLecture(int id, AsyncCallback<Void> async);
+  void removeLecture(long id, AsyncCallback<Void> async);
 }

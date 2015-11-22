@@ -13,8 +13,9 @@ import java.util.List;
  * Created by Ambrozie Paval on 11/19/2015.
  */
 public class LectureServiceImpl extends RemoteServiceServlet implements LectureService {
+
   @Override
-  public void createLecture(Lecture lecture) {
+  public void createLecture(Lecture lecture) throws ELearningException{
     LectureJDBCImpl lectureJDBC = new LectureJDBCImpl();
     lectureJDBC.createLecture(lectureJDBC);
   }
@@ -28,7 +29,7 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   }
 
   @Override
-  public List<Lecture> getAllLecturesByProfessor(int idProfessor) throws ELearningException {
+  public List<Lecture> getAllLecturesByProfessor(long idProfessor) throws ELearningException {
     List<Lecture> lectures;
     LectureJDBCImpl lectureJDBC = new LectureJDBCImpl();
     lectures = lectureJDBC.getAllLecturesByProfessor(idProfessor);
@@ -36,7 +37,7 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   }
 
   @Override
-  public Lecture getLectureById(int id) throws ELearningException{
+  public Lecture getLectureById(long id) throws ELearningException{
     Lecture lecture;
     LectureJDBCImpl lectureJDBC = new LectureJDBCImpl();
     lecture = lectureJDBC.getLectureById(id);
@@ -50,7 +51,7 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   }
 
   @Override
-  public void removeLecture(int id) throws ELearningException{
+  public void removeLecture(long id) throws ELearningException{
     LectureJDBCImpl lectureJDBC;
     lectureJDBC = new LectureJDBCImpl();
     lectureJDBC.removeLecture(id);

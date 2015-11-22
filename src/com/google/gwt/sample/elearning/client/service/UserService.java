@@ -23,7 +23,7 @@ public interface UserService extends RemoteService {
 
   void updateUser(UserData newUser) throws ELearningException;
 
-  void removeUser(List<String> ids) throws ELearningException;
+  void removeUser(List<Long> ids) throws ELearningException;
 
 
 }

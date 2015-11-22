@@ -15,7 +15,7 @@ public class LectureJDBCImpl {
   public LectureJDBCImpl() {
   }
 
-  public void createLecture(LectureJDBCImpl lectureJDBC) {
+  public void createLecture(LectureJDBCImpl lectureJDBC) throws ELearningException{
     throw new ELearningException("Not implemented yet!");
   }
 
@@ -23,11 +23,11 @@ public class LectureJDBCImpl {
     throw new ELearningException("Not implemented yet!");
   }
 
-  public List<Lecture> getAllLecturesByProfessor(int idProfessor) {
+  public List<Lecture> getAllLecturesByProfessor(long idProfessor) {
     throw new ELearningException("Not implemented yet!");
   }
 
-  public Lecture getLectureById(int id) {
+  public Lecture getLectureById(long id) {
     throw new ELearningException("Not implemented yet!");
   }
 
@@ -35,7 +35,7 @@ public class LectureJDBCImpl {
     throw new ELearningException("Not implemented yet!");
   }
 
-  public void removeLecture(int id) {
+  public void removeLecture(long id) {
     throw new ELearningException("Not implemented yet!");
   }
 }

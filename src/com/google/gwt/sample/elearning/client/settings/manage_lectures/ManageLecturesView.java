@@ -109,8 +109,6 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     ColumnModel<Lecture> columnModel = new ColumnModel<Lecture>(columnConfigList);
     ListStore<Lecture> store = new ListStore<Lecture>(lectureProperties.key());
 
-
-
     GroupingView<Lecture> groupingView = new GroupingView<Lecture>();
     groupingView.setShowGroupedColumn(false);
     groupingView.setForceFit(true);
@@ -151,7 +149,7 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     }
   }
 
-  private void clearFields() {
+  public void clearFields() {
     lectureNameField.setText("");
   }
 
@@ -188,6 +186,16 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
   @Override
   public void loadLectures(Lecture lecture) {
     lectureNameField.setText(lecture.getLectureName());
+  }
+
+  @Override
+  public void mask() {
+    mainContainer.mask();
+  }
+
+  @Override
+  public void unMask() {
+    mainContainer.unmask();
   }
 
   @Override

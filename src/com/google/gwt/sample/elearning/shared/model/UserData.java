@@ -24,6 +24,13 @@ public class UserData implements IsSerializable {
     this.firstName = firstName;
   }
 
+  public UserData(String username, String firstName, String lastName, String email) {
+    this.username = username;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+  }
+
   public UserData(long id, String username, String password, String firstName, String lastName, String email) {
     this.id = id;
     this.username = username;
@@ -67,5 +74,9 @@ public class UserData implements IsSerializable {
 
   public UserRoleTypes getRole() {
     return role;
+  }
+
+  public void setId(long id) {
+    this.id = id;
   }
 }

@@ -13,10 +13,12 @@ import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -40,6 +42,7 @@ public class ManageUsersController implements ISettingsController {
     Grid<UserData> getGrid();
     void setState(UserViewState state);
     void loadUserData(UserData userData);
+    void clearFields();
     void mask();
     void unmask();
     Widget asWidget();
@@ -92,6 +95,98 @@ public class ManageUsersController implements ISettingsController {
     view.getFirstNameField().addKeyUpHandler(textFieldsValidator);
     view.getLastNameField().addKeyUpHandler(textFieldsValidator);
     view.getEmailField().addKeyUpHandler(textFieldsValidator);
+
+    view.getAddButton().addSelectHandler(new SelectEvent.SelectHandler() {
+      @Override
+      public void onSelect(SelectEvent event) {
+        onnAddButtonSelection();
+      }
+    });
+
+    view.getEditButton().addSelectHandler(new SelectEvent.SelectHandler() {
+      @Override
+      public void onSelect(SelectEvent event) {
+        onEditButtonSelection();
+      }
+    });
+
+    view.getDeleteButton().addSelectHandler(new SelectEvent.SelectHandler() {
+      @Override
+      public void onSelect(SelectEvent event) {
+        onDeleteButtonSelection();
+      }
+    });
+  }
+
+  private void onnAddButtonSelection() {
+    String fName = view.getFirstNameField().getText();
+    String lName = view.getLastNameField().getText();
+    String uName = view.getUserNameField().getText();
+    String eMail = view.getEmailField().getText();
+    if(TextInputValidator.isEmptyString(fName) || TextInputValidator.isEmptyString(lName) || TextInputValidator.isEmptyString(uName) || TextInputValidator.isEmptyString(eMail)){
+      new MessageBox("","Invalid input").show();
+      return;
+    }
+
+    userService.createUser(new UserData(uName, fName, lName, eMail), new AsyncCallback<Void>() {
+      @Override
+      public void onFailure(Throwable caught) {
+        new MessageBox("", "Could not create User").show();
+      }
+
+      @Override
+      public void onSuccess(Void result) {
+        new MessageBox("", "User created").show();
+        view.clearFields();
+        loadUsers();
+      }
+    });
+  }
+
+  private void onEditButtonSelection() {
+    long id = view.getGrid().getSelectionModel().getSelectedItem().getId();
+    String fName = view.getFirstNameField().getText();
+    String lName = view.getLastNameField().getText();
+    String uName = view.getUserNameField().getText();
+    String eMail = view.getEmailField().getText();
+    if(TextInputValidator.isEmptyString(fName) || TextInputValidator.isEmptyString(lName) || TextInputValidator.isEmptyString(uName) || TextInputValidator.isEmptyString(eMail)){
+      new MessageBox("","Invalid input").show();
+      return;
+    }
+    UserData user = new UserData(uName, fName, lName, eMail);
+    user.setId(id);
+    userService.updateUser(user, new AsyncCallback<Void>() {
+      @Override
+      public void onFailure(Throwable caught) {
+        new MessageBox("", "Could not update User").show();
+      }
+
+      @Override
+      public void onSuccess(Void result) {
+        new MessageBox("", "User updated").show();
+        view.clearFields();
+        loadUsers();
+      }
+    });
+  }
+
+  private void onDeleteButtonSelection() {
+    List<UserData> userDatas = view.getGrid().getSelectionModel().getSelectedItems();
+    List<Long> ids = new ArrayList<Long>();
+    for(UserData userData : userDatas)
+      ids.add(userData.getId());
+    userService.removeUser(ids, new AsyncCallback<Void>() {
+      @Override
+      public void onFailure(Throwable caught) {
+        new MessageBox("","Could not delete users").show();
+      }
+
+      @Override
+      public void onSuccess(Void result) {
+        new MessageBox("","Users deleted").show();
+        loadUsers();
+      }
+    });
   }
 
   private void doGridSelectionEvent(SelectionChangedEvent<UserData> event) {
