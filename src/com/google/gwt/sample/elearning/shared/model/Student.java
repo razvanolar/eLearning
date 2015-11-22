@@ -1,5 +1,7 @@
 package com.google.gwt.sample.elearning.shared.model;
 
+import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +18,13 @@ public class Student extends UserData {
 
   public Student(long id, String username, String password, String firstName, String lastName, String email,
                  long registrationNo) {
-    super(id, username, password, firstName, lastName, email);
+    super(id, username, password, firstName, lastName, email, UserRoleTypes.USER);
+    this.registrationNo = registrationNo;
+  }
+
+  public Student( String username, String password, String firstName, String lastName, String email,
+                 long registrationNo) {
+    super(username, password, firstName, lastName, email, UserRoleTypes.USER);
     this.registrationNo = registrationNo;
   }
 

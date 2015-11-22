@@ -43,7 +43,7 @@ public class UserJDBCImpl {
         String lastName = resultSet.getString(5);
         String email = resultSet.getString(6);
 
-        UserData userData = new UserData(id, userName, password, firstName, lastName, email);
+        UserData userData = new UserData(id, userName, password, firstName, lastName, email,UserRoleTypes.USER);
         resultSet.close();
         getLoginDataStatement.close();
         return userData;

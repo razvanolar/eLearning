@@ -13,9 +13,22 @@ public class Lecture implements IsSerializable {
   public Lecture() {
   }
 
-  public Lecture(long id, Professor professor, String lectureName) {
+  public Lecture(long id, String lectureName,  Professor professor) {
     this.id = id;
     this.professor = professor;
+    this.lectureName = lectureName;
+  }
+
+  public Lecture(String lectureName, Professor professor) {
+    this.professor = professor;
+    this.lectureName = lectureName;
+  }
+
+  public void setProfessor(Professor professor) {
+    this.professor = professor;
+  }
+
+  public void setLectureName(String lectureName) {
     this.lectureName = lectureName;
   }
 

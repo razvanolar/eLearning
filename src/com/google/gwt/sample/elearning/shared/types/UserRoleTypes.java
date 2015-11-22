@@ -1,9 +1,11 @@
 package com.google.gwt.sample.elearning.shared.types;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 /***
  * Created by razvanolar on 17.11.2015.
  */
-public enum UserRoleTypes {
+public enum UserRoleTypes implements IsSerializable {
 
   ADMIN(1), PROFESSOR(2), USER(3);
 

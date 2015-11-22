@@ -23,7 +23,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
     List<UserData> result = new ArrayList<>();
     for (int i = 0; i < 1000; i++) {
       result.add(new UserData(id, "userName" + id, "pwd" + id, "firstName" + id, "lastName" + id,
-              "email" + id + "@gmail.com"));
+              "email" + id + "@gmail.com",UserRoleTypes.USER));
       id++;
     }
     return result;

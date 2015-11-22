@@ -66,11 +66,11 @@ public class ManageLecturesController {
     Professor prof1 = new Professor(0, "user1", "pwd1", "fName1", "lName1", "eMail1");
     Professor prof2 = new Professor(1, "user2", "pwd2", "fName2", "lName2", "eMail2");
     lectureList = new ArrayList<Lecture>();
-    lectureList.add(new Lecture(0, prof1, "denumire1"));
-    lectureList.add(new Lecture(1, prof1, "denumire2"));
-    lectureList.add(new Lecture(2, prof1, "denumire3"));
-    lectureList.add(new Lecture(3, prof2, "denumire4"));
-    lectureList.add(new Lecture(4, prof2, "denumire5"));
+    lectureList.add(new Lecture(0, "denumire1", prof1));
+    lectureList.add(new Lecture(1, "denumire2", prof1));
+    lectureList.add(new Lecture(2, "denumire3", prof1));
+    lectureList.add(new Lecture(3, "denumire4", prof2));
+    lectureList.add(new Lecture(4, "denumire5", prof2));
 
     view.getGrid().getStore().addAll(lectureList);
 
