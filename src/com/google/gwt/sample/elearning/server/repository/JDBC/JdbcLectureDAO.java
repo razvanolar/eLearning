@@ -29,7 +29,7 @@ public class JdbcLectureDAO implements LectureDAO {
             ResultSet rs = stmt.executeQuery("select * from cursuri");
             while (rs.next()) {
                 Professor professor = new Professor( userDAO.getUserById(rs.getLong(3)));
-                Lecture lecture = new Lecture(rs.getLong(1),rs.getString(2), professor);
+                Lecture lecture = new Lecture(rs.getLong(1), professor,rs.getString(2));
                 lecturelist.add(lecture);
             }
 
@@ -55,7 +55,7 @@ public class JdbcLectureDAO implements LectureDAO {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 Professor professor = new Professor( userDAO.getUserById(rs.getLong(3)));
-                lecture = new Lecture(rs.getLong(1), rs.getString(2), (Professor) professor);
+                lecture = new Lecture(rs.getLong(1), professor,rs.getString(2));
             }
 
         } catch (SQLException e) {
@@ -80,7 +80,7 @@ public class JdbcLectureDAO implements LectureDAO {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 Professor professor = new Professor( userDAO.getUserById(rs.getLong(3)));
-                lecture = new Lecture(rs.getLong(1), rs.getString(2), (Professor) professor);
+                lecture = new Lecture(rs.getLong(1), professor, rs.getString(2));
             }
 
         } catch (SQLException e) {
@@ -104,7 +104,7 @@ public class JdbcLectureDAO implements LectureDAO {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 Professor professor = new Professor( userDAO.getUserById(rs.getLong(3)));
-                Lecture lecture = new Lecture(rs.getLong(1),rs.getString(2), professor);
+                Lecture lecture = new Lecture(rs.getLong(1),professor, rs.getString(2));
                 lectures.add(lecture);
             }
 
@@ -174,5 +174,4 @@ public class JdbcLectureDAO implements LectureDAO {
         }
 
     }
-
 }

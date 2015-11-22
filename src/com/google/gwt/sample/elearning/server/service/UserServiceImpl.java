@@ -53,7 +53,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
   }
 
   @Override
-  public void removeUser(List<String> id) throws ELearningException {
+  public void removeUser(List<Long> id) throws ELearningException {
     userJDBC.removeUser(id);
   }
 }

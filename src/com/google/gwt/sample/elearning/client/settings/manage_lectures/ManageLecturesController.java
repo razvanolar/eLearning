@@ -1,15 +1,23 @@
 package com.google.gwt.sample.elearning.client.settings.manage_lectures;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.sample.elearning.client.eLearningUtils.TextInputValidator;
+import com.google.gwt.sample.elearning.client.service.LectureService;
+import com.google.gwt.sample.elearning.client.service.LectureServiceAsync;
+import com.google.gwt.sample.elearning.client.service.ProfessorService;
+import com.google.gwt.sample.elearning.client.service.ProfessorServiceAsync;
 import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.google.gwt.sample.elearning.shared.model.Professor;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.ComboBox;
 import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.Grid;
@@ -25,6 +33,8 @@ public class ManageLecturesController {
 
   private List<Professor> professorList;
   private List<Lecture> lectureList;
+  private LectureServiceAsync lectureService = GWT.create(LectureService.class);
+  private ProfessorServiceAsync professorService = GWT.create(ProfessorService.class);
 
   public enum LectureViewState {
     ADD, EDIT, ADDING, NONE
@@ -47,6 +57,12 @@ public class ManageLecturesController {
 
     void loadLectures(Lecture userData);
 
+    void clearFields();
+
+    void mask();
+
+    void unMask();
+
     Widget asWidget();
   }
 
@@ -58,31 +74,50 @@ public class ManageLecturesController {
 
   public void bind() {
     addListeners();
-    addTestData();
+    populateGrid();
+    populateCombo();
   }
 
-  private void addTestData() {
-    ListStore<Lecture> listStore = view.getGrid().getStore();
-    Professor prof1 = new Professor(0, "user1", "pwd1", "fName1", "lName1", "eMail1");
-    Professor prof2 = new Professor(1, "user2", "pwd2", "fName2", "lName2", "eMail2");
-    lectureList = new ArrayList<Lecture>();
-    lectureList.add(new Lecture(0, "denumire1", prof1));
-    lectureList.add(new Lecture(1, "denumire2", prof1));
-    lectureList.add(new Lecture(2, "denumire3", prof1));
-    lectureList.add(new Lecture(3, "denumire4", prof2));
-    lectureList.add(new Lecture(4, "denumire5", prof2));
+  private void populateGrid(){
+    view.mask();
+    lectureService.getAllLectures(new AsyncCallback<List<Lecture>>() {
+      @Override
+      public void onFailure(Throwable caught) {
+        view.unMask();
+        new MessageBox("", "Could not get Lectures").show();
+      }
 
-    view.getGrid().getStore().addAll(lectureList);
+      @Override
+      public void onSuccess(List<Lecture> result) {
+        view.getGrid().getStore().clear();
+        lectureList.clear();
+        lectureList.addAll(result);
+        view.getGrid().getStore().addAll(lectureList);
+        view.unMask();
+      }
+    });
+  }
 
-    professorList = new ArrayList<Professor>();
-    Professor all = new Professor(-1, "", "", "All", "", "");
-    professorList.add(all);
-    professorList.add(prof1);
-    professorList.add(prof2);
-    ListStore<Professor> profStore = view.getProfessorComboBox().getStore();
+  private void populateCombo(){
+    view.mask();
+    professorService.getAllProfessors(new AsyncCallback<List<Professor>>() {
+      @Override
+      public void onFailure(Throwable caught) {
+        view.unMask();
+        new MessageBox("", "Cold not get Professors").show();
+      }
 
-    profStore.addAll(professorList);
-    view.getProfessorComboBox().setValue(all);
+      @Override
+      public void onSuccess(List<Professor> result) {
+        view.getProfessorComboBox().getStore().clear();
+        Professor all = new Professor(-1, "", "", "All", "", "");
+        professorList.clear();
+        professorList.add(all);
+        professorList.addAll(result);
+        view.getProfessorComboBox().getStore().addAll(professorList);
+        view.unMask();
+      }
+    });
   }
 
   private void addListeners() {
@@ -97,7 +132,8 @@ public class ManageLecturesController {
         if (isLectureSelected()) {
           view.setState(LectureViewState.EDIT);
         } else {
-          if (!TextInputValidator.isEmptyString(view.getLectureNameField().getText()))
+          if (!TextInputValidator.isEmptyString(view.getLectureNameField().getText())
+              && view.getProfessorComboBox().getValue().getId() != -1)
             view.setState(LectureViewState.ADD);
           else
             view.setState(LectureViewState.ADDING);
@@ -113,15 +149,91 @@ public class ManageLecturesController {
         onComboProfessorSelection(selectedProfessordId);
       }
     });
+
+    view.getAddButton().addSelectHandler(new SelectEvent.SelectHandler() {
+      @Override
+      public void onSelect(SelectEvent event) {
+        onAddButtonSelection();
+        populateGrid();
+      }
+    });
+
+    view.getDeleteButton().addSelectHandler(new SelectEvent.SelectHandler() {
+      @Override
+      public void onSelect(SelectEvent event) {
+        onRemoveButtonSelection();
+        populateGrid();
+      }
+    });
+
+    view.getEditButton().addSelectHandler(new SelectEvent.SelectHandler() {
+      @Override
+      public void onSelect(SelectEvent event) {
+        onEditButtonSelection();
+        populateGrid();
+      }
+    });
+  }
+
+  private void onAddButtonSelection() {
+    if (!TextInputValidator.isEmptyString(view.getLectureNameField().getText())) {
+      Lecture lecture = new Lecture(view.getProfessorComboBox().getValue(), view.getLectureNameField().getText());
+      lectureService.createLecture(lecture, new AsyncCallback<Void>() {
+        @Override
+        public void onFailure(Throwable caught) {
+          new MessageBox("", "Could not save Lecture").show();
+        }
+
+        @Override
+        public void onSuccess(Void result) {
+          new MessageBox("", "Lecture saved").show();
+        }
+      });
+    } else {
+      new MessageBox("", "Invalid input").show();
+    }
+  }
+
+  private void onRemoveButtonSelection() {
+    lectureService
+        .removeLecture(view.getGrid().getSelectionModel().getSelectedItem().getId(), new AsyncCallback<Void>() {
+          @Override
+          public void onFailure(Throwable caught) {
+            new MessageBox("", "Could not remove Lecture").show();
+          }
+
+          @Override
+          public void onSuccess(Void result) {
+            new MessageBox("", "Lecture removed").show();
+          }
+        });
+  }
+
+  private void onEditButtonSelection() {
+    Lecture lecture = new Lecture(view.getGrid().getSelectionModel().getSelectedItem().getId(), view.getGrid().getSelectionModel().getSelectedItem().getProfessor(), view.getLectureNameField().getText());
+    lectureService.updateLecture(lecture, new AsyncCallback<Void>() {
+      @Override
+      public void onFailure(Throwable caught) {
+        new MessageBox("", "Could not update Lecture").show();
+      }
+
+      @Override
+      public void onSuccess(Void result) {
+        new MessageBox("", "Lecture updated").show();
+      }
+    });
   }
 
   private void onComboProfessorSelection(long selectedProfessordId) {
     List<Lecture> lectures = new ArrayList<Lecture>();
     if (selectedProfessordId == -1) {
       lectures.addAll(lectureList);
+      view.setState(LectureViewState.ADDING);
     } else {
+      if (!TextInputValidator.isEmptyString(view.getLectureNameField().getText()))
+        view.setState(LectureViewState.ADD);
       for (Lecture lecture : lectureList) {
-        if(lecture.getProfessor().getId() == selectedProfessordId){
+        if (lecture.getProfessor().getId() == selectedProfessordId) {
           lectures.add(lecture);
         }
       }

@@ -16,6 +16,10 @@
         <servlet-name>com.google.gwt.sample.elearning.ELearning LectureService</servlet-name>
         <servlet-class>com.google.gwt.sample.elearning.server.service.LectureServiceImpl</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>com.google.gwt.sample.elearning.ELearning ProfessorService</servlet-name>
+        <servlet-class>com.google.gwt.sample.elearning.server.service.ProfessorServiceImpl</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>com.google.gwt.sample.elearning.ELearning UserService</servlet-name>
         <url-pattern>/elearning/UserService</url-pattern>
@@ -27,6 +31,10 @@
     <servlet-mapping>
         <servlet-name>com.google.gwt.sample.elearning.ELearning LectureService</servlet-name>
         <url-pattern>/elearning/LectureService</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>com.google.gwt.sample.elearning.ELearning ProfessorService</servlet-name>
+        <url-pattern>/elearning/ProfessorService</url-pattern>
     </servlet-mapping>
 
     <!-- Servlets -->

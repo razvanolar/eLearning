@@ -74,7 +74,7 @@ public class UserJDBCImpl {
     throw new ELearningException("Not implemented yet");
   }
 
-  public UserData removeUser(List<String> id) {
+  public UserData removeUser(List<Long> id) {
     throw new ELearningException("Not implemented yet");
   }
 

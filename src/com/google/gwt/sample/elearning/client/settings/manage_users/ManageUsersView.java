@@ -158,7 +158,8 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     emailField.setText(userData.getEmail());
   }
 
-  private void clearFields() {
+  @Override
+  public void clearFields() {
     userNameField.setText("");
     firstNameField.setText("");
     lastNameField.setText("");
