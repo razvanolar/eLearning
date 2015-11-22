@@ -1,7 +1,8 @@
 package com.google.gwt.sample.elearning.server.service;
 
 import com.google.gwt.sample.elearning.client.service.UserService;
-import com.google.gwt.sample.elearning.server.JDBC.UserJDBCImpl;
+import com.google.gwt.sample.elearning.server.repository.DAOFactory;
+import com.google.gwt.sample.elearning.server.repository.JDBC.UserDAO;
 import com.google.gwt.sample.elearning.shared.exception.ELearningException;
 import com.google.gwt.sample.elearning.shared.model.UserData;
 import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
@@ -15,45 +16,48 @@ import java.util.List;
  */
 public class UserServiceImpl extends RemoteServiceServlet implements UserService {
 
-  UserJDBCImpl userJDBC = new UserJDBCImpl();
+  DAOFactory factory = DAOFactory.getInstance();
+  UserDAO userDAO = factory.getUserDAO();
   private long id = 0;
 
   @Override
   public List<UserData> getAllUsers() throws ELearningException {
+    return userDAO.getAllUsers();
+  }
+
+  @Override
+  public List<? extends UserData> getAllUsersByRole(UserRoleTypes role) throws ELearningException {
     List<UserData> result = new ArrayList<>();
-    for (int i = 0; i < 1000; i++) {
-      result.add(new UserData(id, "userName" + id, "pwd" + id, "firstName" + id, "lastName" + id,
-              "email" + id + "@gmail.com",UserRoleTypes.USER));
-      id++;
+    List<? extends UserData> allUsers = userDAO.getAllUsers();
+    for(UserData user : allUsers) {
+      if(user.getRole().getId() == role.getId()) {
+        result.add(user);
+      }
     }
     return result;
   }
 
   @Override
-  public List<? extends UserData> getAllUsersByRole(UserRoleTypes role) throws ELearningException {
-    return userJDBC.getAllUsersByRole(role);
-  }
-
-  @Override
   public UserData getUserById(int id) throws ELearningException {
     UserData userData;
-
-    userData = userJDBC.getUserById(id);
+    userData = userDAO.getUserById(id);
     return userData;
   }
 
   @Override
   public void createUser(UserData user) throws ELearningException {
-    userJDBC.createUser(user);
+    userDAO.insertUser(user);
   }
 
   @Override
   public void updateUser(UserData newUser) throws ELearningException {
-    userJDBC.updateUser(newUser);
+    userDAO.updateUser(newUser);
   }
 
   @Override
-  public void removeUser(List<Long> id) throws ELearningException {
-    userJDBC.removeUser(id);
+  public void removeUser(List<Long> ids) throws ELearningException {
+    for(long id : ids) {
+      userDAO.deleteUser(id);
+    }
   }
 }

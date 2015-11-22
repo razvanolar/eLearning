@@ -6,15 +6,13 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.sample.elearning.client.eLearningUtils.TextInputValidator;
-import com.google.gwt.sample.elearning.client.service.LectureService;
-import com.google.gwt.sample.elearning.client.service.LectureServiceAsync;
-import com.google.gwt.sample.elearning.client.service.ProfessorService;
-import com.google.gwt.sample.elearning.client.service.ProfessorServiceAsync;
+import com.google.gwt.sample.elearning.client.service.*;
 import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.google.gwt.sample.elearning.shared.model.Professor;
+import com.google.gwt.sample.elearning.shared.model.UserData;
+import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -34,7 +32,7 @@ public class ManageLecturesController {
   private List<Professor> professorList;
   private List<Lecture> lectureList;
   private LectureServiceAsync lectureService = GWT.create(LectureService.class);
-  private ProfessorServiceAsync professorService = GWT.create(ProfessorService.class);
+  private UserServiceAsync userServiceAsync = GWT.create(UserService.class);
 
   public enum LectureViewState {
     ADD, EDIT, ADDING, NONE
@@ -100,7 +98,7 @@ public class ManageLecturesController {
 
   private void populateCombo(){
     view.mask();
-    professorService.getAllProfessors(new AsyncCallback<List<Professor>>() {
+    userServiceAsync.getAllUsersByRole(UserRoleTypes.PROFESSOR, new AsyncCallback<List<? extends UserData>>() {
       @Override
       public void onFailure(Throwable caught) {
         view.unMask();
@@ -108,12 +106,14 @@ public class ManageLecturesController {
       }
 
       @Override
-      public void onSuccess(List<Professor> result) {
+      public void onSuccess(List<? extends UserData> result) {
         view.getProfessorComboBox().getStore().clear();
         Professor all = new Professor(-1, "", "", "All", "", "");
         professorList.clear();
         professorList.add(all);
-        professorList.addAll(result);
+        for(UserData user : result) {
+          professorList.add((Professor) user);
+        }
         view.getProfessorComboBox().getStore().addAll(professorList);
         view.unMask();
       }

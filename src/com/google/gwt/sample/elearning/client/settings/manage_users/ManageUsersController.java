@@ -8,6 +8,7 @@ import com.google.gwt.sample.elearning.client.service.UserService;
 import com.google.gwt.sample.elearning.client.service.UserServiceAsync;
 import com.google.gwt.sample.elearning.client.settings.ISettingsController;
 import com.google.gwt.sample.elearning.shared.model.UserData;
+import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
@@ -123,12 +124,13 @@ public class ManageUsersController implements ISettingsController {
     String lName = view.getLastNameField().getText();
     String uName = view.getUserNameField().getText();
     String eMail = view.getEmailField().getText();
+    //TODO collect user role
     if(TextInputValidator.isEmptyString(fName) || TextInputValidator.isEmptyString(lName) || TextInputValidator.isEmptyString(uName) || TextInputValidator.isEmptyString(eMail)){
       new MessageBox("","Invalid input").show();
       return;
     }
 
-    userService.createUser(new UserData(uName, fName, lName, eMail), new AsyncCallback<Void>() {
+    userService.createUser(new UserData(uName, fName, lName, eMail, UserRoleTypes.USER), new AsyncCallback<Void>() {
       @Override
       public void onFailure(Throwable caught) {
         new MessageBox("", "Could not create User").show();
@@ -153,7 +155,8 @@ public class ManageUsersController implements ISettingsController {
       new MessageBox("","Invalid input").show();
       return;
     }
-    UserData user = new UserData(uName, fName, lName, eMail);
+    //TODO collect user role
+    UserData user = new UserData(uName, fName, lName, eMail, UserRoleTypes.USER);
     user.setId(id);
     userService.updateUser(user, new AsyncCallback<Void>() {
       @Override
