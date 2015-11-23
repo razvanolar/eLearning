@@ -24,4 +24,6 @@ public interface LectureService extends RemoteService {
   void updateLecture(Lecture lecture) throws ELearningException;
 
   void removeLecture(long id) throws ELearningException;
+
+  String addLectureFile(String title, String text) throws ELearningException;
 }

@@ -157,7 +157,7 @@ public class ManageLecturesController {
 
   private void onHtmlEditorSelection() {
     HtmlEditorController.IHtmlEditorView editorView = new HtmlEditorView();
-    HtmlEditorController controller = new HtmlEditorController(editorView);
+    HtmlEditorController controller = new HtmlEditorController(editorView, lectureService);
     controller.bind();
     MasterWindow window = new MasterWindow();
     window.setContent(editorView.asWidget(), "Html Editor");

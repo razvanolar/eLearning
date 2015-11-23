@@ -18,4 +18,6 @@ public interface LectureServiceAsync {
   void updateLecture(Lecture lecture, AsyncCallback<Void> async);
 
   void removeLecture(long id, AsyncCallback<Void> async);
+
+  void addLectureFile(String title, String text, AsyncCallback<String> async);
 }
