@@ -51,7 +51,6 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
 
   private void initGUI() {
     mainContainer = new BorderLayoutContainer();
-    log.info("test 1");
     professorListStore = new ListStore<Professor>(professorProperties.key());
     professorComboBox = new ComboBox<Professor>(professorListStore, new StringLabelProvider<Professor>());
     professorComboBox.setEditable(false);
@@ -62,7 +61,6 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     lectureNameField = new TextField();
     htmlEditor = new TextButton("Create new file");
 
-    log.info("test 2");
     ToolBar toolBar = new ToolBar();
     toolBar.add(new FieldLabel(professorComboBox, "Professor"));
     toolBar.add(new SeparatorToolItem());
@@ -71,29 +69,24 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     VerticalLayoutContainer formPanel = new VerticalLayoutContainer();
     HBoxLayoutContainer buttonsContainer = new HBoxLayoutContainer(HBoxLayoutContainer.HBoxLayoutAlign.MIDDLE);
     lectureGridView = createGrid();
-    log.info("test 3");
     BoxLayoutContainer.BoxLayoutData hBoxLayoutData = new BoxLayoutContainer.BoxLayoutData(new Margins(5));
     hBoxLayoutData.setFlex(1);
     buttonsContainer.add(addButton, hBoxLayoutData);
     buttonsContainer.add(editButton, hBoxLayoutData);
     buttonsContainer.add(deleteButton, hBoxLayoutData);
     buttonsContainer.setStyleName("buttonsBar");
-    log.info("test 4");
     VerticalLayoutContainer.VerticalLayoutData verticalLayoutData = new VerticalLayoutContainer.VerticalLayoutData(1,
         -1);
     formPanel.add(new FieldLabel(lectureNameField, "Lecture Name"), verticalLayoutData);
     formPanel.add(buttonsContainer, verticalLayoutData);
-    log.info("test 5");
     formContainer.add(formPanel);
     formContainer.setStyleName("whiteBackground");
-    log.info("test 6");
     BorderLayoutContainer.BorderLayoutData layoutData = new BorderLayoutContainer.BorderLayoutData(.6);
     layoutData.setSplit(true);
     layoutData.setMargins(new Margins(0, 5, 0, 0));
     mainContainer.setNorthWidget(toolBar, new BorderLayoutContainer.BorderLayoutData(30));
     mainContainer.setWestWidget(lectureGridView, layoutData);
     mainContainer.setCenterWidget(formContainer);
-    log.info("test 7");
     setState(state);
   }
 

@@ -10,12 +10,14 @@ import com.google.gwt.sample.elearning.client.eLearningUtils.HtmlEditorControlle
 import com.google.gwt.sample.elearning.client.eLearningUtils.HtmlEditorView;
 import com.google.gwt.sample.elearning.client.eLearningUtils.TextInputValidator;
 import com.google.gwt.sample.elearning.client.service.*;
+import com.google.gwt.sample.elearning.client.settings.ISettingsController;
 import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.google.gwt.sample.elearning.shared.model.Professor;
 import com.google.gwt.sample.elearning.shared.model.UserData;
 import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -26,11 +28,12 @@ import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
-/***
+/**
  * Created by Cristi on 11/17/2015.
  */
-public class ManageLecturesController {
+public class ManageLecturesController implements ISettingsController{
 
   private List<Professor> professorList;
   private List<Lecture> lectureList;
@@ -68,12 +71,24 @@ public class ManageLecturesController {
   }
 
   public void bind() {
+    lectureList = new ArrayList<Lecture>();
+    professorList = new ArrayList<Professor>();
     addListeners();
     populateGrid();
     populateCombo();
   }
 
-  private void populateGrid(){
+  @Override
+  public void loadResources() {
+    ListStore<Lecture> lecturesStore = view.getGrid().getStore();
+    if(lecturesStore == null || lecturesStore.getAll().isEmpty())
+      populateGrid();
+    ListStore<Professor> professorStore = view.getProfessorComboBox().getStore();
+    if(professorStore == null || professorStore.getAll().isEmpty())
+      populateCombo();
+  }
+
+  private void populateGrid() {
     view.mask();
     lectureService.getAllLectures(new AsyncCallback<List<Lecture>>() {
       @Override
@@ -92,8 +107,7 @@ public class ManageLecturesController {
       }
     });
   }
-
-  private void populateCombo(){
+  private void populateCombo() {
     view.mask();
     userServiceAsync.getAllUsersByRole(UserRoleTypes.PROFESSOR, new AsyncCallback<List<? extends UserData>>() {
       @Override
@@ -108,10 +122,12 @@ public class ManageLecturesController {
         Professor all = new Professor(-1, "", "", "All", "", "");
         professorList.clear();
         professorList.add(all);
-        for(UserData user : result) {
-          professorList.add((Professor) user);
+        for (UserData user : result) {
+          professorList.add(new Professor(user.getId(), user.getUsername(), user.getPassword(), user.getFirstName(),
+              user.getLastName(), user.getEmail()));
         }
         view.getProfessorComboBox().getStore().addAll(professorList);
+        view.getProfessorComboBox().setValue(all);
         view.unMask();
       }
     });
@@ -153,23 +169,11 @@ public class ManageLecturesController {
         onHtmlEditorSelection();
       }
     });
-  }
-
-  private void onHtmlEditorSelection() {
-    HtmlEditorController.IHtmlEditorView editorView = new HtmlEditorView();
-    HtmlEditorController controller = new HtmlEditorController(editorView, lectureService);
-    controller.bind();
-    MasterWindow window = new MasterWindow();
-    window.setContent(editorView.asWidget(), "Html Editor");
-    window.setModal(true);
-    window.setPixelSize(500, 350);
-    window.show();
 
     view.getAddButton().addSelectHandler(new SelectEvent.SelectHandler() {
       @Override
       public void onSelect(SelectEvent event) {
         onAddButtonSelection();
-        populateGrid();
       }
     });
 
@@ -177,7 +181,6 @@ public class ManageLecturesController {
       @Override
       public void onSelect(SelectEvent event) {
         onRemoveButtonSelection();
-        populateGrid();
       }
     });
 
@@ -185,12 +188,23 @@ public class ManageLecturesController {
       @Override
       public void onSelect(SelectEvent event) {
         onEditButtonSelection();
-        populateGrid();
       }
     });
   }
 
+  private void onHtmlEditorSelection() {
+    HtmlEditorController.IHtmlEditorView editorView = new HtmlEditorView();
+    HtmlEditorController controller = new HtmlEditorController(editorView,lectureService);
+    controller.bind();
+    MasterWindow window = new MasterWindow();
+    window.setContent(editorView.asWidget(), "Html Editor");
+    window.setModal(true);
+    window.setPixelSize(500, 350);
+    window.show();
+  }
+  Logger logger = Logger.getLogger(ManageLecturesController.class.getName());
   private void onAddButtonSelection() {
+    logger.info("onAdd");
     if (!TextInputValidator.isEmptyString(view.getLectureNameField().getText())) {
       Lecture lecture = new Lecture(view.getProfessorComboBox().getValue(), view.getLectureNameField().getText());
       lectureService.createLecture(lecture, new AsyncCallback<Void>() {
@@ -202,6 +216,8 @@ public class ManageLecturesController {
         @Override
         public void onSuccess(Void result) {
           new MessageBox("", "Lecture saved").show();
+          populateGrid();
+          view.clearFields();
         }
       });
     } else {
@@ -220,12 +236,15 @@ public class ManageLecturesController {
           @Override
           public void onSuccess(Void result) {
             new MessageBox("", "Lecture removed").show();
+            populateGrid();
+            view.clearFields();
           }
         });
   }
 
   private void onEditButtonSelection() {
-    Lecture lecture = new Lecture(view.getGrid().getSelectionModel().getSelectedItem().getId(), view.getGrid().getSelectionModel().getSelectedItem().getProfessor(), view.getLectureNameField().getText());
+    Lecture lecture = new Lecture(view.getGrid().getSelectionModel().getSelectedItem().getId(),
+        view.getGrid().getSelectionModel().getSelectedItem().getProfessor(), view.getLectureNameField().getText());
     lectureService.updateLecture(lecture, new AsyncCallback<Void>() {
       @Override
       public void onFailure(Throwable caught) {
@@ -235,6 +254,7 @@ public class ManageLecturesController {
       @Override
       public void onSuccess(Void result) {
         new MessageBox("", "Lecture updated").show();
+        populateGrid();
       }
     });
   }

@@ -44,6 +44,8 @@ public class MainSettingsController {
     ManageLecturesController manageLecturesController = new ManageLecturesController(manageLecturesView);
     manageLecturesController.bind();
     view.addTab(manageLecturesView.asWidget(), "Manage Lectures");
+    manageLecturesView.asWidget().setLayoutData(manageLecturesController);
+
 
     /* Add manage users */
     ManageUsersController.IManageUsersView manageUsersView = new ManageUsersView();
