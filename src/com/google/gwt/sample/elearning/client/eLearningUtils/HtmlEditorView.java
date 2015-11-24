@@ -24,7 +24,6 @@ public class HtmlEditorView implements HtmlEditorController.IHtmlEditorView {
   private BorderLayoutContainer mainContainer;
   private TextField titleField;
   private TextButton saveButton;
-  private TextButton downloadButton;
 
   private Logger log = Logger.getLogger(HtmlEditorView.class.getName());
 
@@ -37,11 +36,9 @@ public class HtmlEditorView implements HtmlEditorController.IHtmlEditorView {
     mainContainer = new BorderLayoutContainer();
     titleField = new TextField();
     saveButton = new TextButton("", ELearningController.ICONS.save());
-    downloadButton = new TextButton("", ELearningController.ICONS.download());
     ToolBar toolBar = new ToolBar();
 
     toolBar.add(saveButton);
-    toolBar.add(downloadButton);
     toolBar.add(new SeparatorToolItem());
     toolBar.add(new Label("Title : "));
     toolBar.add(titleField);
@@ -58,11 +55,6 @@ public class HtmlEditorView implements HtmlEditorController.IHtmlEditorView {
   @Override
   public TextButton getSaveButton() {
     return saveButton;
-  }
-
-  @Override
-  public TextButton getDownloadButton() {
-    return downloadButton;
   }
 
   @Override

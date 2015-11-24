@@ -40,4 +40,19 @@ public interface Icons extends ClientBundle {
 
   @Source("download.png")
   ImageResource download();
+
+  @Source("newfile.png")
+  ImageResource newfile();
+
+  @Source("newfolder.png")
+  ImageResource newfolder();
+
+  @Source("refresh.png")
+  ImageResource refresh();
+
+  @Source("deletefile.png")
+  ImageResource deletefile();
+
+  @Source("editfile.png")
+  ImageResource editfile();
 }

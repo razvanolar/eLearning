@@ -9,7 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/***
  * Created by Valy on 11/21/2015.
  */
 public class JdbcUserDAO implements UserDAO {

@@ -2,7 +2,7 @@ package com.google.gwt.sample.elearning.shared.model;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-/**
+/***
  * Created by Horea on 14/11/2015.
  */
 public class Lecture implements IsSerializable {

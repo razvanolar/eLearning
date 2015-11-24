@@ -6,7 +6,7 @@ import com.google.gwt.sample.elearning.shared.model.UserData;
 
 import java.util.List;
 
-/**
+/***
  * Created by Valy on 11/21/2015.
  */
 public interface UserDAO {

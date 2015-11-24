@@ -1,11 +1,13 @@
 package com.google.gwt.sample.elearning.server;
 
+import com.google.gwt.sample.elearning.shared.model.UserData;
+
 /***
  * Created by razvanolar on 23.11.2015.
  */
 public class ServerUtil {
   public static final String PATH = "c:\\elearning\\";
-  public static final String LECTURES_PATH = PATH + "lectures\\";
+  public static final String LECTURES_PATH = "lectures\\";
 
   public static final String HTML_DOCUMENT = "<!DOCTYPE html>\n"
       + "<html>"
@@ -22,5 +24,13 @@ public class ServerUtil {
     doc = doc.replace("{0}", title);
     doc = doc.replace("{1}", content);
     return doc;
+  }
+
+  public static String getUserDirectoryPath(UserData user) {
+    return PATH + user.getId() + "\\";
+  }
+
+  public static String getUserLectureDirectoryPath(UserData user, long lectureId) {
+    return getUserDirectoryPath(user) + LECTURES_PATH + lectureId + "\\";
   }
 }

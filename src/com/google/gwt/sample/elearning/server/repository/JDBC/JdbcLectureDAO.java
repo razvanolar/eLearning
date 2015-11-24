@@ -10,7 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/***
  * Created by Valy on 11/22/2015.
  */
 public class JdbcLectureDAO implements LectureDAO {

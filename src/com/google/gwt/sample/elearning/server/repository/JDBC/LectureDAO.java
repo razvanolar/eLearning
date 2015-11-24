@@ -5,7 +5,7 @@ import com.google.gwt.sample.elearning.shared.model.Lecture;
 
 import java.util.List;
 
-/**
+/***
  * Created by Valy on 11/22/2015.
  */
 public interface LectureDAO {
