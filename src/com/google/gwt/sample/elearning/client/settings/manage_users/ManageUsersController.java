@@ -3,13 +3,14 @@ package com.google.gwt.sample.elearning.client.settings.manage_users;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.sample.elearning.client.eLearningUtils.MaskableView;
 import com.google.gwt.sample.elearning.client.eLearningUtils.TextInputValidator;
 import com.google.gwt.sample.elearning.client.service.UserService;
 import com.google.gwt.sample.elearning.client.service.UserServiceAsync;
 import com.google.gwt.sample.elearning.client.settings.ISettingsController;
 import com.google.gwt.sample.elearning.shared.model.UserData;
 import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.sample.elearning.client.eLearningUtils.ELearningAsyncCallBack;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
@@ -33,7 +34,7 @@ public class ManageUsersController implements ISettingsController {
     ADD, EDIT, ADDING, NONE
   }
 
-  public interface IManageUsersView {
+  public interface IManageUsersView extends MaskableView{
     TextButton getAddButton();
     TextButton getEditButton();
     TextButton getDeleteButton();
@@ -132,7 +133,7 @@ public class ManageUsersController implements ISettingsController {
       return;
     }
 
-    userService.createUser(new UserData(uName, fName, lName, eMail, UserRoleTypes.USER), new AsyncCallback<Void>() {
+    userService.createUser(new UserData(uName, fName, lName, eMail, UserRoleTypes.USER), new ELearningAsyncCallBack<Void>(view, log) {
       @Override
       public void onFailure(Throwable caught) {
         new MessageBox("", "Could not create User").show();
@@ -160,7 +161,7 @@ public class ManageUsersController implements ISettingsController {
     //TODO collect user role
     UserData user = new UserData(uName, fName, lName, eMail, UserRoleTypes.USER);
     user.setId(id);
-    userService.updateUser(user, new AsyncCallback<Void>() {
+    userService.updateUser(user, new ELearningAsyncCallBack<Void>(view, log) {
       @Override
       public void onFailure(Throwable caught) {
         new MessageBox("", "Could not update User").show();
@@ -180,7 +181,7 @@ public class ManageUsersController implements ISettingsController {
     List<Long> ids = new ArrayList<Long>();
     for(UserData userData : userDatas)
       ids.add(userData.getId());
-    userService.removeUser(ids, new AsyncCallback<Void>() {
+    userService.removeUser(ids, new ELearningAsyncCallBack<Void>(view, log) {
       @Override
       public void onFailure(Throwable caught) {
         new MessageBox("","Could not delete users").show();
@@ -214,7 +215,7 @@ public class ManageUsersController implements ISettingsController {
 
   private void loadUsers() {
     view.mask();
-    userService.getAllUsers(new AsyncCallback<List<UserData>>() {
+    userService.getAllUsers(new ELearningAsyncCallBack<List<UserData>>(view, log) {
       @Override
       public void onFailure(Throwable caught) {
         view.unmask();

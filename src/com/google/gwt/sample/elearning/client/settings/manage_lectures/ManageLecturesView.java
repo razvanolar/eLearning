@@ -337,7 +337,7 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     mainContainer.mask();
   }
 
-  public void unMask() {
+  public void unmask() {
     mainContainer.unmask();
   }
 

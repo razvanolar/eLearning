@@ -7,6 +7,7 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.sample.elearning.client.eLearningUtils.MaskableView;
 import com.google.gwt.sample.elearning.client.eLearningUtils.TextInputValidator;
 import com.google.gwt.sample.elearning.client.service.*;
 import com.google.gwt.sample.elearning.client.settings.ISettingsController;
@@ -16,7 +17,7 @@ import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.google.gwt.sample.elearning.shared.model.Professor;
 import com.google.gwt.sample.elearning.shared.model.UserData;
 import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.sample.elearning.client.eLearningUtils.ELearningAsyncCallBack;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.RadioButton;
@@ -55,7 +56,7 @@ public class ManageLecturesController implements ISettingsController {
     FILES, TESTS;
   }
 
-  public interface IManageLecturesView {
+  public interface IManageLecturesView extends MaskableView{
     TextButton getAddButton();
     TextButton getEditButton();
     TextButton getDeleteButton();
@@ -78,7 +79,7 @@ public class ManageLecturesController implements ISettingsController {
     void loadLectures(Lecture userData);
     void clearFields();
     void mask();
-    void unMask();
+    void unmask();
     Widget asWidget();
   }
 
@@ -112,9 +113,9 @@ public class ManageLecturesController implements ISettingsController {
 
   private void populateGrid() {
     view.mask();
-    lectureService.getAllLectures(new AsyncCallback<List<Lecture>>() {
+    lectureService.getAllLectures(new ELearningAsyncCallBack<List<Lecture>>(view,log) {
       public void onFailure(Throwable caught) {
-        view.unMask();
+        view.unmask();
         new MessageBox("", "Could not get Lectures").show();
       }
 
@@ -123,19 +124,14 @@ public class ManageLecturesController implements ISettingsController {
         lectureList.clear();
         lectureList.addAll(result);
         view.getGrid().getStore().addAll(lectureList);
-        view.unMask();
+        view.unmask();
       }
     });
   }
 
   private void populateCombo() {
     view.mask();
-    userServiceAsync.getAllUsersByRole(UserRoleTypes.PROFESSOR, new AsyncCallback<List<? extends UserData>>() {
-      public void onFailure(Throwable caught) {
-        view.unMask();
-        new MessageBox("", "Cold not get Professors").show();
-      }
-
+    userServiceAsync.getAllUsersByRole(UserRoleTypes.PROFESSOR, new ELearningAsyncCallBack<List<? extends UserData>>(view,log) {
       public void onSuccess(List<? extends UserData> result) {
         view.getProfessorComboBox().getStore().clear();
         Professor all = new Professor(-1, "", "", "All", "", "");
@@ -143,11 +139,11 @@ public class ManageLecturesController implements ISettingsController {
         professorList.add(all);
         for (UserData user : result) {
           professorList.add(new Professor(user.getId(), user.getUsername(), user.getPassword(), user.getFirstName(),
-                  user.getLastName(), user.getEmail()));
+              user.getLastName(), user.getEmail()));
         }
         view.getProfessorComboBox().getStore().addAll(professorList);
         view.getProfessorComboBox().setValue(all);
-        view.unMask();
+        view.unmask();
       }
     });
   }
@@ -209,7 +205,8 @@ public class ManageLecturesController implements ISettingsController {
 
     view.getFilesRadioButton().addValueChangeHandler(new ValueChangeHandler<Boolean>() {
       public void onValueChange(ValueChangeEvent<Boolean> event) {
-        view.setFilesAndTestsState(event.getValue() ? LecturesFilesAndTestsState.FILES : LecturesFilesAndTestsState.TESTS);
+        view.setFilesAndTestsState(
+            event.getValue() ? LecturesFilesAndTestsState.FILES : LecturesFilesAndTestsState.TESTS);
       }
     });
   }
@@ -220,12 +217,7 @@ public class ManageLecturesController implements ISettingsController {
     log.info("onAdd");
     if (!TextInputValidator.isEmptyString(view.getLectureNameField().getText())) {
       Lecture lecture = new Lecture(view.getProfessorComboBox().getValue(), view.getLectureNameField().getText());
-      lectureService.createLecture(lecture, new AsyncCallback<Void>() {
-        @Override
-        public void onFailure(Throwable caught) {
-          new MessageBox("", "Could not save Lecture").show();
-        }
-
+      lectureService.createLecture(lecture, new ELearningAsyncCallBack<Void>(view,log) {
         @Override
         public void onSuccess(Void result) {
           new MessageBox("", "Lecture saved").show();
@@ -240,12 +232,7 @@ public class ManageLecturesController implements ISettingsController {
 
   private void onRemoveButtonSelection() {
     lectureService
-            .removeLecture(view.getGrid().getSelectionModel().getSelectedItem().getId(), new AsyncCallback<Void>() {
-              @Override
-              public void onFailure(Throwable caught) {
-                new MessageBox("", "Could not remove Lecture").show();
-              }
-
+            .removeLecture(view.getGrid().getSelectionModel().getSelectedItem().getId(), new ELearningAsyncCallBack<Void>(view,log) {
               @Override
               public void onSuccess(Void result) {
                 new MessageBox("", "Lecture removed").show();
@@ -258,12 +245,7 @@ public class ManageLecturesController implements ISettingsController {
   private void onEditButtonSelection() {
     Lecture lecture = new Lecture(view.getGrid().getSelectionModel().getSelectedItem().getId(),
             view.getGrid().getSelectionModel().getSelectedItem().getProfessor(), view.getLectureNameField().getText());
-    lectureService.updateLecture(lecture, new AsyncCallback<Void>() {
-      @Override
-      public void onFailure(Throwable caught) {
-        new MessageBox("", "Could not update Lecture").show();
-      }
-
+    lectureService.updateLecture(lecture, new ELearningAsyncCallBack<Void>(view,log) {
       @Override
       public void onSuccess(Void result) {
         new MessageBox("", "Lecture updated").show();

@@ -271,14 +271,14 @@ public class ManageLecturesFilesController implements IHtmlListener {
     view.mask();
     lectureService.getLectureFilesTree(currentLecture.getProfessor(), currentLecture.getId(), new AsyncCallback<com.google.gwt.sample.elearning.shared.Tree<FileData>>() {
       public void onFailure(Throwable caught) {
-        view.unMask();
+        view.unmask();
         (new MessageBox("Error", caught.getMessage())).show();
       }
 
       public void onSuccess(com.google.gwt.sample.elearning.shared.Tree<FileData> result) {
         log.info("onSuccess");
         loadTreeStore(result);
-        view.unMask();
+        view.unmask();
       }
     });
   }
