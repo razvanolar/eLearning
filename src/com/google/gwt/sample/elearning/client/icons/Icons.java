@@ -55,4 +55,13 @@ public interface Icons extends ClientBundle {
 
   @Source("editfile.png")
   ImageResource editfile();
+
+  @Source("upload.png")
+  ImageResource upload();
+
+  @Source("succes.png")
+  ImageResource succes();
+
+  @Source("fail.png")
+  ImageResource fail();
 }

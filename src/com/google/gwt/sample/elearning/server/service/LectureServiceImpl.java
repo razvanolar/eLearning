@@ -12,11 +12,9 @@ import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.google.gwt.sample.elearning.shared.model.UserData;
 import com.google.gwt.sample.elearning.shared.types.FileTypes;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import org.apache.commons.io.FileUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -69,7 +67,7 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
     PrintWriter writer = null;
     try {
       title = title + ".html";
-      writer = new PrintWriter(path + "\\" + title, "UTF-8");
+      writer = new PrintWriter(ServerUtil.getUserLectureDirectoryPath(user, lectureId) + path + "\\" + title, "UTF-8");
       writer.println(ServerUtil.getHtmlDocumentText(title, text));
       return title;
     } catch (FileNotFoundException | UnsupportedEncodingException e) {
@@ -116,6 +114,62 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
     tree.addRoots(roots);
     return tree;
   }
+
+  @Override
+  public String getHtmlFileBodyContent(UserData userData, long lectureId, String path, String title) throws ELearningException {
+    String lecturesDirectoryPath = ServerUtil.getUserLectureDirectoryPath(userData, lectureId);
+    String filePath = lecturesDirectoryPath + path + title;
+
+    File file = new File(filePath);
+
+    if (!file.exists())
+      throw new ELearningException("Specified path does not exists. Path: " + path);
+    if (!file.getName().endsWith(".html"))
+      throw new ELearningException(file.getName() + " is not a html file. Path: " + path);
+
+    BufferedReader reader = null;
+    try {
+      reader = new BufferedReader(new FileReader(file));
+      StringBuilder result = new StringBuilder();
+      String line = null;
+      while ((line = reader.readLine()) != null) {
+        result.append(line);
+      }
+      int bodyIndex = result.indexOf("<body>");
+      int endBodyIndex = result.indexOf("</body>");
+      if (bodyIndex == -1)
+        throw new ELearningException("<body> tag can not be found. Html file is corrupted");
+      if (endBodyIndex == -1)
+        throw new ELearningException("</body> tag can not be found. Html file is corrupted");
+      bodyIndex += 6;
+      return result.substring(bodyIndex, endBodyIndex);
+    } catch (FileNotFoundException ex) {
+      throw new ELearningException("Specified path does not exists. Path: " + path, ex);
+    } catch (IOException ex) {
+      throw new ELearningException("An error occurred while reading the file. Path: " + path, ex);
+    }
+  }
+
+  @Override
+  public void deleteFile(UserData user, long lectureId, String path, String title) throws ELearningException {
+    String filePath = ServerUtil.getUserLectureDirectoryPath(user, lectureId) + path + title;
+    File file = new File(filePath);
+    if (!file.exists())
+      throw new ELearningException("Specified file does not exists. Path: " + path + title);
+
+//    if (!file.isDirectory())
+//      throw new ELearningException("Failed to delete the specified file. Path: " + path + title);
+
+    try {
+      if (!file.isDirectory())
+        FileUtils.forceDelete(file);
+      else
+        FileUtils.deleteDirectory(file);
+    } catch (IOException e) {
+      throw new ELearningException(title + " can not be deleted. Error message: " + e.getMessage());
+    }
+  }
+
 
   private List<Node<FileData>> createFileNodesFromFiles(File[] files) {
     List<Node<FileData>> result = new ArrayList<Node<FileData>>();

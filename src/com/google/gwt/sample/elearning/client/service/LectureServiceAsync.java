@@ -27,4 +27,8 @@ public interface LectureServiceAsync {
   void createFolder(UserData user, String path, String name, long lectureId, AsyncCallback<Void> async);
 
   void getLectureFilesTree(UserData user, long lectureId, AsyncCallback<Tree<FileData>> async);
+
+  void getHtmlFileBodyContent(UserData userData, long lectureId, String path, String title, AsyncCallback<String> async);
+
+  void deleteFile(UserData user, long lectureId, String path, String title, AsyncCallback<Void> async);
 }

@@ -33,4 +33,8 @@ public interface LectureService extends RemoteService {
   void createFolder(UserData user, String path, String name, long lectureId) throws ELearningException;
 
   Tree<FileData> getLectureFilesTree(UserData user, long lectureId) throws ELearningException;
+
+  String getHtmlFileBodyContent(UserData userData, long lectureId, String path, String title) throws ELearningException;
+
+  void deleteFile(UserData user, long lectureId, String path, String title) throws ELearningException;
 }

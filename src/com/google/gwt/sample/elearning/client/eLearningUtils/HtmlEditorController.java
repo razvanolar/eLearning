@@ -21,17 +21,30 @@ public class HtmlEditorController {
     TextButton getSaveButton();
     TextField getTitleField();
     String getEditorValue();
+    void setEditorValue(String value);
+    void setSaveStatus(SaveStatus status);
     Widget asWidget();
+  }
+
+  public enum SaveStatus {
+    SAVED, FAILED
   }
 
   private IHtmlEditorView view;
   private IHtmlListener htmlListener;
-  private String fileName;
+  private String path;
   private Logger log = Logger.getLogger(HtmlEditorController.class.getName());
 
-  public HtmlEditorController(IHtmlEditorView view, IHtmlListener htmlListener) {
+  public HtmlEditorController(IHtmlEditorView view, String path, IHtmlListener htmlListener) {
     this.view = view;
     this.htmlListener = htmlListener;
+    this.path = path;
+  }
+
+  public HtmlEditorController(IHtmlEditorView view, String path, IHtmlListener htmlListener, String value, String title) {
+    this(view, path, htmlListener);
+    view.setEditorValue(value);
+    view.getTitleField().setText(title);
   }
 
   public void bind() {
@@ -48,8 +61,12 @@ public class HtmlEditorController {
 
   private void onSaveSelect() {
     String title = view.getTitleField().getText();
-    title = title == null || title.isEmpty() ? "Untitled.html" : title.replace(".html", "");
+    title = title == null || title.isEmpty() ? "Untitled" : title.replace(".html", "");
     String text = view.getEditorValue();
-    htmlListener.createHtmlFile(title, text);
+    htmlListener.createHtmlFile(path, title, text);
+  }
+
+  public void setSaveState(SaveStatus status) {
+    view.setSaveStatus(status);
   }
 }

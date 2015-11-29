@@ -24,6 +24,10 @@
         <servlet-name>lectureDownloadService</servlet-name>
         <servlet-class>com.google.gwt.sample.elearning.server.LectureDownloadService</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>lectureUploadService</servlet-name>
+        <servlet-class>com.google.gwt.sample.elearning.server.service.LectureUploadService</servlet-class>
+    </servlet>
 
 
     <servlet-mapping>
@@ -45,6 +49,10 @@
     <servlet-mapping>
         <servlet-name>lectureDownloadService</servlet-name>
         <url-pattern>/elearning/lectureDownloadService</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>lectureUploadService</servlet-name>
+        <url-pattern>/elearning/lectureUploadService</url-pattern>
     </servlet-mapping>
 
 

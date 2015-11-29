@@ -1,45 +1,47 @@
 package com.google.gwt.sample.elearning.server;
 
-import com.google.gwt.sample.elearning.server.ServerUtil;
-
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
-/***
- * Created by razvanolar on 23.11.2015.
+/**
+ * Created by razvanolar on 29.11.2015.
  */
 public class LectureDownloadService extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    String fileName = req.getParameter("fileName");
+    String lecturePath = req.getParameter("path");
+    String fileName = req.getParameter("name");
+    String user = req.getParameter("user");
+    String lecture = req.getParameter("lecture");
     try {
-      BufferedReader reader = new BufferedReader(new FileReader(ServerUtil.LECTURES_PATH + fileName));
-      String line;
-      StringBuilder rez = new StringBuilder();
-      while ((line = reader.readLine()) != null) {
-        rez.append(line);
-      }
+      long userId = Long.parseLong(user);
+      long lectureId = Long.parseLong(lecture);
 
-      int BUFFER = 1024 * 100;
-      String content = rez.toString();
-      resp.setContentType("text/html");
+      OutputStream outputStream = (OutputStream) resp.getOutputStream();
+      FileInputStream inputStream = new FileInputStream(ServerUtil.getUserLectureDirectoryPath(userId, lectureId) + lecturePath + fileName);
+
+      int bytes, sum=0;
+      byte[] buffer = new byte[255];
+      resp.setContentType(ServerUtil.getFileContentType(fileName));
       resp.setHeader("Content-Disposition:", "attachment;filename=" + "\"" + fileName + "\"");
       resp.setHeader("Connection:", "Close");
+      int BUFFER = 1024 * 100;
       resp.setBufferSize(BUFFER);
-      resp.setContentLength(content.length());
 
-      ServletOutputStream outputStream = resp.getOutputStream();
-      outputStream.print(content);
+      while ((bytes = inputStream.read(buffer)) != -1) {
+        outputStream.write(buffer, 0, bytes);
+        sum += bytes;
+      }
+
+      resp.setContentLength(sum);
     } catch (Exception ex) {
       ex.printStackTrace();
-      throw ex;
     }
   }
 }

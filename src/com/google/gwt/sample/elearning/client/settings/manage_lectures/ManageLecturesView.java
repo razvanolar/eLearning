@@ -2,40 +2,37 @@ package com.google.gwt.sample.elearning.client.settings.manage_lectures;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.sample.elearning.client.ELearningController;
+import com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_lectures_files.ManageLecturesFilesController;
 import com.google.gwt.sample.elearning.shared.model.FileData;
+import com.google.gwt.sample.elearning.shared.model.LWLectureTestData;
 import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.google.gwt.sample.elearning.shared.model.Professor;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.cell.core.client.form.ComboBoxCell;
-import com.sencha.gxt.core.client.IdentityValueProvider;
-import com.sencha.gxt.core.client.Style;
-import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.core.client.util.Margins;
+import com.sencha.gxt.core.client.util.ToggleGroup;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.StringLabelProvider;
-import com.sencha.gxt.data.shared.TreeStore;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.*;
 import com.sencha.gxt.widget.core.client.form.ComboBox;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.TextField;
-import com.sencha.gxt.widget.core.client.grid.*;
+import com.sencha.gxt.widget.core.client.grid.Grid;
+import com.sencha.gxt.widget.core.client.toolbar.FillToolItem;
 import com.sencha.gxt.widget.core.client.toolbar.SeparatorToolItem;
 import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 import com.sencha.gxt.widget.core.client.treegrid.TreeGrid;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 /***
  * Created by Cristi on 11/17/2015.
  */
 public class ManageLecturesView implements ManageLecturesController.IManageLecturesView {
-  private static LectureDataProperties lectureProperties = GWT.create(LectureDataProperties.class);
   private static ProfessorProperties professorProperties = GWT.create(ProfessorProperties.class);
-  private static FileDataProperties fileDataProperties = GWT.create(FileDataProperties.class);
+  private ManageLecturesViewUtils viewUtils;
 
   private BorderLayoutContainer mainContainer;
   private TextButton refreshButton;
@@ -47,15 +44,27 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
   private TextButton deleteFileButton;
   private TextButton editFileButton;
   private TextButton downloadFileButton;
+  private TextButton uploadFileButton;
+  private TextButton createTestButton;
+  private TextButton editTestButton;
+  private TextButton deleteTestButton;
   private ComboBox<Professor> professorComboBox;
   private TextField lectureNameField;
   private Grid<Lecture> lectureGridView;
+  private Grid<LWLectureTestData> lectureTestDataGrid;
   private TreeGrid<FileData> fileTreeGrid;
+  private RadioButton filesRadioButton;
+  private RadioButton testsRadioButton;
 
   private ManageLecturesController.LectureGridViewState state = ManageLecturesController.LectureGridViewState.NONE;
   private static Logger log = Logger.getLogger(ManageLecturesView.class.getName());
+  private BorderLayoutContainer filesPanelContainer;
+  private BorderLayoutContainer testsPanelContainer;
+  private FormPanel fileFormPanel;
+  private FileUpload fileUpload;
 
   public ManageLecturesView() {
+    viewUtils = new ManageLecturesViewUtils();
     initGUI();
   }
 
@@ -75,23 +84,39 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     deleteFileButton = new TextButton("Delete", ELearningController.ICONS.deletefile());
     editFileButton = new TextButton("Edit file", ELearningController.ICONS.editfile());
     downloadFileButton = new TextButton("Download", ELearningController.ICONS.download());
-    lectureGridView = createGrid();
-    fileTreeGrid = createFileTree();
+    uploadFileButton = new TextButton("Upload", ELearningController.ICONS.upload());
+    createTestButton = new TextButton("Create Test");
+    editTestButton = new TextButton("Edit test");
+    deleteTestButton = new TextButton("Delete test");
+    lectureGridView = viewUtils.createLecturesGrid();
+    fileTreeGrid = viewUtils.createFileTreeGrid();
+    lectureTestDataGrid = viewUtils.createTestsGrid();
+    filesRadioButton = new RadioButton("Files", "Files");
+    testsRadioButton = new RadioButton("Tests", "Tests");
+    ToggleGroup radioGroup = new ToggleGroup();
     BorderLayoutContainer gridContainer = new BorderLayoutContainer();
-    BorderLayoutContainer treeContainer = new BorderLayoutContainer();
-    ContentPanel treeContentPanel = new ContentPanel();
+    filesPanelContainer = new BorderLayoutContainer();
+    testsPanelContainer = new BorderLayoutContainer();
+    fileFormPanel = new FormPanel();
+    fileUpload = new FileUpload();
+    HorizontalPanel fileUploadContainer = new HorizontalPanel();
+    ContentPanel filesGridContentPanel = new ContentPanel();
+    ContentPanel testGridContentPanel = new ContentPanel();
     ToolBar toolBar = new ToolBar();
+    ToolBar filesToolBar = new ToolBar();
+    ToolBar testToolBar = new ToolBar();
+
+
+    fileFormPanel.setEncoding(FormPanel.ENCODING_MULTIPART);
+    fileFormPanel.setMethod(FormPanel.METHOD_POST);
+    fileFormPanel.setWidget(fileUploadContainer);
+    fileUpload.setName("fileUpload");
+    fileUploadContainer.add(fileUpload);
 
     toolBar.add(refreshButton);
     toolBar.add(new SeparatorToolItem());
     toolBar.add(new FieldLabel(professorComboBox, "Professor"));
     toolBar.add(new SeparatorToolItem());
-    toolBar.add(createHtmlFile);
-    toolBar.add(editFileButton);
-    toolBar.add(createFolderButton);
-    toolBar.add(deleteFileButton);
-    toolBar.add(new SeparatorToolItem());
-    toolBar.add(downloadFileButton);
 
     CenterLayoutContainer formContainer = new CenterLayoutContainer();
     VerticalLayoutContainer formPanel = new VerticalLayoutContainer();
@@ -114,68 +139,47 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     gridLayoutData.setMargins(new Margins(5, 0, 0, 0));
     gridContainer.setSouthWidget(formContainer, gridLayoutData);
 
-    treeContentPanel.setHeaderVisible(false);
-    treeContentPanel.add(fileTreeGrid);
-    treeContainer.setCenterWidget(treeContentPanel);
+    filesRadioButton.setValue(true);
+    radioGroup.add(filesRadioButton);
+    radioGroup.add(testsRadioButton);
 
-    BorderLayoutContainer.BorderLayoutData layoutData = new BorderLayoutContainer.BorderLayoutData(.55);
+    toolBar.add(new FillToolItem());
+    toolBar.add(filesRadioButton);
+    toolBar.add(testsRadioButton);
+    toolBar.setHorizontalSpacing(5);
+
+    filesToolBar.add(createHtmlFile);
+    filesToolBar.add(editFileButton);
+    filesToolBar.add(createFolderButton);
+    filesToolBar.add(deleteFileButton);
+    filesToolBar.add(downloadFileButton);
+    filesToolBar.add(uploadFileButton);
+    filesToolBar.add(fileFormPanel);
+    filesToolBar.setHorizontalSpacing(2);
+
+    testToolBar.add(createTestButton);
+    testToolBar.add(editTestButton);
+    testToolBar.add(deleteTestButton);
+
+    filesGridContentPanel.setHeaderVisible(false);
+    filesGridContentPanel.add(fileTreeGrid);
+    filesPanelContainer.setCenterWidget(filesGridContentPanel);
+    filesPanelContainer.setSouthWidget(filesToolBar, new BorderLayoutContainer.BorderLayoutData(30));
+
+    testGridContentPanel.setHeaderVisible(false);
+    testGridContentPanel.add(lectureTestDataGrid);
+    testsPanelContainer.setCenterWidget(testGridContentPanel);
+    testsPanelContainer.setSouthWidget(testToolBar, new BorderLayoutContainer.BorderLayoutData(30));
+
+    BorderLayoutContainer.BorderLayoutData layoutData = new BorderLayoutContainer.BorderLayoutData(.30);
     layoutData.setSplit(true);
     layoutData.setMargins(new Margins(0, 5, 0, 0));
     mainContainer.setNorthWidget(toolBar, new BorderLayoutContainer.BorderLayoutData(30));
     mainContainer.setWestWidget(gridContainer, layoutData);
-    mainContainer.setCenterWidget(treeContainer);
+
     setGridState(state);
-    setTreeState(ManageLecturesController.LectureTreeViewState.NONE);
-  }
-
-  private Grid<Lecture> createGrid() {
-    IdentityValueProvider<Lecture> identityValueProvider = new IdentityValueProvider<Lecture>("sm");
-    CheckBoxSelectionModel<Lecture> selectionModel = new CheckBoxSelectionModel<Lecture>(identityValueProvider);
-    selectionModel.setSelectionMode(Style.SelectionMode.SINGLE);
-
-    List<ColumnConfig<Lecture, ?>> columnConfigList = new ArrayList<ColumnConfig<Lecture, ?>>();
-    columnConfigList.add(selectionModel.getColumn());
-    columnConfigList.add(new ColumnConfig<Lecture, Long>(lectureProperties.id(), 20, "ID"));
-    columnConfigList.add(new ColumnConfig<Lecture, String>(lectureProperties.lectureName(), 100, "Lecture Name"));
-    ColumnConfig<Lecture, String> profColumn = new ColumnConfig<Lecture, String>(new ValueProvider<Lecture, String>() {
-      public String getValue(Lecture object) {
-        return (object != null && object.getProfessor() != null) ? object.getProfessor().toString() : "";
-      }
-      public void setValue(Lecture object, String value) {}
-      public String getPath() { return "professor_path"; }
-    }, 100, "Professor");
-    columnConfigList.add(profColumn);
-    ColumnModel<Lecture> columnModel = new ColumnModel<Lecture>(columnConfigList);
-    ListStore<Lecture> store = new ListStore<Lecture>(lectureProperties.key());
-
-    GroupingView<Lecture> groupingView = new GroupingView<Lecture>();
-    groupingView.setShowGroupedColumn(false);
-    groupingView.setForceFit(true);
-    groupingView.groupBy(profColumn);
-
-    Grid<Lecture> lectureDataGrid = new Grid<Lecture>(store, columnModel, groupingView);
-
-    lectureDataGrid.setHideHeaders(false);
-    lectureDataGrid.getView().setAutoFill(true);
-    lectureDataGrid.setSelectionModel(selectionModel);
-    return lectureDataGrid;
-  }
-
-  private TreeGrid<FileData> createFileTree() {
-    TreeStore<FileData> store = new TreeStore<FileData>(fileDataProperties.path());
-
-    List<ColumnConfig<FileData, ?>> columnConfigList = new ArrayList<ColumnConfig<FileData, ?>>();
-    ColumnConfig<FileData, String> primaryColumn = new ColumnConfig<FileData, String>(fileDataProperties.name(), 100, "Name");
-    columnConfigList.add(primaryColumn);
-    columnConfigList.add(new ColumnConfig<FileData, String>(fileDataProperties.lastModified(), 100, "Last Modified"));
-    columnConfigList.add(new ColumnConfig<FileData, Long>(fileDataProperties.length(), 30, "Size"));
-
-    ColumnModel<FileData> columnModel = new ColumnModel<FileData>(columnConfigList);
-
-    TreeGrid<FileData> treeGrid = new TreeGrid<FileData>(store, columnModel, primaryColumn);
-    treeGrid.setAutoExpand(true);
-    treeGrid.getTreeView().setAutoFill(true);
-    return treeGrid;
+    setTreeState(ManageLecturesFilesController.LectureTreeViewState.NONE);
+    setFilesAndTestsState(ManageLecturesController.LecturesFilesAndTestsState.FILES);
   }
 
   @Override
@@ -209,14 +213,16 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
   }
 
   @Override
-  public void setTreeState(ManageLecturesController.LectureTreeViewState state) {
+  public void setTreeState(ManageLecturesFilesController.LectureTreeViewState state) {
     switch (state) {
     case FOLDER_SELECTED:
       createHtmlFile.setEnabled(true);
       createFolderButton.setEnabled(true);
       deleteFileButton.setEnabled(true);
       editFileButton.setEnabled(false);
-      downloadFileButton.setEnabled(true);
+      downloadFileButton.setEnabled(false);
+      uploadFileButton.setEnabled(true);
+      fileUpload.setEnabled(true);
       break;
     case FILE_SELECTED:
       createHtmlFile.setEnabled(false);
@@ -224,6 +230,9 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
       deleteFileButton.setEnabled(true);
       editFileButton.setEnabled(true);
       downloadFileButton.setEnabled(true);
+      uploadFileButton.setEnabled(false);
+      fileUpload.setEnabled(false);
+      fileUpload.getElement().setPropertyString("value", "");
       break;
     case NONE:
       createHtmlFile.setEnabled(false);
@@ -231,75 +240,107 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
       deleteFileButton.setEnabled(false);
       editFileButton.setEnabled(false);
       downloadFileButton.setEnabled(false);
+      uploadFileButton.setEnabled(false);
+      fileUpload.setEnabled(false);
+      fileUpload.getElement().setPropertyString("value", "");
       break;
     }
   }
+
+  public void setFilesAndTestsState(ManageLecturesController.LecturesFilesAndTestsState state) {
+    if (state == ManageLecturesController.LecturesFilesAndTestsState.FILES) {
+      mainContainer.setCenterWidget(filesPanelContainer);
+    } else if (state == ManageLecturesController.LecturesFilesAndTestsState.TESTS) {
+      mainContainer.setCenterWidget(testsPanelContainer);
+    }
+    mainContainer.forceLayout();
+  }
+
 
   public void clearFields() {
     lectureNameField.setText("");
   }
 
-  @Override
   public TextButton getAddButton() {
     return this.addButton;
   }
 
-  @Override
   public TextButton getEditButton() {
     return this.editButton;
   }
 
-  @Override
   public TextButton getDeleteButton() {
     return this.deleteButton;
   }
 
-  @Override
   public TextButton getCreateHtmlButton() {
     return createHtmlFile;
   }
 
-  @Override
+  public TextButton getEditHtmlButton() {
+    return editFileButton;
+  }
+
+  public TextButton getDeleteHtmlButton() {
+    return deleteFileButton;
+  }
+
   public TextButton getCreateFolderButton() {
     return createFolderButton;
   }
 
-  @Override
+  public TextButton getFileDowloadButton() {
+    return downloadFileButton;
+  }
+
+  public TextButton getFileUploadButton() {
+    return uploadFileButton;
+  }
+
+  public FormPanel getFileFormPanel() {
+    return fileFormPanel;
+  }
+
+  public FileUpload getFileUpload() {
+    return fileUpload;
+  }
+
   public TextField getLectureNameField() {
     return this.lectureNameField;
   }
 
-  @Override
+  public RadioButton getFilesRadioButton() {
+    return filesRadioButton;
+  }
+
+  public RadioButton getTestsRadioButton() {
+    return testsRadioButton;
+  }
+
   public ComboBox<Professor> getProfessorComboBox() {
     return this.professorComboBox;
   }
 
-  @Override
   public Grid<Lecture> getGrid() {
     return this.lectureGridView;
   }
 
-  @Override
   public TreeGrid<FileData> getTreeGrid() {
     return fileTreeGrid;
   }
 
-  @Override
   public void loadLectures(Lecture lecture) {
     lectureNameField.setText(lecture.getLectureName());
   }
 
-  @Override
   public void mask() {
     mainContainer.mask();
   }
 
-  @Override
   public void unMask() {
     mainContainer.unmask();
   }
 
-  @Override
   public Widget asWidget() {
     return this.mainContainer;
   }

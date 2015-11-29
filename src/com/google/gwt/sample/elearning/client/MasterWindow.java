@@ -8,7 +8,7 @@ import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
  * Created by razvanolar on 14.11.2015.
  */
 public class MasterWindow extends Window {
-  private static final int DEFAULT_WIDTH = 950;
+  private static final int DEFAULT_WIDTH = 1000;
   private static final int DEFAULT_HEIGHT = 500;
   private BorderLayoutContainer mainContainer;
 

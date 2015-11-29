@@ -1,6 +1,7 @@
 package com.google.gwt.sample.elearning.server;
 
 import com.google.gwt.sample.elearning.shared.model.UserData;
+import com.google.gwt.sample.elearning.shared.types.FileExtensionTypes;
 
 /***
  * Created by razvanolar on 23.11.2015.
@@ -26,11 +27,41 @@ public class ServerUtil {
     return doc;
   }
 
+  public static String getUserDirectoryPath(long userId) {
+    return PATH + userId + "\\";
+  }
+
   public static String getUserDirectoryPath(UserData user) {
-    return PATH + user.getId() + "\\";
+    return getUserDirectoryPath(user.getId());
   }
 
   public static String getUserLectureDirectoryPath(UserData user, long lectureId) {
     return getUserDirectoryPath(user) + LECTURES_PATH + lectureId + "\\";
+  }
+
+  public static String getUserLectureDirectoryPath(long userId, long lectureId) {
+    return getUserDirectoryPath(userId) + LECTURES_PATH + lectureId + "\\";
+  }
+
+  public static FileExtensionTypes getFileExensionByName(String fileName) {
+    for (FileExtensionTypes extension : FileExtensionTypes.values())
+      if (fileName.endsWith(extension.getValue()))
+        return extension;
+    return null;
+  }
+
+  public static String getFileContentType(String fileName) {
+    FileExtensionTypes extension = getFileExensionByName(fileName);
+    if (extension == null)
+      return "application/octet-stream";
+    if (extension == FileExtensionTypes.HTML)
+      return "text/html";
+    if (extension == FileExtensionTypes.PDF)
+      return "application/pdf";
+    if (extension == FileExtensionTypes.PNG)
+      return "image/png";
+    if (extension == FileExtensionTypes.XML)
+      return "application/xml";
+    return "application/octet-stream";
   }
 }
