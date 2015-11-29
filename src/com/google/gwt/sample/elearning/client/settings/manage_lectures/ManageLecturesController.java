@@ -284,7 +284,8 @@ public class ManageLecturesController implements ISettingsController {
     } else {
       view.setGridState(LectureGridViewState.EDIT);
       view.loadLectures(selection.get(0));
-      lecturesFilesController.loadFileTree(selection.get(0));
+      if (view.getFilesRadioButton().getValue())
+        lecturesFilesController.loadFileTree(selection.get(0));
     }
   }
 

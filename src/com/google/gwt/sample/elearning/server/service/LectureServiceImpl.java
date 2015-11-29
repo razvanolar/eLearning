@@ -4,6 +4,7 @@ import com.google.gwt.sample.elearning.client.service.LectureService;
 import com.google.gwt.sample.elearning.server.ServerUtil;
 import com.google.gwt.sample.elearning.server.repository.DAOFactory;
 import com.google.gwt.sample.elearning.server.repository.JDBC.LectureDAO;
+import com.google.gwt.sample.elearning.server.service.lecture_service_util.LectureFilesUtil;
 import com.google.gwt.sample.elearning.shared.Node;
 import com.google.gwt.sample.elearning.shared.Tree;
 import com.google.gwt.sample.elearning.shared.exception.ELearningException;
@@ -25,6 +26,7 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
 
   private DAOFactory factory = DAOFactory.getInstance();
   private LectureDAO lectureDAO = factory.getLectureDAO();
+  private LectureFilesUtil filesUtil = new LectureFilesUtil();
 
   @Override
   public void createLecture(Lecture lecture) throws ELearningException{
@@ -64,132 +66,26 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
 
   @Override
   public String addLectureHtmlFile(UserData user, String path, String title, long lectureId, String text) throws ELearningException {
-    PrintWriter writer = null;
-    try {
-      title = title + ".html";
-      writer = new PrintWriter(ServerUtil.getUserLectureDirectoryPath(user, lectureId) + path + "\\" + title, "UTF-8");
-      writer.println(ServerUtil.getHtmlDocumentText(title, text));
-      return title;
-    } catch (FileNotFoundException | UnsupportedEncodingException e) {
-      e.printStackTrace();
-      throw new ELearningException(e);
-    } finally {
-      if (writer != null)
-        writer.close();
-    }
+    return filesUtil.addLectureHtmlFile(user, path, title, lectureId, text);
   }
 
   @Override
   public void createFolder(UserData user, String path, String name, long lectureId) throws ELearningException {
-    String lectureDirectoryPath = ServerUtil.getUserLectureDirectoryPath(user, lectureId);
-    File file = new File(lectureDirectoryPath + path + "\\" + name);
-    if (!file.exists() && !file.mkdirs())
-      throw new ELearningException("Folder " + name + " can not be created");
+    filesUtil.createFolder(user, path, name, lectureId);
   }
 
   @Override
   public Tree<FileData> getLectureFilesTree(UserData user, long lectureId) throws ELearningException {
-    String lectureDirectoryPath = ServerUtil.getUserLectureDirectoryPath(user, lectureId);
-    File rootDir = new File(lectureDirectoryPath);
-
-    Tree<FileData> tree = new Tree<FileData>();
-    File []filesList = rootDir.listFiles();
-    if (filesList == null)
-      return tree;
-
-    Queue<Node<FileData>> queue = new LinkedList<Node<FileData>>();
-    List<Node<FileData>> roots = createFileNodesFromFiles(filesList);
-    queue.addAll(roots);
-
-    while (!queue.isEmpty()) {
-      Node<FileData> node = queue.poll();
-      if (node.getValue().getType() == FileTypes.FOLDER) {
-        File[] files = getFileContents(node.getValue().getPath());
-        List<Node<FileData>> children = createFileNodesFromFiles(files);
-        node.addChildren(children);
-        queue.addAll(children);
-      }
-    }
-
-    tree.addRoots(roots);
-    return tree;
+    return filesUtil.getLectureFilesTree(user, lectureId);
   }
 
   @Override
   public String getHtmlFileBodyContent(UserData userData, long lectureId, String path, String title) throws ELearningException {
-    String lecturesDirectoryPath = ServerUtil.getUserLectureDirectoryPath(userData, lectureId);
-    String filePath = lecturesDirectoryPath + path + title;
-
-    File file = new File(filePath);
-
-    if (!file.exists())
-      throw new ELearningException("Specified path does not exists. Path: " + path);
-    if (!file.getName().endsWith(".html"))
-      throw new ELearningException(file.getName() + " is not a html file. Path: " + path);
-
-    BufferedReader reader = null;
-    try {
-      reader = new BufferedReader(new FileReader(file));
-      StringBuilder result = new StringBuilder();
-      String line = null;
-      while ((line = reader.readLine()) != null) {
-        result.append(line);
-      }
-      int bodyIndex = result.indexOf("<body>");
-      int endBodyIndex = result.indexOf("</body>");
-      if (bodyIndex == -1)
-        throw new ELearningException("<body> tag can not be found. Html file is corrupted");
-      if (endBodyIndex == -1)
-        throw new ELearningException("</body> tag can not be found. Html file is corrupted");
-      bodyIndex += 6;
-      return result.substring(bodyIndex, endBodyIndex);
-    } catch (FileNotFoundException ex) {
-      throw new ELearningException("Specified path does not exists. Path: " + path, ex);
-    } catch (IOException ex) {
-      throw new ELearningException("An error occurred while reading the file. Path: " + path, ex);
-    }
+    return filesUtil.getHtmlFileBodyContent(userData, lectureId, path, title);
   }
 
   @Override
   public void deleteFile(UserData user, long lectureId, String path, String title) throws ELearningException {
-    String filePath = ServerUtil.getUserLectureDirectoryPath(user, lectureId) + path + title;
-    File file = new File(filePath);
-    if (!file.exists())
-      throw new ELearningException("Specified file does not exists. Path: " + path + title);
-
-//    if (!file.isDirectory())
-//      throw new ELearningException("Failed to delete the specified file. Path: " + path + title);
-
-    try {
-      if (!file.isDirectory())
-        FileUtils.forceDelete(file);
-      else
-        FileUtils.deleteDirectory(file);
-    } catch (IOException e) {
-      throw new ELearningException(title + " can not be deleted. Error message: " + e.getMessage());
-    }
-  }
-
-
-  private List<Node<FileData>> createFileNodesFromFiles(File[] files) {
-    List<Node<FileData>> result = new ArrayList<Node<FileData>>();
-    if (files == null)
-      return result;
-    for (File file : files) {
-      FileTypes type = file.isDirectory() ? FileTypes.FOLDER : FileTypes.REGULAR;
-      result.add(new Node<FileData>(
-          new FileData(file.getName(), file.getAbsolutePath(), type, file.length(), new Date(file.lastModified()))));
-    }
-    return result;
-  }
-
-  private File[] getFileContents(String path) {
-    File file = new File(path);
-    if (!file.exists())
-      return null;
-    if (!file.isDirectory())
-      return null;
-
-    return file.listFiles();
+    filesUtil.deleteFile(user, lectureId, path, title);
   }
 }
