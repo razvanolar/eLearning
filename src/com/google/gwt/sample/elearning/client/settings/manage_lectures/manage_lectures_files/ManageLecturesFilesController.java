@@ -265,7 +265,7 @@ public class ManageLecturesFilesController implements IHtmlListener {
     });
   }
 
-  private void loadFileTree() {
+  public void loadFileTree() {
     if (currentLecture == null)
       return;
     view.mask();
@@ -361,20 +361,15 @@ public class ManageLecturesFilesController implements IHtmlListener {
     return null;
   }
 
-  /**
-   * methods that are called from the primary controller - ManageLecturesController
-   */
-
-  public void loadFileTree(Lecture lecture) {
-    this.currentLecture = lecture;
-    loadFileTree();
-  }
-
   private String getFileExtentsion(String fileName) {
     StringBuilder builder = new StringBuilder(fileName);
     int index = builder.lastIndexOf(".");
     if (index == -1)
       return "";
     return builder.substring(index);
+  }
+
+  public void setSelectedLecture(Lecture lecture) {
+    currentLecture = lecture;
   }
 }

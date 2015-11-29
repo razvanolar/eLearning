@@ -2,6 +2,7 @@ package com.google.gwt.sample.elearning.client.service;
 
 import com.google.gwt.sample.elearning.shared.Tree;
 import com.google.gwt.sample.elearning.shared.model.FileData;
+import com.google.gwt.sample.elearning.shared.model.LWLectureTestData;
 import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.google.gwt.sample.elearning.shared.model.UserData;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -31,4 +32,6 @@ public interface LectureServiceAsync {
   void getHtmlFileBodyContent(UserData userData, long lectureId, String path, String title, AsyncCallback<String> async);
 
   void deleteFile(UserData user, long lectureId, String path, String title, AsyncCallback<Void> async);
+
+  void getAllTests(UserData user, long lectureId, AsyncCallback<List<LWLectureTestData>> async);
 }

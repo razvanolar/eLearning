@@ -1,16 +1,20 @@
 package com.google.gwt.sample.elearning.shared.model;
 
-/***
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+/**
  * Created by razvanolar on 27.11.2015.
  *
  * A light weight version of LectureTestData
  */
-public class LWLectureTestData {
+public class LWLectureTestData implements IsSerializable {
 
   private String key;
   private String name;
   private int questionsNo;
   private int totalScore;
+
+  public LWLectureTestData() {}
 
   public LWLectureTestData(String name, int questionsNo, int totalScore) {
     this.key = name;

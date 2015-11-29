@@ -3,6 +3,7 @@ package com.google.gwt.sample.elearning.client.settings.manage_lectures;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.sample.elearning.client.ELearningController;
 import com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_lectures_files.ManageLecturesFilesController;
+import com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_lectures_tests.ManageLecturesTestsController;
 import com.google.gwt.sample.elearning.shared.model.FileData;
 import com.google.gwt.sample.elearning.shared.model.LWLectureTestData;
 import com.google.gwt.sample.elearning.shared.model.Lecture;
@@ -85,9 +86,9 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     editFileButton = new TextButton("Edit file", ELearningController.ICONS.editfile());
     downloadFileButton = new TextButton("Download", ELearningController.ICONS.download());
     uploadFileButton = new TextButton("Upload", ELearningController.ICONS.upload());
-    createTestButton = new TextButton("Create Test");
-    editTestButton = new TextButton("Edit test");
-    deleteTestButton = new TextButton("Delete test");
+    createTestButton = new TextButton("Create Test", ELearningController.ICONS.newfile());
+    editTestButton = new TextButton("Edit test", ELearningController.ICONS.editfile());
+    deleteTestButton = new TextButton("Delete test", ELearningController.ICONS.deletefile());
     lectureGridView = viewUtils.createLecturesGrid();
     fileTreeGrid = viewUtils.createFileTreeGrid();
     lectureTestDataGrid = viewUtils.createTestsGrid();
@@ -179,6 +180,7 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
 
     setGridState(state);
     setTreeState(ManageLecturesFilesController.LectureTreeViewState.NONE);
+    setTestGridState(ManageLecturesTestsController.LectureTestsViewState.NONE);
     setFilesAndTestsState(ManageLecturesController.LecturesFilesAndTestsState.FILES);
   }
 
@@ -247,6 +249,27 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     }
   }
 
+  @Override
+  public void setTestGridState(ManageLecturesTestsController.LectureTestsViewState state) {
+    switch (state) {
+      case ADD:
+        createTestButton.setEnabled(true);
+        editTestButton.setEnabled(false);
+        deleteTestButton.setEnabled(false);
+        break;
+      case TEST_SELECTED:
+        createTestButton.setEnabled(true);
+        editTestButton.setEnabled(true);
+        deleteTestButton.setEnabled(true);
+        break;
+      case NONE:
+        createTestButton.setEnabled(false);
+        editTestButton.setEnabled(false);
+        deleteTestButton.setEnabled(false);
+        break;
+    }
+  }
+
   public void setFilesAndTestsState(ManageLecturesController.LecturesFilesAndTestsState state) {
     if (state == ManageLecturesController.LecturesFilesAndTestsState.FILES) {
       mainContainer.setCenterWidget(filesPanelContainer);
@@ -297,6 +320,18 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     return uploadFileButton;
   }
 
+  public TextButton getCreateTestButton() {
+    return createTestButton;
+  }
+
+  public TextButton getEditTestButton() {
+    return editTestButton;
+  }
+
+  public TextButton getDeleteTestButton() {
+    return deleteTestButton;
+  }
+
   public FormPanel getFileFormPanel() {
     return fileFormPanel;
   }
@@ -327,6 +362,10 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
 
   public TreeGrid<FileData> getTreeGrid() {
     return fileTreeGrid;
+  }
+
+  public Grid<LWLectureTestData> getTestsGrid() {
+    return lectureTestDataGrid;
   }
 
   public void loadLectures(Lecture lecture) {

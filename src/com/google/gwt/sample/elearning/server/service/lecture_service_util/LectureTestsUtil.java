@@ -1,7 +1,67 @@
 package com.google.gwt.sample.elearning.server.service.lecture_service_util;
 
+import com.google.gwt.sample.elearning.server.ServerUtil;
+import com.google.gwt.sample.elearning.shared.exception.ELearningException;
+import com.google.gwt.sample.elearning.shared.model.LWLectureTestData;
+import com.google.gwt.sample.elearning.shared.model.UserData;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
+ *
  * Created by razvanolar on 29.11.2015.
  */
 public class LectureTestsUtil {
+
+  public List<LWLectureTestData> getAllTests(UserData user, long lectureId) throws ELearningException {
+    try {
+      File testsPath = new File(ServerUtil.getTestsDirectoryPath(user, lectureId));
+      if (!testsPath.exists())
+        throw new FileNotFoundException();
+
+      List<LWLectureTestData> result = new ArrayList<LWLectureTestData>();
+
+      File[] files = testsPath.listFiles();
+      if (files != null)
+        for (File file : files)
+          if (file.getName().endsWith(".props")) {
+            LWLectureTestData testData = createLWDataFromProp(file);
+            if (testData != null)
+              result.add(testData);
+          }
+      return result;
+    } catch (FileNotFoundException ex) {
+      ex.printStackTrace();
+      throw new ELearningException("Specified file does not exists. userId: " + user.getId() + " and lectureId: "
+              + lectureId);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      throw new ELearningException("Failed to retrieve tests for userId: " + user.getId() + " and lectureId: "
+              + lectureId + ". Error message: " + ex.getMessage(), ex);
+    }
+  }
+
+
+  private LWLectureTestData createLWDataFromProp(File propFile) {
+    try {
+      BufferedReader reader = new BufferedReader(new FileReader(propFile));
+
+      String line;
+      String name = propFile.getName().replace(".props", "");
+      int questionNo = 0, totalScore = 0;
+      while ((line = reader.readLine()) != null) {
+        if (line.contains("QUESTIONS_NO="))
+          questionNo = Integer.parseInt(line.split("=")[1].trim());
+        if (line.contains("TOTAL_SCORE="))
+          totalScore = Integer.parseInt(line.split("=")[1].trim());
+      }
+      reader.close();
+      return new LWLectureTestData(name, questionNo, totalScore);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
 }

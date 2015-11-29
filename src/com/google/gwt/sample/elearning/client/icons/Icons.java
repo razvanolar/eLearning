@@ -64,4 +64,13 @@ public interface Icons extends ClientBundle {
 
   @Source("fail.png")
   ImageResource fail();
+
+  @Source("apply.png")
+  ImageResource apply();
+
+  @Source("arrowleft.png")
+  ImageResource arrowleft();
+
+  @Source("arrowright.png")
+  ImageResource arrowright();
 }
