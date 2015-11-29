@@ -17,7 +17,7 @@ public class ProfileBarView implements ProfileBarController.IProfileBarView {
   private HBoxLayoutContainer mainContainer;
   private ToolBar toolBar;
   private Menu userMenu;
-  private MenuItem showProfileItem, logoutItem;
+  private MenuItem showProfileItem, logoutItem, viewLogsItem;
 
   private boolean addSettingsButton;
   private TextButton settingsButton;
@@ -34,11 +34,13 @@ public class ProfileBarView implements ProfileBarController.IProfileBarView {
     TextButton forumButton = new TextButton("Forum");
     TextButton chatButton = new TextButton("Chat");
     showProfileItem = new MenuItem("Show profile");
+    viewLogsItem = new MenuItem("View logs");
     logoutItem = new MenuItem("Logout");
     userMenu = new Menu();
 
     logoutItem.setIcon(ELearningController.ICONS.logout());
     userMenu.add(showProfileItem);
+    userMenu.add(viewLogsItem);
     userMenu.add(logoutItem);
 
     userButton.setWidth(100);
@@ -70,5 +72,10 @@ public class ProfileBarView implements ProfileBarController.IProfileBarView {
   public Widget asWidget() {
     toolBar.forceLayout();
     return toolBar;
+  }
+
+  @Override
+  public MenuItem getViewLogsMenuItem() {
+    return viewLogsItem;
   }
 }
