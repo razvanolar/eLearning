@@ -97,8 +97,6 @@ public class ManageLecturesController implements ISettingsController {
     professorList = new ArrayList<Professor>();
     lecturesFilesController.bind();
     addListeners();
-    populateGrid();
-    populateCombo();
   }
 
   @Override
@@ -288,5 +286,10 @@ public class ManageLecturesController implements ISettingsController {
       view.loadLectures(selection.get(0));
       lecturesFilesController.loadFileTree(selection.get(0));
     }
+  }
+
+  @Override
+  public String getControllerName() {
+    return "ManageLecturesController";
   }
 }

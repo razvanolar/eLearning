@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.data.shared.SortDir;
 import com.sencha.gxt.data.shared.Store;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
@@ -26,6 +27,7 @@ public class LogGridHandler extends Handler implements IsWidget{
   private Grid<LogRecord> grid;
   private ListStore<LogRecord> store;
   private static LogGridHandler instance;
+  private static long logId = 0;
 
   public static LogGridHandler getInstance(){
     if(instance == null)
@@ -38,7 +40,12 @@ public class LogGridHandler extends Handler implements IsWidget{
   }
 
   private void createGrid() {
-    store = new ListStore<LogRecord>(properties.key());
+    store = new ListStore<LogRecord>(new ModelKeyProvider<LogRecord>() {
+      @Override
+      public String getKey(LogRecord item) {
+        return item.getMillis() + "" + logId++;
+      }
+    });
     List<ColumnConfig<LogRecord, ?>> columnConfigList = new ArrayList<ColumnConfig<LogRecord, ?>>();
     columnConfigList.add(new ColumnConfig<LogRecord, Date>(new LongToDateValueProvider<LogRecord>(properties.millis()), 70, "Timestamp"));
     columnConfigList.add(new ColumnConfig<LogRecord, Level>(properties.level(), 30, "Level"));

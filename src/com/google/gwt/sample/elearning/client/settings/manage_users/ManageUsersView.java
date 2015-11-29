@@ -137,6 +137,8 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
       @Override
       public String getColStyle(UserData model, ValueProvider<? super UserData, ?> valueProvider, int rowIndex,
           int colIndex) {
+        log.info("row: " + rowIndex + " col: " + colIndex);
+        log.info("role: " + model.getRole());
         if (model.getRole() == UserRoleTypes.PROFESSOR) {
           log.info("id: " + model.getId() + " | role: " + model.getRole());
           return "adminRoleBackground";

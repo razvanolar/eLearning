@@ -62,7 +62,10 @@ public class MainSettingsController {
       public void onSelection(SelectionEvent<Widget> event) {
         Widget selectedWidget = event.getSelectedItem();
         ISettingsController controller = (ISettingsController) selectedWidget.getLayoutData();
-        controller.loadResources();
+        if (controller != null) {
+          log.info("MainSettingsController -load resources - " + controller.getControllerName());
+          controller.loadResources();
+        }
       }
     });
   }

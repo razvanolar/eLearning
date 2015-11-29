@@ -57,7 +57,7 @@ public class ManageUsersController implements ISettingsController {
   private UserServiceAsync userService = GWT.create(UserService.class);
   private UserDataProperties userProperties = GWT.create(UserDataProperties.class);
 
-  private static Logger log = Logger.getLogger(ManageUsersController.class.getName());
+  private Logger log = Logger.getLogger(ManageUsersController.class.getName());
 
   public ManageUsersController(IManageUsersView view) {
     this.view = view;
@@ -193,7 +193,9 @@ public class ManageUsersController implements ISettingsController {
   @Override
   public void loadResources() {
     ListStore<UserData> store = getListStore();
-    if (store == null || store.getAll().isEmpty()) {
+    log.info("ManageUsersController - loadResources");
+    if (store.getAll() == null || store.getAll().isEmpty()) {
+      log.info("start loading users ----");
       loadUsers();
     }
   }
@@ -201,6 +203,11 @@ public class ManageUsersController implements ISettingsController {
   private void loadUsers() {
     view.mask();
     userService.getAllUsers(new ELearningAsyncCallBack<List<UserData>>(view, log) {
+      @Override
+      public void onFailure(Throwable caught) {
+        super.onFailure(caught);
+      }
+
       @Override
       public void onSuccess(List<UserData> result) {
         ListStore<UserData> store = getListStore();
@@ -226,5 +233,10 @@ public class ManageUsersController implements ISettingsController {
 
   private boolean isUserSelected() {
     return getSelectedUser() != null;
+  }
+
+  @Override
+  public String getControllerName() {
+    return "ManageUsersController";
   }
 }

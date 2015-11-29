@@ -5,4 +5,5 @@ package com.google.gwt.sample.elearning.client.settings;
  */
 public interface ISettingsController {
   void loadResources();
+  String getControllerName();
 }

@@ -110,4 +110,9 @@ public class UserData implements IsSerializable {
   public void setId(long id) {
     this.id = id;
   }
+
+  @Override
+  public String toString() {
+    return id + " " + username;
+  }
 }

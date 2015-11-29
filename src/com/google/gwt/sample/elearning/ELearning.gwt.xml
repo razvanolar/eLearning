@@ -7,6 +7,7 @@
 
   <inherits name="com.google.gwt.logging.Logging"/>
   <set-property name="gwt.logging.enabled" value="TRUE"/>
+  <set-property name="gwt.logging.developmentModeHandler" value="ENABLED" />
   <set-property name="gwt.logging.popupHandler" value="DISABLED" />
 
   <!--<inherits name='com.sencha.gxt.theme.neptune.Theme' />-->
