@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
+ *
  * Created by razvanolar on 29.11.2015.
  */
 public class LectureDownloadService extends HttpServlet {
@@ -38,6 +39,8 @@ public class LectureDownloadService extends HttpServlet {
         outputStream.write(buffer, 0, bytes);
         sum += bytes;
       }
+      inputStream.close();
+      outputStream.close();
 
       resp.setContentLength(sum);
     } catch (Exception ex) {
