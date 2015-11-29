@@ -128,12 +128,16 @@ public class ManageUsersController implements ISettingsController {
     String uName = view.getUserNameField().getText();
     String eMail = view.getEmailField().getText();
     //TODO collect user role
-    if(TextInputValidator.isEmptyString(fName) || TextInputValidator.isEmptyString(lName) || TextInputValidator.isEmptyString(uName) || TextInputValidator.isEmptyString(eMail)){
+    if(TextInputValidator.isEmptyString(fName) ||
+            TextInputValidator.isEmptyString(lName) ||
+            TextInputValidator.isEmptyString(uName) ||
+            TextInputValidator.isEmptyString(eMail) ||
+            view.getRoleCombo().getValue() == null){
       new MessageBox("","Invalid input").show();
       return;
     }
 
-    userService.createUser(new UserData(uName, fName, lName, eMail, UserRoleTypes.USER), new ELearningAsyncCallBack<Void>(view, log) {
+    userService.createUser(new UserData(uName, fName, lName, eMail, view.getRoleCombo().getValue()), new ELearningAsyncCallBack<Void>(view, log) {
       @Override
       public void onSuccess(Void result) {
         new MessageBox("", "User created").show();
@@ -149,12 +153,16 @@ public class ManageUsersController implements ISettingsController {
     String lName = view.getLastNameField().getText();
     String uName = view.getUserNameField().getText();
     String eMail = view.getEmailField().getText();
-    if(TextInputValidator.isEmptyString(fName) || TextInputValidator.isEmptyString(lName) || TextInputValidator.isEmptyString(uName) || TextInputValidator.isEmptyString(eMail)){
+    if(TextInputValidator.isEmptyString(fName) ||
+            TextInputValidator.isEmptyString(lName) ||
+            TextInputValidator.isEmptyString(uName) ||
+            TextInputValidator.isEmptyString(eMail) ||
+            view.getRoleCombo().getValue() == null){
       new MessageBox("","Invalid input").show();
       return;
     }
     //TODO collect user role
-    UserData user = new UserData(uName, fName, lName, eMail, UserRoleTypes.USER);
+    UserData user = new UserData(uName, fName, lName, eMail, view.getRoleCombo().getValue());
     user.setId(id);
     userService.updateUser(user, new ELearningAsyncCallBack<Void>(view, log) {
       @Override
