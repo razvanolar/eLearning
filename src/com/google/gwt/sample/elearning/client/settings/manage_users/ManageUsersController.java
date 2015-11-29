@@ -135,11 +135,6 @@ public class ManageUsersController implements ISettingsController {
 
     userService.createUser(new UserData(uName, fName, lName, eMail, UserRoleTypes.USER), new ELearningAsyncCallBack<Void>(view, log) {
       @Override
-      public void onFailure(Throwable caught) {
-        new MessageBox("", "Could not create User").show();
-      }
-
-      @Override
       public void onSuccess(Void result) {
         new MessageBox("", "User created").show();
         view.clearFields();
@@ -163,11 +158,6 @@ public class ManageUsersController implements ISettingsController {
     user.setId(id);
     userService.updateUser(user, new ELearningAsyncCallBack<Void>(view, log) {
       @Override
-      public void onFailure(Throwable caught) {
-        new MessageBox("", "Could not update User").show();
-      }
-
-      @Override
       public void onSuccess(Void result) {
         new MessageBox("", "User updated").show();
         view.clearFields();
@@ -182,11 +172,6 @@ public class ManageUsersController implements ISettingsController {
     for(UserData userData : userDatas)
       ids.add(userData.getId());
     userService.removeUser(ids, new ELearningAsyncCallBack<Void>(view, log) {
-      @Override
-      public void onFailure(Throwable caught) {
-        new MessageBox("","Could not delete users").show();
-      }
-
       @Override
       public void onSuccess(Void result) {
         new MessageBox("","Users deleted").show();
@@ -216,12 +201,6 @@ public class ManageUsersController implements ISettingsController {
   private void loadUsers() {
     view.mask();
     userService.getAllUsers(new ELearningAsyncCallBack<List<UserData>>(view, log) {
-      @Override
-      public void onFailure(Throwable caught) {
-        view.unmask();
-        (new MessageBox("Error", "An error occurred while retrieving users.")).show();
-      }
-
       @Override
       public void onSuccess(List<UserData> result) {
         ListStore<UserData> store = getListStore();

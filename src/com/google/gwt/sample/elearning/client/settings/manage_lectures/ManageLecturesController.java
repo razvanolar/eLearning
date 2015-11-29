@@ -114,11 +114,6 @@ public class ManageLecturesController implements ISettingsController {
   private void populateGrid() {
     view.mask();
     lectureService.getAllLectures(new ELearningAsyncCallBack<List<Lecture>>(view,log) {
-      public void onFailure(Throwable caught) {
-        view.unmask();
-        new MessageBox("", "Could not get Lectures").show();
-      }
-
       public void onSuccess(List<Lecture> result) {
         view.getGrid().getStore().clear();
         lectureList.clear();
