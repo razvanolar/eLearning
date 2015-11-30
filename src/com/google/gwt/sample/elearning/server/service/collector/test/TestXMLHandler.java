@@ -1,6 +1,6 @@
 package com.google.gwt.sample.elearning.server.service.collector.test;
 
-import com.google.gwt.sample.elearning.shared.model.LWLectureTestData;
+import com.google.gwt.sample.elearning.shared.model.LectureTestData;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -27,7 +27,7 @@ public class TestXMLHandler {
     testSAXHandler = new TestSAXHandler();
   }
 
-  public LWLectureTestData parse() throws IOException, SAXException {
+  public LectureTestData parse() throws IOException, SAXException {
     InputStream systemResourceAsStream = new ByteArrayInputStream(fileResource.getBytes());
     parser.parse(systemResourceAsStream, testSAXHandler);
     return TestSAXHandler.getTestData();

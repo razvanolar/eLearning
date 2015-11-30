@@ -1,23 +1,15 @@
 package com.google.gwt.sample.elearning.server.service;
 
 import com.google.gwt.sample.elearning.client.service.LectureService;
-import com.google.gwt.sample.elearning.server.ServerUtil;
 import com.google.gwt.sample.elearning.server.repository.DAOFactory;
 import com.google.gwt.sample.elearning.server.repository.JDBC.LectureDAO;
 import com.google.gwt.sample.elearning.server.service.lecture_service_util.LectureFilesUtil;
 import com.google.gwt.sample.elearning.server.service.lecture_service_util.LectureTestsUtil;
-import com.google.gwt.sample.elearning.shared.Node;
 import com.google.gwt.sample.elearning.shared.Tree;
 import com.google.gwt.sample.elearning.shared.exception.ELearningException;
-import com.google.gwt.sample.elearning.shared.model.FileData;
-import com.google.gwt.sample.elearning.shared.model.LWLectureTestData;
-import com.google.gwt.sample.elearning.shared.model.Lecture;
-import com.google.gwt.sample.elearning.shared.model.UserData;
-import com.google.gwt.sample.elearning.shared.types.FileTypes;
+import com.google.gwt.sample.elearning.shared.model.*;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import org.apache.commons.io.FileUtils;
 
-import java.io.*;
 import java.util.*;
 
 /**
@@ -93,7 +85,12 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   }
 
   @Override
-  public List<LWLectureTestData> getAllTests(UserData user, long lectureId) throws ELearningException {
-    return testsUtil.getAllTests(user, lectureId);
+  public List<LWLectureTestData> getAllLWTests(UserData user, long lectureId) throws ELearningException {
+    return testsUtil.getAllLWTests(user, lectureId);
+  }
+
+  @Override
+  public LectureTestData getTest(UserData user, long lectureId, String testName) throws ELearningException {
+    return testsUtil.getTest(user, lectureId, testName);
   }
 }

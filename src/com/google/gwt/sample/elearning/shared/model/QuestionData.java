@@ -12,15 +12,20 @@ import java.util.List;
 public class QuestionData implements IsSerializable {
 
   private long score = 0;
-  private String value = "";
+  private String question = "";
   private List<AnswerData> answers;
 
   public QuestionData() {}
 
-  public QuestionData(String value, long score, List<AnswerData> answers) {
-    this.value = value;
+  public QuestionData(String question, long score, List<AnswerData> answers) {
+    this.question = question;
     this.score = score;
     this.answers = answers;
+  }
+
+  public QuestionData(String question, long score) {
+    this.question = question;
+    this.score = score;
   }
 
   public long getScore() {
@@ -39,12 +44,12 @@ public class QuestionData implements IsSerializable {
     this.answers = answers;
   }
 
-  public String getValue() {
-    return value;
+  public String getQuestion() {
+    return question;
   }
 
-  public void setValue(String value) {
-    this.value = value;
+  public void setQuestion(String question) {
+    this.question = question;
   }
 
   public void addAnswer(AnswerData answer) {

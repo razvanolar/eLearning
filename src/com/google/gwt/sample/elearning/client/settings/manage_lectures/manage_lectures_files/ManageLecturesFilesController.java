@@ -372,4 +372,8 @@ public class ManageLecturesFilesController implements IHtmlListener {
   public void setSelectedLecture(Lecture lecture) {
     currentLecture = lecture;
   }
+
+  public void clearStore() {
+    treeStore.clear();
+  }
 }

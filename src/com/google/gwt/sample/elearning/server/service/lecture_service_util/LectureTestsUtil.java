@@ -1,8 +1,10 @@
 package com.google.gwt.sample.elearning.server.service.lecture_service_util;
 
 import com.google.gwt.sample.elearning.server.ServerUtil;
+import com.google.gwt.sample.elearning.server.service.collector.test.TestXMLHandler;
 import com.google.gwt.sample.elearning.shared.exception.ELearningException;
 import com.google.gwt.sample.elearning.shared.model.LWLectureTestData;
+import com.google.gwt.sample.elearning.shared.model.LectureTestData;
 import com.google.gwt.sample.elearning.shared.model.UserData;
 
 import java.io.*;
@@ -15,7 +17,30 @@ import java.util.List;
  */
 public class LectureTestsUtil {
 
-  public List<LWLectureTestData> getAllTests(UserData user, long lectureId) throws ELearningException {
+  public LectureTestData getTest(UserData user, long lectureId, String testName) {
+    try {
+      File testFile = new File(ServerUtil.getTestsDirectoryPath(user, lectureId) + testName + ".xml");
+      if (!testFile.exists())
+        throw new FileNotFoundException();
+      BufferedReader reader = new BufferedReader(new FileReader(testFile));
+      StringBuilder stringBuilder = new StringBuilder();
+      String line;
+      while ((line = reader.readLine()) != null)
+        stringBuilder.append(line);
+      TestXMLHandler testXMLHandler = new TestXMLHandler(stringBuilder.toString());
+      return testXMLHandler.parse();
+    } catch (FileNotFoundException ex) {
+      ex.printStackTrace();
+      throw new ELearningException("Specified file does not exist. userId: " + user.getId() + " lectureId: " + lectureId +
+          " testName: " + testName, ex);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      throw new ELearningException("Failed to retrieve test data" + user.getId() + " lectureId: " + lectureId +
+              " testName: " + testName, ex);
+    }
+  }
+
+  public List<LWLectureTestData> getAllLWTests(UserData user, long lectureId) throws ELearningException {
     try {
       File testsPath = new File(ServerUtil.getTestsDirectoryPath(user, lectureId));
       if (!testsPath.exists())

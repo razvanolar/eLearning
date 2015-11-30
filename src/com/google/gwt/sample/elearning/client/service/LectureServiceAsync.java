@@ -1,10 +1,7 @@
 package com.google.gwt.sample.elearning.client.service;
 
 import com.google.gwt.sample.elearning.shared.Tree;
-import com.google.gwt.sample.elearning.shared.model.FileData;
-import com.google.gwt.sample.elearning.shared.model.LWLectureTestData;
-import com.google.gwt.sample.elearning.shared.model.Lecture;
-import com.google.gwt.sample.elearning.shared.model.UserData;
+import com.google.gwt.sample.elearning.shared.model.*;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 
@@ -33,5 +30,7 @@ public interface LectureServiceAsync {
 
   void deleteFile(UserData user, long lectureId, String path, String title, AsyncCallback<Void> async);
 
-  void getAllTests(UserData user, long lectureId, AsyncCallback<List<LWLectureTestData>> async);
+  void getAllLWTests(UserData user, long lectureId, AsyncCallback<List<LWLectureTestData>> async);
+
+  void getTest(UserData user, long lectureId, String testName, AsyncCallback<LectureTestData> async);
 }

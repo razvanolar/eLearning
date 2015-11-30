@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.sample.elearning.client.eLearningUtils.TextInputValidator;
 import com.google.gwt.sample.elearning.shared.model.AnswerData;
+import com.google.gwt.sample.elearning.shared.model.LectureTestData;
 import com.google.gwt.sample.elearning.shared.model.QuestionData;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -65,6 +66,7 @@ public class CreateTestController {
 
   private ICreateTestView view;
   private ListStore<AnswerData> store;
+  private LectureTestData test;
   private List<QuestionData> questions;
   private int currentIndex;
 
@@ -73,11 +75,21 @@ public class CreateTestController {
     questions = new ArrayList<QuestionData>();
     questions.add(new QuestionData());
     currentIndex = 0;
+    test = new LectureTestData();
+  }
+
+  public CreateTestController(ICreateTestView view, LectureTestData test) {
+    this.view = view;
+    questions = test.getQuestions();
+    currentIndex = 0;
+    this.test = test;
   }
 
   public void bind() {
     store = view.getAnswersGrid().getStore();
     updatePagingLabel();
+    loadQuestion(questions.get(currentIndex));
+    setBottomToolbarState();
     addListeners();
   }
 
@@ -273,7 +285,7 @@ public class CreateTestController {
     store.clear();
     if (questionData.getAnswers() != null)
       store.addAll(questionData.getAnswers());
-    view.getQuestionField().setText(questionData.getValue());
+    view.getQuestionField().setText(questionData.getQuestion());
     view.getScoreField().setText(questionData.getScore() + "");
   }
 
@@ -303,8 +315,8 @@ public class CreateTestController {
     }
   }
 
-  private void updateCurrentQuestionValue(String value) {
-    questions.get(currentIndex).setValue(value);
+  private void updateCurrentQuestionValue(String question) {
+    questions.get(currentIndex).setQuestion(question);
   }
 
   private void updateCurrentQuestionScore(long score) {

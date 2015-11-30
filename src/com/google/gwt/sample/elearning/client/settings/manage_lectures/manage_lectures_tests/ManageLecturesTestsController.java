@@ -6,6 +6,7 @@ import com.google.gwt.sample.elearning.client.service.LectureServiceAsync;
 import com.google.gwt.sample.elearning.client.settings.manage_lectures.ManageLecturesController;
 import com.google.gwt.sample.elearning.shared.model.LWLectureTestData;
 import com.google.gwt.sample.elearning.shared.model.Lecture;
+import com.google.gwt.sample.elearning.shared.model.LectureTestData;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
@@ -51,6 +52,12 @@ public class ManageLecturesTestsController implements ICreateTestListener {
         onCreateTestSelection();
       }
     });
+
+    view.getEditTestButton().addSelectHandler(new SelectEvent.SelectHandler() {
+      public void onSelect(SelectEvent event) {
+        onEditTestSelection();
+      }
+    });
   }
 
   private void onTestsGridSelection(SelectionChangedEvent<LWLectureTestData> event) {
@@ -76,11 +83,32 @@ public class ManageLecturesTestsController implements ICreateTestListener {
     window.show();
   }
 
+  private void onEditTestSelection() {
+    LWLectureTestData seletedLWTest = getSelectedLWTest();
+    if (currentLecture == null || seletedLWTest == null)
+      return;
+    lectureService.getTest(currentLecture.getProfessor(), currentLecture.getId(), seletedLWTest.getName(), new ELearningAsyncCallBack<LectureTestData>(view, log) {
+      @Override
+      public void onSuccess(LectureTestData result) {
+        if (result == null)
+          return;
+        CreateTestController.ICreateTestView view = new CreateTestView();
+        CreateTestController createTestController = new CreateTestController(view, result);
+        createTestController.bind();
+        MasterWindow window = new MasterWindow();
+        window.setContent(view.asWidget(), "Create Test View");
+        window.setModal(true);
+        window.setPixelSize(600, 350);
+        window.show();
+      }
+    });
+  }
+
   public void loadTestsGrid() {
     if (currentLecture == null)
       return;
     view.mask();
-    lectureService.getAllTests(currentLecture.getProfessor(), currentLecture.getId(), new ELearningAsyncCallBack<List<LWLectureTestData>>(view, log) {
+    lectureService.getAllLWTests(currentLecture.getProfessor(), currentLecture.getId(), new ELearningAsyncCallBack<List<LWLectureTestData>>(view, log) {
       @Override
       public void onSuccess(List<LWLectureTestData> result) {
         if (result != null) {
@@ -98,5 +126,18 @@ public class ManageLecturesTestsController implements ICreateTestListener {
       view.setTestGridState(LectureTestsViewState.ADD);
     else
       view.setTestGridState(LectureTestsViewState.NONE);
+  }
+
+  private LWLectureTestData getSelectedLWTest() {
+    if (view.getTestsGrid().getSelectionModel() != null) {
+      List<LWLectureTestData> selectedItems = view.getTestsGrid().getSelectionModel().getSelectedItems();
+      if (selectedItems != null && !selectedItems.isEmpty())
+        return selectedItems.get(0);
+    }
+    return null;
+  }
+
+  public void clearStore() {
+    gridStore.clear();
   }
 }

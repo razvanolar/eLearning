@@ -18,12 +18,12 @@ import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
 import com.google.gwt.sample.elearning.client.eLearningUtils.ELearningAsyncCallBack;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
-import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.TreeStore;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.button.ToggleButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.ComboBox;
 import com.sencha.gxt.widget.core.client.form.TextField;
@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
+ *
  * Created by Cristi on 11/17/2015.
  */
 public class ManageLecturesController implements ISettingsController {
@@ -52,7 +53,7 @@ public class ManageLecturesController implements ISettingsController {
   }
 
   public enum LecturesFilesAndTestsState {
-    FILES, TESTS;
+    FILES, TESTS, VIDEOS
   }
 
   public interface IManageLecturesView extends MaskableView{
@@ -60,7 +61,8 @@ public class ManageLecturesController implements ISettingsController {
     TextButton getEditButton();
     TextButton getDeleteButton();
     TextField getLectureNameField();
-    RadioButton getFilesRadioButton();
+    ToggleButton getFileToggleButton();
+    ToggleButton getTestToggleButton();
     ComboBox<Professor> getProfessorComboBox();
     TextButton getCreateHtmlButton();
     TextButton getEditHtmlButton();
@@ -77,7 +79,7 @@ public class ManageLecturesController implements ISettingsController {
     Grid<LWLectureTestData> getTestsGrid();
     void setTreeState(ManageLecturesFilesController.LectureTreeViewState state);
     void setTestGridState(ManageLecturesTestsController.LectureTestsViewState state);
-    void setFilesAndTestsState(LecturesFilesAndTestsState state);
+    void setCenterWidgetState(LecturesFilesAndTestsState state);
     Grid<Lecture> getGrid();
     void setGridState(LectureGridViewState state);
     void loadLectures(Lecture userData);
@@ -88,11 +90,9 @@ public class ManageLecturesController implements ISettingsController {
   }
 
   private IManageLecturesView view;
-  private TreeStore<FileData> treeStore;
 
   public ManageLecturesController(IManageLecturesView view) {
     this.view = view;
-    treeStore = view.getTreeGrid().getTreeStore();
     lecturesFilesController = new ManageLecturesFilesController(view, lectureService);
     lecturesTestsController = new ManageLecturesTestsController(view, lectureService);
   }
@@ -202,15 +202,33 @@ public class ManageLecturesController implements ISettingsController {
       }
     });
 
-    view.getFilesRadioButton().addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+//    view.getFilesRadioButton().addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+//      public void onValueChange(ValueChangeEvent<Boolean> event) {
+//        view.setCenterWidgetState(
+//                event.getValue() ? LecturesFilesAndTestsState.FILES : LecturesFilesAndTestsState.TESTS);
+//        if (event.getValue()) {
+//          view.setCenterWidgetState(LecturesFilesAndTestsState.FILES);
+//          lecturesFilesController.loadFileTree();
+//        } else {
+//          view.setCenterWidgetState(LecturesFilesAndTestsState.TESTS);
+//          lecturesTestsController.loadTestsGrid();
+//        }
+//      }
+//    });
+
+    view.getFileToggleButton().addValueChangeHandler(new ValueChangeHandler<Boolean>() {
       public void onValueChange(ValueChangeEvent<Boolean> event) {
-        view.setFilesAndTestsState(
-                event.getValue() ? LecturesFilesAndTestsState.FILES : LecturesFilesAndTestsState.TESTS);
         if (event.getValue()) {
-          view.setFilesAndTestsState(LecturesFilesAndTestsState.FILES);
+          view.setCenterWidgetState(LecturesFilesAndTestsState.FILES);
           lecturesFilesController.loadFileTree();
-        } else {
-          view.setFilesAndTestsState(LecturesFilesAndTestsState.TESTS);
+        }
+      }
+    });
+
+    view.getTestToggleButton().addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+      public void onValueChange(ValueChangeEvent<Boolean> event) {
+        if (event.getValue()) {
+          view.setCenterWidgetState(LecturesFilesAndTestsState.TESTS);
           lecturesTestsController.loadTestsGrid();
         }
       }
@@ -291,9 +309,10 @@ public class ManageLecturesController implements ISettingsController {
 
   private void onGridSelection(SelectionChangedEvent<Lecture> event) {
     List<Lecture> selection = event.getSelection();
+    lecturesFilesController.clearStore();
+    lecturesTestsController.clearStore();
     if (selection == null || selection.isEmpty()) {
       view.setGridState(LectureGridViewState.NONE);
-      treeStore.clear();
       lecturesFilesController.setSelectedLecture(null);
       lecturesTestsController.setSelectedLecture(null);
     } else {
@@ -302,9 +321,9 @@ public class ManageLecturesController implements ISettingsController {
       view.loadLectures(lecture);
       lecturesFilesController.setSelectedLecture(lecture);
       lecturesTestsController.setSelectedLecture(lecture);
-      if (view.getFilesRadioButton().getValue())
+      if (view.getFileToggleButton().getValue())
         lecturesFilesController.loadFileTree();
-      else
+      else if (view.getTestToggleButton().getValue())
         lecturesTestsController.loadTestsGrid();
     }
   }

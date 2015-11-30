@@ -1,8 +1,6 @@
 package com.google.gwt.sample.elearning.server.service.collector.test;
 
-import com.google.gwt.sample.elearning.shared.model.AnswerData;
-import com.google.gwt.sample.elearning.shared.model.LWLectureTestData;
-import com.google.gwt.sample.elearning.shared.model.TestQuestion;
+import com.google.gwt.sample.elearning.shared.model.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -15,13 +13,13 @@ import java.util.ArrayList;
  */
 public class TestSAXHandler extends DefaultHandler{
   private String content = null;
-  private static LWLectureTestData testData;
-  private TestQuestion testQuestion;
-  private static ArrayList<TestQuestion> questions;
+  private static LectureTestData testData;
+  private QuestionData testQuestion;
+  private static ArrayList<QuestionData> questions;
   private AnswerData answerData;
   private static ArrayList<AnswerData> answers;
 
-  public static LWLectureTestData getTestData() {
+  public static LectureTestData getTestData() {
     return testData;
   }
 
@@ -31,19 +29,17 @@ public class TestSAXHandler extends DefaultHandler{
     switch (startTag){
       case TEST:
         questions = new ArrayList<>();
-        testData = new LWLectureTestData();
-        long id = Long.parseLong(attributes.getValue("id"));
+        testData = new LectureTestData();
         String name = attributes.getValue("name");
-        long courseId = Long.parseLong(attributes.getValue("course"));
-        testData.setId(id);
         testData.setName(name);
-        testData.setCourseId(courseId);
+        String duration = attributes.getValue("duration");
+        testData.setDuration(Long.parseLong(duration));
         break;
       case QUESTION:
         answers = new ArrayList<>();
         String question = attributes.getValue("value");
         int score = Integer.parseInt(attributes.getValue("score"));
-        testQuestion = new TestQuestion(question, score);
+        testQuestion = new QuestionData(question, score);
         break;
       case ANSWER:
         answerData = new AnswerData();

@@ -15,7 +15,8 @@ import com.sencha.gxt.core.client.util.ToggleGroup;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.StringLabelProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
-import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.button.*;
+import com.sencha.gxt.widget.core.client.button.ToggleButton;
 import com.sencha.gxt.widget.core.client.container.*;
 import com.sencha.gxt.widget.core.client.form.ComboBox;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
@@ -54,13 +55,15 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
   private Grid<Lecture> lectureGridView;
   private Grid<LWLectureTestData> lectureTestDataGrid;
   private TreeGrid<FileData> fileTreeGrid;
-  private RadioButton filesRadioButton;
-  private RadioButton testsRadioButton;
+  private com.sencha.gxt.widget.core.client.button.ToggleButton filesToggleButton;
+  private com.sencha.gxt.widget.core.client.button.ToggleButton testsToggleButton;
+  private com.sencha.gxt.widget.core.client.button.ToggleButton videosToggleButton;
 
   private ManageLecturesController.LectureGridViewState state = ManageLecturesController.LectureGridViewState.NONE;
   private static Logger log = Logger.getLogger(ManageLecturesView.class.getName());
   private BorderLayoutContainer filesPanelContainer;
   private BorderLayoutContainer testsPanelContainer;
+  private BorderLayoutContainer videosPanelContainer;
   private FormPanel fileFormPanel;
   private FileUpload fileUpload;
 
@@ -92,9 +95,10 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     lectureGridView = viewUtils.createLecturesGrid();
     fileTreeGrid = viewUtils.createFileTreeGrid();
     lectureTestDataGrid = viewUtils.createTestsGrid();
-    filesRadioButton = new RadioButton("Files", "Files");
-    testsRadioButton = new RadioButton("Tests", "Tests");
-    ToggleGroup radioGroup = new ToggleGroup();
+    filesToggleButton = new ToggleButton("Files");
+    testsToggleButton = new ToggleButton("Tests");
+    videosToggleButton = new ToggleButton("Videos");
+    ToggleGroup toggleGroup = new ToggleGroup();
     BorderLayoutContainer gridContainer = new BorderLayoutContainer();
     filesPanelContainer = new BorderLayoutContainer();
     testsPanelContainer = new BorderLayoutContainer();
@@ -140,13 +144,15 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     gridLayoutData.setMargins(new Margins(5, 0, 0, 0));
     gridContainer.setSouthWidget(formContainer, gridLayoutData);
 
-    filesRadioButton.setValue(true);
-    radioGroup.add(filesRadioButton);
-    radioGroup.add(testsRadioButton);
+    filesToggleButton.setValue(true);
+    toggleGroup.add(filesToggleButton);
+    toggleGroup.add(testsToggleButton);
+    toggleGroup.add(videosToggleButton);
 
     toolBar.add(new FillToolItem());
-    toolBar.add(filesRadioButton);
-    toolBar.add(testsRadioButton);
+    toolBar.add(filesToggleButton);
+    toolBar.add(testsToggleButton);
+    toolBar.add(videosToggleButton);
     toolBar.setHorizontalSpacing(5);
 
     filesToolBar.add(createHtmlFile);
@@ -181,7 +187,7 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     setGridState(state);
     setTreeState(ManageLecturesFilesController.LectureTreeViewState.NONE);
     setTestGridState(ManageLecturesTestsController.LectureTestsViewState.NONE);
-    setFilesAndTestsState(ManageLecturesController.LecturesFilesAndTestsState.FILES);
+    setCenterWidgetState(ManageLecturesController.LecturesFilesAndTestsState.FILES);
   }
 
   @Override
@@ -270,7 +276,7 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     }
   }
 
-  public void setFilesAndTestsState(ManageLecturesController.LecturesFilesAndTestsState state) {
+  public void setCenterWidgetState(ManageLecturesController.LecturesFilesAndTestsState state) {
     if (state == ManageLecturesController.LecturesFilesAndTestsState.FILES) {
       mainContainer.setCenterWidget(filesPanelContainer);
     } else if (state == ManageLecturesController.LecturesFilesAndTestsState.TESTS) {
@@ -344,12 +350,14 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     return this.lectureNameField;
   }
 
-  public RadioButton getFilesRadioButton() {
-    return filesRadioButton;
+  @Override
+  public ToggleButton getFileToggleButton() {
+    return filesToggleButton;
   }
 
-  public RadioButton getTestsRadioButton() {
-    return testsRadioButton;
+  @Override
+  public ToggleButton getTestToggleButton() {
+    return testsToggleButton;
   }
 
   public ComboBox<Professor> getProfessorComboBox() {
