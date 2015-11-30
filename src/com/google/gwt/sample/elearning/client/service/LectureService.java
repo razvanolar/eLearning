@@ -39,4 +39,6 @@ public interface LectureService extends RemoteService {
   List<LWLectureTestData> getAllLWTests(UserData user, long lectureId) throws ELearningException;
 
   LectureTestData getTest(UserData user, long lectureId, String testName) throws ELearningException;
+
+  List<VideoLinkData> getLectureVideos(long lectureId) throws ELearningException;
 }

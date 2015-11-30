@@ -18,4 +18,9 @@ public class JdbcDAOFactory extends DAOFactory {
   public LectureDAO getLectureDAO() {
     return new JdbcLectureDAO();
   }
+
+  @Override
+  public VideoLinkDAO getVideoLinkDAO() {
+    return new JdbcVideoLinkDAO();
+  }
 }

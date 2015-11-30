@@ -4,10 +4,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.sample.elearning.client.ELearningController;
 import com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_lectures_files.ManageLecturesFilesController;
 import com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_lectures_tests.ManageLecturesTestsController;
-import com.google.gwt.sample.elearning.shared.model.FileData;
-import com.google.gwt.sample.elearning.shared.model.LWLectureTestData;
-import com.google.gwt.sample.elearning.shared.model.Lecture;
-import com.google.gwt.sample.elearning.shared.model.Professor;
+import com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_lectures_videos.ManageLecturesVideosController;
+import com.google.gwt.sample.elearning.shared.model.*;
 import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.cell.core.client.form.ComboBoxCell;
 import com.sencha.gxt.core.client.util.Margins;
@@ -50,11 +48,16 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
   private TextButton createTestButton;
   private TextButton editTestButton;
   private TextButton deleteTestButton;
+  private TextButton addVideoButton;
+  private TextButton editVideoButton;
+  private TextButton deleteVideoButton;
+  private TextButton playVideoButton;
   private ComboBox<Professor> professorComboBox;
   private TextField lectureNameField;
   private Grid<Lecture> lectureGridView;
   private Grid<LWLectureTestData> lectureTestDataGrid;
   private TreeGrid<FileData> fileTreeGrid;
+  private Grid<VideoLinkData> videoLinkDataGrid;
   private com.sencha.gxt.widget.core.client.button.ToggleButton filesToggleButton;
   private com.sencha.gxt.widget.core.client.button.ToggleButton testsToggleButton;
   private com.sencha.gxt.widget.core.client.button.ToggleButton videosToggleButton;
@@ -92,9 +95,14 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     createTestButton = new TextButton("Create Test", ELearningController.ICONS.newfile());
     editTestButton = new TextButton("Edit test", ELearningController.ICONS.editfile());
     deleteTestButton = new TextButton("Delete test", ELearningController.ICONS.deletefile());
+    addVideoButton = new TextButton("Add video", ELearningController.ICONS.newfile());
+    editVideoButton = new TextButton("Edit video", ELearningController.ICONS.editfile());
+    deleteVideoButton = new TextButton("Delete video", ELearningController.ICONS.deletefile());
+    playVideoButton = new TextButton("Play video", ELearningController.ICONS.play());
     lectureGridView = viewUtils.createLecturesGrid();
     fileTreeGrid = viewUtils.createFileTreeGrid();
     lectureTestDataGrid = viewUtils.createTestsGrid();
+    videoLinkDataGrid = viewUtils.createVideosGrid();
     filesToggleButton = new ToggleButton("Files");
     testsToggleButton = new ToggleButton("Tests");
     videosToggleButton = new ToggleButton("Videos");
@@ -102,15 +110,17 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     BorderLayoutContainer gridContainer = new BorderLayoutContainer();
     filesPanelContainer = new BorderLayoutContainer();
     testsPanelContainer = new BorderLayoutContainer();
+    videosPanelContainer = new BorderLayoutContainer();
     fileFormPanel = new FormPanel();
     fileUpload = new FileUpload();
     HorizontalPanel fileUploadContainer = new HorizontalPanel();
     ContentPanel filesGridContentPanel = new ContentPanel();
     ContentPanel testGridContentPanel = new ContentPanel();
+    ContentPanel videosContentPanel = new ContentPanel();
     ToolBar toolBar = new ToolBar();
     ToolBar filesToolBar = new ToolBar();
     ToolBar testToolBar = new ToolBar();
-
+    ToolBar videosTooBar = new ToolBar();
 
     fileFormPanel.setEncoding(FormPanel.ENCODING_MULTIPART);
     fileFormPanel.setMethod(FormPanel.METHOD_POST);
@@ -168,6 +178,12 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     testToolBar.add(editTestButton);
     testToolBar.add(deleteTestButton);
 
+    videosTooBar.add(addVideoButton);
+    videosTooBar.add(editVideoButton);
+    videosTooBar.add(deleteVideoButton);
+    videosTooBar.add(new SeparatorToolItem());
+    videosTooBar.add(playVideoButton);
+
     filesGridContentPanel.setHeaderVisible(false);
     filesGridContentPanel.add(fileTreeGrid);
     filesPanelContainer.setCenterWidget(filesGridContentPanel);
@@ -177,6 +193,11 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     testGridContentPanel.add(lectureTestDataGrid);
     testsPanelContainer.setCenterWidget(testGridContentPanel);
     testsPanelContainer.setSouthWidget(testToolBar, new BorderLayoutContainer.BorderLayoutData(30));
+
+    videosContentPanel.setHeaderVisible(false);
+    videosContentPanel.add(videoLinkDataGrid);
+    videosPanelContainer.setCenterWidget(videosContentPanel);
+    videosPanelContainer.setSouthWidget(videosTooBar, new BorderLayoutContainer.BorderLayoutData(30));
 
     BorderLayoutContainer.BorderLayoutData layoutData = new BorderLayoutContainer.BorderLayoutData(.30);
     layoutData.setSplit(true);
@@ -276,11 +297,37 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     }
   }
 
+  @Override
+  public void setVideoGridState(ManageLecturesVideosController.ManageVideosToolBarState state) {
+    switch (state) {
+      case ADD:
+        addVideoButton.setEnabled(true);
+        editVideoButton.setEnabled(false);
+        deleteVideoButton.setEnabled(false);
+        playVideoButton.setEnabled(false);
+        break;
+      case EDIT:
+        addVideoButton.setEnabled(true);
+        editVideoButton.setEnabled(true);
+        deleteVideoButton.setEnabled(true);
+        playVideoButton.setEnabled(true);
+        break;
+      case NONE:
+        addVideoButton.setEnabled(false);
+        editVideoButton.setEnabled(false);
+        deleteVideoButton.setEnabled(false);
+        playVideoButton.setEnabled(false);
+        break;
+    }
+  }
+
   public void setCenterWidgetState(ManageLecturesController.LecturesFilesAndTestsState state) {
     if (state == ManageLecturesController.LecturesFilesAndTestsState.FILES) {
       mainContainer.setCenterWidget(filesPanelContainer);
     } else if (state == ManageLecturesController.LecturesFilesAndTestsState.TESTS) {
       mainContainer.setCenterWidget(testsPanelContainer);
+    } else if (state == ManageLecturesController.LecturesFilesAndTestsState.VIDEOS) {
+      mainContainer.setCenterWidget(videosPanelContainer);
     }
     mainContainer.forceLayout();
   }
@@ -338,6 +385,10 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     return deleteTestButton;
   }
 
+  public TextButton getPlayVideoButton() {
+    return playVideoButton;
+  }
+
   public FormPanel getFileFormPanel() {
     return fileFormPanel;
   }
@@ -350,14 +401,16 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     return this.lectureNameField;
   }
 
-  @Override
   public ToggleButton getFileToggleButton() {
     return filesToggleButton;
   }
 
-  @Override
   public ToggleButton getTestToggleButton() {
     return testsToggleButton;
+  }
+
+  public ToggleButton getVideosToggleButton() {
+    return videosToggleButton;
   }
 
   public ComboBox<Professor> getProfessorComboBox() {
@@ -374,6 +427,10 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
 
   public Grid<LWLectureTestData> getTestsGrid() {
     return lectureTestDataGrid;
+  }
+
+  public Grid<VideoLinkData> getVideosGrid() {
+    return videoLinkDataGrid;
   }
 
   public void loadLectures(Lecture lecture) {

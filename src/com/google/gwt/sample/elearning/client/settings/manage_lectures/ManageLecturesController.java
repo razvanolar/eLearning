@@ -13,6 +13,7 @@ import com.google.gwt.sample.elearning.client.service.*;
 import com.google.gwt.sample.elearning.client.settings.ISettingsController;
 import com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_lectures_files.ManageLecturesFilesController;
 import com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_lectures_tests.ManageLecturesTestsController;
+import com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_lectures_videos.ManageLecturesVideosController;
 import com.google.gwt.sample.elearning.shared.model.*;
 import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
 import com.google.gwt.sample.elearning.client.eLearningUtils.ELearningAsyncCallBack;
@@ -20,7 +21,6 @@ import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
-import com.sencha.gxt.data.shared.TreeStore;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.button.ToggleButton;
@@ -47,6 +47,7 @@ public class ManageLecturesController implements ISettingsController {
   private UserServiceAsync userServiceAsync = GWT.create(UserService.class);
   private ManageLecturesFilesController lecturesFilesController;
   private ManageLecturesTestsController lecturesTestsController;
+  private ManageLecturesVideosController lecturesVideosController;
 
   public enum LectureGridViewState {
     ADD, EDIT, ADDING, NONE
@@ -63,6 +64,7 @@ public class ManageLecturesController implements ISettingsController {
     TextField getLectureNameField();
     ToggleButton getFileToggleButton();
     ToggleButton getTestToggleButton();
+    ToggleButton getVideosToggleButton();
     ComboBox<Professor> getProfessorComboBox();
     TextButton getCreateHtmlButton();
     TextButton getEditHtmlButton();
@@ -73,12 +75,15 @@ public class ManageLecturesController implements ISettingsController {
     TextButton getCreateTestButton();
     TextButton getEditTestButton();
     TextButton getDeleteTestButton();
+    TextButton getPlayVideoButton();
     FormPanel getFileFormPanel();
     FileUpload getFileUpload();
     TreeGrid<FileData> getTreeGrid();
     Grid<LWLectureTestData> getTestsGrid();
+    Grid<VideoLinkData> getVideosGrid();
     void setTreeState(ManageLecturesFilesController.LectureTreeViewState state);
     void setTestGridState(ManageLecturesTestsController.LectureTestsViewState state);
+    void setVideoGridState(ManageLecturesVideosController.ManageVideosToolBarState state);
     void setCenterWidgetState(LecturesFilesAndTestsState state);
     Grid<Lecture> getGrid();
     void setGridState(LectureGridViewState state);
@@ -95,6 +100,7 @@ public class ManageLecturesController implements ISettingsController {
     this.view = view;
     lecturesFilesController = new ManageLecturesFilesController(view, lectureService);
     lecturesTestsController = new ManageLecturesTestsController(view, lectureService);
+    lecturesVideosController = new ManageLecturesVideosController(view, lectureService);
   }
 
   public void bind() {
@@ -102,6 +108,7 @@ public class ManageLecturesController implements ISettingsController {
     professorList = new ArrayList<Professor>();
     lecturesFilesController.bind();
     lecturesTestsController.bind();
+    lecturesVideosController.bind();
     addListeners();
   }
 
@@ -175,7 +182,6 @@ public class ManageLecturesController implements ISettingsController {
     view.getLectureNameField().addKeyUpHandler(textFieldsValidator);
 
     view.getProfessorComboBox().addSelectionHandler(new SelectionHandler<Professor>() {
-      @Override
       public void onSelection(SelectionEvent<Professor> event) {
         long selectedProfessordId = event.getSelectedItem().getId();
         onComboProfessorSelection(selectedProfessordId);
@@ -183,7 +189,6 @@ public class ManageLecturesController implements ISettingsController {
     });
 
     view.getAddButton().addSelectHandler(new SelectEvent.SelectHandler() {
-      @Override
       public void onSelect(SelectEvent event) {
         onAddButtonSelection();
       }
@@ -196,25 +201,10 @@ public class ManageLecturesController implements ISettingsController {
     });
 
     view.getEditButton().addSelectHandler(new SelectEvent.SelectHandler() {
-      @Override
       public void onSelect(SelectEvent event) {
         onEditButtonSelection();
       }
     });
-
-//    view.getFilesRadioButton().addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-//      public void onValueChange(ValueChangeEvent<Boolean> event) {
-//        view.setCenterWidgetState(
-//                event.getValue() ? LecturesFilesAndTestsState.FILES : LecturesFilesAndTestsState.TESTS);
-//        if (event.getValue()) {
-//          view.setCenterWidgetState(LecturesFilesAndTestsState.FILES);
-//          lecturesFilesController.loadFileTree();
-//        } else {
-//          view.setCenterWidgetState(LecturesFilesAndTestsState.TESTS);
-//          lecturesTestsController.loadTestsGrid();
-//        }
-//      }
-//    });
 
     view.getFileToggleButton().addValueChangeHandler(new ValueChangeHandler<Boolean>() {
       public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -229,7 +219,16 @@ public class ManageLecturesController implements ISettingsController {
       public void onValueChange(ValueChangeEvent<Boolean> event) {
         if (event.getValue()) {
           view.setCenterWidgetState(LecturesFilesAndTestsState.TESTS);
-          lecturesTestsController.loadTestsGrid();
+          lecturesTestsController.loadTests();
+        }
+      }
+    });
+
+    view.getVideosToggleButton().addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+      public void onValueChange(ValueChangeEvent<Boolean> event) {
+        if (event.getValue()) {
+          view.setCenterWidgetState(LecturesFilesAndTestsState.VIDEOS);
+          lecturesVideosController.loadVideos();
         }
       }
     });
@@ -315,16 +314,20 @@ public class ManageLecturesController implements ISettingsController {
       view.setGridState(LectureGridViewState.NONE);
       lecturesFilesController.setSelectedLecture(null);
       lecturesTestsController.setSelectedLecture(null);
+      lecturesVideosController.setSelectedLecture(null);
     } else {
       view.setGridState(LectureGridViewState.EDIT);
       Lecture lecture = selection.get(0);
       view.loadLectures(lecture);
       lecturesFilesController.setSelectedLecture(lecture);
       lecturesTestsController.setSelectedLecture(lecture);
+      lecturesVideosController.setSelectedLecture(lecture);
       if (view.getFileToggleButton().getValue())
         lecturesFilesController.loadFileTree();
       else if (view.getTestToggleButton().getValue())
-        lecturesTestsController.loadTestsGrid();
+        lecturesTestsController.loadTests();
+      else if (view.getVideosToggleButton().getValue())
+        lecturesVideosController.loadVideos();
     }
   }
 

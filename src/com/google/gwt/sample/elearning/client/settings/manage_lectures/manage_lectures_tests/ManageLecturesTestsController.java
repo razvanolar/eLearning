@@ -104,7 +104,7 @@ public class ManageLecturesTestsController implements ICreateTestListener {
     });
   }
 
-  public void loadTestsGrid() {
+  public void loadTests() {
     if (currentLecture == null)
       return;
     view.mask();

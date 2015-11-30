@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.sample.elearning.shared.model.FileData;
 import com.google.gwt.sample.elearning.shared.model.LWLectureTestData;
 import com.google.gwt.sample.elearning.shared.model.Lecture;
+import com.google.gwt.sample.elearning.shared.model.VideoLinkData;
 import com.sencha.gxt.core.client.IdentityValueProvider;
 import com.sencha.gxt.core.client.Style;
 import com.sencha.gxt.core.client.ValueProvider;
@@ -22,6 +23,7 @@ public class ManageLecturesViewUtils {
   private static LectureDataProperties lectureProperties = GWT.create(LectureDataProperties.class);
   private static FileDataProperties fileDataProperties = GWT.create(FileDataProperties.class);
   private static LWLectureTestDataProperties testDataProperties = GWT.create(LWLectureTestDataProperties.class);
+  private static VideoLinkDataProperties videoLinkDataProperties = GWT.create(VideoLinkDataProperties.class);
 
   public Grid<Lecture> createLecturesGrid() {
     IdentityValueProvider<Lecture> identityValueProvider = new IdentityValueProvider<Lecture>("sm");
@@ -89,4 +91,25 @@ public class ManageLecturesViewUtils {
     return grid;
   }
 
+  public Grid<VideoLinkData> createVideosGrid() {
+    IdentityValueProvider<VideoLinkData> identityValueProvider = new IdentityValueProvider<VideoLinkData>("sm");
+    CheckBoxSelectionModel<VideoLinkData> checkBoxSelectionModel = new CheckBoxSelectionModel<VideoLinkData>(identityValueProvider);
+    checkBoxSelectionModel.setSelectionMode(Style.SelectionMode.SINGLE);
+
+    ListStore<VideoLinkData> store = new ListStore<VideoLinkData>(videoLinkDataProperties.key());
+
+    List<ColumnConfig<VideoLinkData, ?>> columns = new ArrayList<ColumnConfig<VideoLinkData, ?>>();
+    columns.add(checkBoxSelectionModel.getColumn());
+    columns.add(new ColumnConfig<VideoLinkData, Long>(videoLinkDataProperties.id(), 50, "ID"));
+    columns.add(new ColumnConfig<VideoLinkData, String>(videoLinkDataProperties.title(), 70, "Title"));
+    columns.add(new ColumnConfig<VideoLinkData, String>(videoLinkDataProperties.url(), 150, "URL"));
+    columns.add(new ColumnConfig<VideoLinkData, String>(videoLinkDataProperties.description(), 150, "Description"));
+
+    ColumnModel<VideoLinkData> columnModel = new ColumnModel<VideoLinkData>(columns);
+    Grid<VideoLinkData> grid = new Grid<VideoLinkData>(store, columnModel);
+    grid.getView().setAutoFill(true);
+    grid.setSelectionModel(checkBoxSelectionModel);
+
+    return grid;
+  }
 }

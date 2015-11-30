@@ -33,4 +33,6 @@ public interface LectureServiceAsync {
   void getAllLWTests(UserData user, long lectureId, AsyncCallback<List<LWLectureTestData>> async);
 
   void getTest(UserData user, long lectureId, String testName, AsyncCallback<LectureTestData> async);
+
+  void getLectureVideos(long lectureId, AsyncCallback<List<VideoLinkData>> async);
 }

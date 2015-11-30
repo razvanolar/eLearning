@@ -3,6 +3,7 @@ package com.google.gwt.sample.elearning.server.service;
 import com.google.gwt.sample.elearning.client.service.LectureService;
 import com.google.gwt.sample.elearning.server.repository.DAOFactory;
 import com.google.gwt.sample.elearning.server.repository.JDBC.LectureDAO;
+import com.google.gwt.sample.elearning.server.repository.JDBC.VideoLinkDAO;
 import com.google.gwt.sample.elearning.server.service.lecture_service_util.LectureFilesUtil;
 import com.google.gwt.sample.elearning.server.service.lecture_service_util.LectureTestsUtil;
 import com.google.gwt.sample.elearning.shared.Tree;
@@ -20,6 +21,7 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
 
   private DAOFactory factory = DAOFactory.getInstance();
   private LectureDAO lectureDAO = factory.getLectureDAO();
+  private VideoLinkDAO videoLinkDAO = factory.getVideoLinkDAO();
   private LectureFilesUtil filesUtil = new LectureFilesUtil();
   private LectureTestsUtil testsUtil = new LectureTestsUtil();
 
@@ -92,5 +94,9 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   @Override
   public LectureTestData getTest(UserData user, long lectureId, String testName) throws ELearningException {
     return testsUtil.getTest(user, lectureId, testName);
+  }
+
+  public List<VideoLinkData> getLectureVideos(long lectureId) throws ELearningException {
+    return videoLinkDAO.getLectureVideos(lectureId);
   }
 }
