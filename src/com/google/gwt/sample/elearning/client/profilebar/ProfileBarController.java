@@ -2,7 +2,9 @@ package com.google.gwt.sample.elearning.client.profilebar;
 
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.sample.elearning.client.ELearningController;
 import com.google.gwt.sample.elearning.client.MasterWindow;
+import com.google.gwt.sample.elearning.client.login.LoginController;
 import com.google.gwt.sample.elearning.client.logs.LogsController;
 import com.google.gwt.sample.elearning.client.logs.LogsView;
 import com.google.gwt.sample.elearning.client.settings.MainSettingsController;
@@ -22,6 +24,7 @@ public class ProfileBarController {
   public interface IProfileBarView {
     TextButton getSettingsButton();
     MenuItem getViewLogsMenuItem();
+    MenuItem getLogoutMenuItem();
     Widget asWidget();
   }
 
@@ -48,6 +51,12 @@ public class ProfileBarController {
         doOnViewLogsSelect();
       }
     });
+    view.getLogoutMenuItem().addSelectionHandler(new SelectionHandler<Item>() {
+      @Override
+      public void onSelection(SelectionEvent<Item> event) {
+        doOnLogoutSelect();
+      }
+    });
   }
 
   private void doOnSettingsSelect() {
@@ -67,5 +76,9 @@ public class ProfileBarController {
     MasterWindow window = new MasterWindow();
     window.setContent(logsView.asWidget(), "View Logs");
     window.show();
+  }
+
+  private void doOnLogoutSelect() {
+    LoginController.logout();
   }
 }

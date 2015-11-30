@@ -17,4 +17,6 @@ public interface LoginService extends RemoteService {
   String loginFromSessionServer();
 
   void logout();
+
+  boolean isSessionAlive();
 }
