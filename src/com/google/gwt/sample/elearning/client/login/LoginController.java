@@ -10,9 +10,13 @@ import com.google.gwt.sample.elearning.client.service.LoginService;
 import com.google.gwt.sample.elearning.client.service.LoginServiceAsync;
 import com.google.gwt.sample.elearning.shared.model.UserData;
 import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.event.HideEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.PasswordField;
@@ -34,9 +38,13 @@ public class LoginController {
     Widget asWidget();
   }
 
-  private LoginServiceAsync loginService = GWT.create(LoginService.class);
+  private static LoginServiceAsync loginService = GWT.create(LoginService.class);
 
   private ILoginView view;
+  private static Timer sessionTimeoutTimer;
+  private static final int DURATION = 1000 * 60 * 10;// * 60 * 24 * 1;
+
+
 
   public LoginController(ILoginView view) {
     this.view = view;
@@ -59,13 +67,54 @@ public class LoginController {
 
       @Override
       public void onSuccess(UserData userData) {
-        final long DURATION = 1000 * 60 * 10;// * 60 * 24 * 1;
         Date expires = new Date(System.currentTimeMillis() + DURATION);
         Cookies.setCookie("sid", userData.getSessionId(), expires, null, "/", false);
-
+        initSessionTimeoutTimer();
         ELearningController.getInstance().onSuccessLogin();
       }
     });
+  }
+
+  public static void initSessionTimeoutTimer(){
+    sessionTimeoutTimer = new Timer() {
+      @Override
+      public void run() {
+        loginService.isSessionAlive(new AsyncCallback<Boolean>() {
+          @Override
+          public void onFailure(Throwable caught) {
+
+          }
+
+          @Override
+          public void onSuccess(Boolean result) {
+            sessionTimeoutTimer.cancel();
+            if (result) {
+              sessionTimeoutTimer.scheduleRepeating(DURATION);
+            } else {
+              onSessionTimedOut();
+            }
+          }
+        });
+      }
+    };
+    sessionTimeoutTimer.schedule(DURATION);
+  }
+
+  private static void onSessionTimedOut() {
+    Cookies.setCookie("sid", null, new Date(System.currentTimeMillis()), null, "/", false);
+    MessageBox loginFailMessage = new MessageBox("Error","Your login session has expired please re-login!");
+    loginFailMessage.addHideHandler(new HideEvent.HideHandler() {
+      @Override
+      public void onHide(HideEvent event) {
+        Window.Location.reload();
+      }
+    });
+    loginFailMessage.show();
+  }
+
+  public static void logout(){
+    Cookies.setCookie("sid", null, new Date(System.currentTimeMillis()), null, "/", false);
+    Window.Location.reload();
   }
 
   private void addListeners() {

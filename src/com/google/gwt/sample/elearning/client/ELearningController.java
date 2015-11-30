@@ -38,8 +38,10 @@ public class ELearningController {
     String sessionID = Cookies.getCookie("sid");
     if(sessionID == null)
       displayLoginWindow();
-    else
+    else {
       displayWindow();
+      LoginController.initSessionTimeoutTimer();
+    }
   }
 
   private void displayLoginWindow() {

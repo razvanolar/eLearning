@@ -9,4 +9,6 @@ public interface LoginServiceAsync {
   void loginFromSessionServer(AsyncCallback<String> async);
 
   void logout(AsyncCallback<Void> async);
+
+  void isSessionAlive(AsyncCallback<Boolean> async);
 }

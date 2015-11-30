@@ -18,6 +18,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
   private static final long serialVersionUID = 4456105400553118785L;
   private static long sessionId = 0;
   private static final String USER = "user";
+  private int timeout = 1000 * 60 * 10;
 
   @Override
   public UserData loginServer(String user, String pwd) throws ELearningException, IncorrectLoginException {
@@ -36,6 +37,11 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
   @Override
   public void logout() {
     deleteUserFromSession();
+  }
+
+  public boolean isSessionAlive() {
+    return (System.currentTimeMillis() - getThreadLocalRequest().getSession()
+        .getLastAccessedTime()) < timeout;
   }
 
   private void storeUserInSession(String user) {
