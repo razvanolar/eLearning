@@ -73,4 +73,10 @@ public interface Icons extends ClientBundle {
 
   @Source("arrowright.png")
   ImageResource arrowright();
+
+  @Source("addquestion.png")
+  ImageResource addquestion();
+
+  @Source("deletequestion.png")
+  ImageResource deletequestion();
 }

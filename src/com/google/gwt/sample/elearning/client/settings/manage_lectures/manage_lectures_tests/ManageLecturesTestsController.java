@@ -72,7 +72,7 @@ public class ManageLecturesTestsController implements ICreateTestListener {
     MasterWindow window = new MasterWindow();
     window.setContent(view.asWidget(), "Create Test View");
     window.setModal(true);
-    window.setPixelSize(500, 350);
+    window.setPixelSize(600, 350);
     window.show();
   }
 

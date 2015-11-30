@@ -23,9 +23,17 @@
 }
 
 .whiteBackground {
-  background-color: white;
+  background-color: white !important;
 }
 
 .adminRoleBackground {
   background-color: #77aaff !important;
+}
+
+.correctAnswerBackground {
+  background-color: #4fff47 !important;
+}
+
+.questionBarBackground {
+  background-color: #5298c2 !important;
 }
