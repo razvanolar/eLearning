@@ -10,8 +10,10 @@ import java.util.List;
  */
 public class LectureTestData implements IsSerializable {
 
+  private long id;
   private String name;
   private long duration;
+  private long courseId;
   private List<QuestionData> questions;
 
   public LectureTestData() {}
@@ -19,6 +21,14 @@ public class LectureTestData implements IsSerializable {
   public LectureTestData(String name, long duration, List<QuestionData> questions) {
     this.name = name;
     this.duration = duration;
+    this.questions = questions;
+  }
+
+  public LectureTestData(long id, String name, long duration, long courseId, List<QuestionData> questions) {
+    this.id = id;
+    this.name = name;
+    this.duration = duration;
+    this.courseId = courseId;
     this.questions = questions;
   }
 
@@ -44,5 +54,21 @@ public class LectureTestData implements IsSerializable {
 
   public void setDuration(long duration) {
     this.duration = duration;
+  }
+
+  public long getId() {
+    return id;
+  }
+
+  public void setId(long id) {
+    this.id = id;
+  }
+
+  public long getCourseId() {
+    return courseId;
+  }
+
+  public void setCourseId(long courseId) {
+    this.courseId = courseId;
   }
 }

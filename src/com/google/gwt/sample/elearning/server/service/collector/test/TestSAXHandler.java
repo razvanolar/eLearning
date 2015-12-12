@@ -30,10 +30,14 @@ public class TestSAXHandler extends DefaultHandler{
       case TEST:
         questions = new ArrayList<>();
         testData = new LectureTestData();
+        String id = attributes.getValue("id");
+        testData.setId(Long.parseLong(id));
         String name = attributes.getValue("name");
         testData.setName(name);
         String duration = attributes.getValue("duration");
         testData.setDuration(Long.parseLong(duration));
+        String courseId = attributes.getValue("course");
+        testData.setCourseId(Long.parseLong(courseId));
         break;
       case QUESTION:
         answers = new ArrayList<>();
