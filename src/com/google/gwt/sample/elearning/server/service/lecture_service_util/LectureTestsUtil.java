@@ -89,4 +89,35 @@ public class LectureTestsUtil {
     }
     return null;
   }
+
+  public void createTestXMLFile(String xml, String title, long lectureId, long professorId) throws ELearningException{
+    try {
+      File file = new File("C:\\elearning\\lectures\\" + lectureId + "\\tests");
+      if (!file.exists() && !file.mkdirs())
+        throw new ELearningException("File " + title + " can not be created");
+      File testFile = new File("C:\\elearning\\lectures\\" + lectureId + "\\tests\\" + title + ".xml");
+      BufferedWriter writer = new BufferedWriter(new FileWriter(testFile));
+      writer.write(xml);
+      writer.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new ELearningException(e.getMessage(), e);
+    }
+  }
+
+  public void createTestPropsFile(int questionNo, int totalScore, String title, long lectureId, long professorId) throws ELearningException{
+    try {
+      File file = new File("C:\\elearning\\lectures\\" + lectureId + "\\tests");
+      if (!file.exists() && !file.mkdirs())
+        throw new ELearningException("File " + title + " can not be created");
+      File testFile = new File("C:\\elearning\\lectures\\" + lectureId + "\\tests\\" + title + ".props");
+      BufferedWriter writer = new BufferedWriter(new FileWriter(testFile));
+      String result = "QUESTIONS_NO="+ questionNo + "\nTOTAL_SCORE="+totalScore;
+      writer.write(result);
+      writer.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new ELearningException(e.getMessage(), e);
+    }
+  }
 }

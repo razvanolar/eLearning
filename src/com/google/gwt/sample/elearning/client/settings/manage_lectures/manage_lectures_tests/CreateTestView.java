@@ -2,7 +2,9 @@ package com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_l
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.sample.elearning.client.ELearningController;
+import com.google.gwt.sample.elearning.client.MasterWindow;
 import com.google.gwt.sample.elearning.shared.model.AnswerData;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.IdentityValueProvider;
@@ -23,6 +25,7 @@ import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  *
@@ -276,6 +279,11 @@ public class CreateTestView implements CreateTestController.ICreateTestView {
     return deleteQuestionButton;
   }
 
+  @Override
+  public TextButton getApplyButton() {
+    return applyButton;
+  }
+
   public CheckBox getIsTrueCheckBox() {
     return isTrueCheckBox;
   }
@@ -290,6 +298,11 @@ public class CreateTestView implements CreateTestController.ICreateTestView {
 
   public TextField getScoreField() {
     return scoreField;
+  }
+
+  @Override
+  public TextField getTitleField() {
+    return titleField;
   }
 
   public Label getPagingLabel() {

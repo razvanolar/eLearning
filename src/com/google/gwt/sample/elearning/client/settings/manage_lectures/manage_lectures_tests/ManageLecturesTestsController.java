@@ -74,13 +74,14 @@ public class ManageLecturesTestsController implements ICreateTestListener {
 
   private void onCreateTestSelection() {
     CreateTestController.ICreateTestView view = new CreateTestView();
-    CreateTestController createTestController = new CreateTestController(view);
+    CreateTestController createTestController = new CreateTestController(view, currentLecture.getProfessor().getId());
     createTestController.bind();
     MasterWindow window = new MasterWindow();
     window.setContent(view.asWidget(), "Create Test View");
     window.setModal(true);
     window.setPixelSize(600, 350);
     window.show();
+    createTestController.setContentWindow(window);
   }
 
   private void onEditTestSelection() {
@@ -93,7 +94,7 @@ public class ManageLecturesTestsController implements ICreateTestListener {
         if (result == null)
           return;
         CreateTestController.ICreateTestView view = new CreateTestView();
-        CreateTestController createTestController = new CreateTestController(view, result);
+        CreateTestController createTestController = new CreateTestController(view, result, currentLecture.getProfessor().getId());
         createTestController.bind();
         MasterWindow window = new MasterWindow();
         window.setContent(view.asWidget(), "Create Test View");

@@ -37,4 +37,6 @@ public interface LectureServiceAsync {
   void getLectureVideos(long lectureId, AsyncCallback<List<VideoLinkData>> async);
 
   void saveVideoData(long lectureId, VideoLinkData videoLinkData, AsyncCallback<Void> async);
+
+  void createTest(LectureTestData lectureTestData, long professorId, AsyncCallback<Void> async);
 }

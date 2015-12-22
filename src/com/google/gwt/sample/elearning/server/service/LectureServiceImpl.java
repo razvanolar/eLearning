@@ -4,6 +4,7 @@ import com.google.gwt.sample.elearning.client.service.LectureService;
 import com.google.gwt.sample.elearning.server.repository.DAOFactory;
 import com.google.gwt.sample.elearning.server.repository.JDBC.LectureDAO;
 import com.google.gwt.sample.elearning.server.repository.JDBC.VideoLinkDAO;
+import com.google.gwt.sample.elearning.server.service.collector.test.TestXMLConvertor;
 import com.google.gwt.sample.elearning.server.service.lecture_service_util.LectureFilesUtil;
 import com.google.gwt.sample.elearning.server.service.lecture_service_util.LectureTestsUtil;
 import com.google.gwt.sample.elearning.shared.Tree;
@@ -104,5 +105,20 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   @Override
   public void saveVideoData(long lectureId, VideoLinkData videoLinkData) throws ELearningException {
     videoLinkDAO.saveVideoLinkData(lectureId, videoLinkData);
+  }
+
+  @Override
+  public void createTest(LectureTestData lectureTestData, long professorId) throws ELearningException {
+    // 1. Create .xml file
+    TestXMLConvertor testXMLConvertor = new TestXMLConvertor();
+    String xmlValue = testXMLConvertor.convertToXML(lectureTestData);
+    testsUtil.createTestXMLFile(xmlValue, lectureTestData.getName(), lectureTestData.getCourseId(), professorId);
+
+    // 2. Create .props file
+    int totalScore = 0;
+    for(QuestionData question : lectureTestData.getQuestions())
+      totalScore += question.getScore();
+    testsUtil.createTestPropsFile(lectureTestData.getQuestions().size(), totalScore, lectureTestData.getName(),
+        lectureTestData.getCourseId(), professorId);
   }
 }

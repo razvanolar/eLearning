@@ -1,16 +1,23 @@
 package com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_lectures_tests;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.sample.elearning.client.MasterWindow;
+import com.google.gwt.sample.elearning.client.eLearningUtils.ELearningAsyncCallBack;
 import com.google.gwt.sample.elearning.client.eLearningUtils.TextInputValidator;
+import com.google.gwt.sample.elearning.client.service.LectureService;
+import com.google.gwt.sample.elearning.client.service.LectureServiceAsync;
 import com.google.gwt.sample.elearning.shared.model.AnswerData;
 import com.google.gwt.sample.elearning.shared.model.LectureTestData;
 import com.google.gwt.sample.elearning.shared.model.QuestionData;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -50,10 +57,12 @@ public class CreateTestController {
     TextButton getPrevButton();
     TextButton getAddQuestionButton();
     TextButton getDeleteQuestionButton();
+    TextButton getApplyButton();
     CheckBox getIsTrueCheckBox();
     TextField getAnswerField();
     TextField getQuestionField();
     TextField getScoreField();
+    TextField getTitleField();
     Label getPagingLabel();
     Grid<AnswerData> getAnswersGrid();
     void setButtonsBarState(ButtonsBarViewState state);
@@ -69,8 +78,11 @@ public class CreateTestController {
   private LectureTestData test;
   private List<QuestionData> questions;
   private int currentIndex;
+  private LectureServiceAsync lectureService = GWT.create(LectureService.class);
+  private long professorId;
+  private Window window;
 
-  public CreateTestController(ICreateTestView view) {
+  public CreateTestController(ICreateTestView view, long professorId) {
     this.view = view;
     questions = new ArrayList<QuestionData>();
     questions.add(new QuestionData());
@@ -78,7 +90,7 @@ public class CreateTestController {
     test = new LectureTestData();
   }
 
-  public CreateTestController(ICreateTestView view, LectureTestData test) {
+  public CreateTestController(ICreateTestView view, LectureTestData test, long ProfessorId) {
     this.view = view;
     questions = test.getQuestions();
     currentIndex = 0;
@@ -183,6 +195,28 @@ public class CreateTestController {
       public void onKeyUp(KeyUpEvent event) {
         if (view.getScoreField().isValid())
           updateCurrentQuestionScore(Long.parseLong(view.getScoreField().getText()));
+      }
+    });
+
+    view.getApplyButton().addSelectHandler(new SelectEvent.SelectHandler() {
+      @Override
+      public void onSelect(SelectEvent event) {
+        doOnApplyButtonSelection();
+      }
+    });
+  }
+
+  private void doOnApplyButtonSelection() {
+    LectureTestData lectureTestData = new LectureTestData(view.getTitleField().getText(),0,questions);
+    lectureService.createTest(lectureTestData, professorId, new AsyncCallback<Void>() {
+      @Override
+      public void onFailure(Throwable caught) {
+        new MessageBox("Error",caught.getMessage()).show();
+      }
+
+      @Override
+      public void onSuccess(Void result) {
+        window.hide();
       }
     });
   }
@@ -348,5 +382,9 @@ public class CreateTestController {
         return selectedItems.get(0);
     }
     return null;
+  }
+
+  public void setContentWindow(Window window) {
+    this.window = window;
   }
 }
