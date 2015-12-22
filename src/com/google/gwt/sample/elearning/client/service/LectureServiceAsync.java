@@ -35,4 +35,6 @@ public interface LectureServiceAsync {
   void getTest(UserData user, long lectureId, String testName, AsyncCallback<LectureTestData> async);
 
   void getLectureVideos(long lectureId, AsyncCallback<List<VideoLinkData>> async);
+
+  void saveVideoData(long lectureId, VideoLinkData videoLinkData, AsyncCallback<Void> async);
 }

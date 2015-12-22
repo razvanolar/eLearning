@@ -413,6 +413,10 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     return videosToggleButton;
   }
 
+  public TextButton getAddVideoLinkButton() {
+    return addVideoButton;
+  }
+
   public ComboBox<Professor> getProfessorComboBox() {
     return this.professorComboBox;
   }

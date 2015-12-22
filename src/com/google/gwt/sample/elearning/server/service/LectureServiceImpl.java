@@ -96,7 +96,13 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
     return testsUtil.getTest(user, lectureId, testName);
   }
 
+  @Override
   public List<VideoLinkData> getLectureVideos(long lectureId) throws ELearningException {
     return videoLinkDAO.getLectureVideos(lectureId);
+  }
+
+  @Override
+  public void saveVideoData(long lectureId, VideoLinkData videoLinkData) throws ELearningException {
+    videoLinkDAO.saveVideoLinkData(lectureId, videoLinkData);
   }
 }

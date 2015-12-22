@@ -11,4 +11,5 @@ import java.util.List;
  */
 public interface VideoLinkDAO {
   List<VideoLinkData> getLectureVideos(long lectureId) throws RepositoryException;
+  void saveVideoLinkData(long lectureId, VideoLinkData videoLinkData) throws RepositoryException;
 }

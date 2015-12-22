@@ -6,6 +6,7 @@ import com.sencha.gxt.widget.core.client.box.MessageBox;
 import java.util.logging.Logger;
 
 /**
+ *
  * Created by Cristi on 11/29/2015.
  */
 public abstract class ELearningAsyncCallBack<T> implements AsyncCallback<T> {

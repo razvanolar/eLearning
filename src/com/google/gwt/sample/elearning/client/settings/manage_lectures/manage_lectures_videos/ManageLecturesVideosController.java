@@ -7,7 +7,6 @@ import com.google.gwt.sample.elearning.client.service.LectureServiceAsync;
 import com.google.gwt.sample.elearning.client.settings.manage_lectures.ManageLecturesController;
 import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.google.gwt.sample.elearning.shared.model.VideoLinkData;
-import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
@@ -23,11 +22,6 @@ public class ManageLecturesVideosController {
 
   public enum ManageVideosToolBarState {
     ADD, EDIT, NONE;
-  }
-
-  public interface IManageLectureVideosView {
-
-    Widget asWidget();
   }
 
   private ManageLecturesController.IManageLecturesView view;
@@ -58,6 +52,12 @@ public class ManageLecturesVideosController {
         onPlayVideoSelection();
       }
     });
+
+    view.getAddVideoLinkButton().addSelectHandler(new SelectEvent.SelectHandler() {
+      public void onSelect(SelectEvent event) {
+        onAddVideoLinkSelection();
+      }
+    });
   }
 
   private void onVideosGridSelection(SelectionChangedEvent<VideoLinkData> event) {
@@ -83,6 +83,17 @@ public class ManageLecturesVideosController {
     window.setModal(true);
     window.setCollapsible(true);
     window.show();
+  }
+
+  private void onAddVideoLinkSelection() {
+    CreateVideoLinkController.ICreateVideoLinkView view = new CreateVideoLinkView();
+    CreateVideoLinkController controller = new CreateVideoLinkController(view, lectureService, this);
+    controller.bind();
+    MasterWindow window = new MasterWindow();
+    window.setContent(view.asWidget(), "Add link");
+    window.setPixelSize(350, 500);
+    window.show();
+    controller.setContentWindow(window);
   }
 
   private VideoLinkData getSelectedVideoLink() {
@@ -116,5 +127,9 @@ public class ManageLecturesVideosController {
       view.setVideoGridState(ManageVideosToolBarState.ADD);
     else
       view.setVideoGridState(ManageVideosToolBarState.NONE);
+  }
+
+  public Lecture getSelectedLecture() {
+    return currentLecture;
   }
 }

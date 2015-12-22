@@ -76,6 +76,7 @@ public class ManageLecturesController implements ISettingsController {
     TextButton getEditTestButton();
     TextButton getDeleteTestButton();
     TextButton getPlayVideoButton();
+    TextButton getAddVideoLinkButton();
     FormPanel getFileFormPanel();
     FileUpload getFileUpload();
     TreeGrid<FileData> getTreeGrid();
