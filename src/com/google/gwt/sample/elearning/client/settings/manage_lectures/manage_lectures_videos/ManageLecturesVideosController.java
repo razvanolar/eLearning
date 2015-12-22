@@ -8,6 +8,7 @@ import com.google.gwt.sample.elearning.client.settings.manage_lectures.ManageLec
 import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.google.gwt.sample.elearning.shared.model.VideoLinkData;
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 
@@ -58,6 +59,18 @@ public class ManageLecturesVideosController {
         onAddVideoLinkSelection();
       }
     });
+
+    view.getEditVideoLinkButton().addSelectHandler(new SelectEvent.SelectHandler() {
+      public void onSelect(SelectEvent event) {
+        onEditVideoLinkSelection();
+      }
+    });
+
+    view.getDeleteVideoLinkButton().addSelectHandler(new SelectEvent.SelectHandler() {
+      public void onSelect(SelectEvent event) {
+        onDeleteVideoLinkSelection();
+      }
+    });
   }
 
   private void onVideosGridSelection(SelectionChangedEvent<VideoLinkData> event) {
@@ -94,6 +107,35 @@ public class ManageLecturesVideosController {
     window.setPixelSize(350, 500);
     window.show();
     controller.setContentWindow(window);
+  }
+
+  private void onEditVideoLinkSelection() {
+    CreateVideoLinkController.ICreateVideoLinkView view = new CreateVideoLinkView();
+    CreateVideoLinkController controller = new CreateVideoLinkController(view, lectureService, this, getSelectedVideoLink());
+    controller.bind();
+    MasterWindow window = new MasterWindow();
+    window.setContent(view.asWidget(), "Add link");
+    window.setPixelSize(350, 500);
+    window.show();
+    controller.setContentWindow(window);
+  }
+
+  private void onDeleteVideoLinkSelection() {
+    if (getSelectedLecture() == null) {
+      (new MessageBox("Error", "Please select a lecture")).show();
+      return;
+    }
+
+    VideoLinkData videoLinkData = getSelectedVideoLink();
+    if (videoLinkData != null) {
+      lectureService.deleteVideoData(getSelectedLecture().getId(), videoLinkData, new ELearningAsyncCallBack<Void>(view, log) {
+        public void onSuccess(Void result) {
+          (new MessageBox("Info", "Link was deleted!")).show();
+        }
+      });
+    } else {
+      (new MessageBox("Error", "Please select a link")).show();
+    }
   }
 
   private VideoLinkData getSelectedVideoLink() {

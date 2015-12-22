@@ -34,13 +34,27 @@ public class CreateVideoLinkController {
   private LectureServiceAsync lectureService;
   private final ManageLecturesVideosController parentController;
   private Window window;
+  private VideoLinkData videoLinkData;
 
   private Logger log = Logger.getLogger(CreateVideoLinkController.class.getName());
 
-  public CreateVideoLinkController(ICreateVideoLinkView view, LectureServiceAsync lectureService, ManageLecturesVideosController parentController) {
+  public CreateVideoLinkController(ICreateVideoLinkView view, LectureServiceAsync lectureService,
+                                   ManageLecturesVideosController parentController) {
     this.view = view;
     this.lectureService = lectureService;
     this.parentController = parentController;
+  }
+
+  public CreateVideoLinkController(ICreateVideoLinkView view, LectureServiceAsync lectureService,
+                                   ManageLecturesVideosController parentController, VideoLinkData videoLinkData) {
+    this(view, lectureService, parentController);
+    this.videoLinkData = videoLinkData;
+    if (this.videoLinkData != null) {
+      view.getTitleField().setText(videoLinkData.getTitle());
+      view.getLinkField().setText(videoLinkData.getUrl());
+      view.getDescriptionTextArea().setText(videoLinkData.getDescription());
+      view.testLink(videoLinkData.getUrl());
+    }
   }
 
   public void bind() {
@@ -79,14 +93,28 @@ public class CreateVideoLinkController {
       return;
     }
 
-    VideoLinkData videoLinkData = new VideoLinkData(-1, view.getTitleField().getText(), view.getLinkField().getText(),
-            view.getDescriptionTextArea().getText(), parentController.getSelectedLecture().getId());
-    lectureService.saveVideoData(parentController.getSelectedLecture().getId(),
-            videoLinkData, new ELearningAsyncCallBack<Void>(view, log) {
-              public void onSuccess(Void result) {
-                window.hide();
-              }
-            });
+    if (videoLinkData == null) {
+      videoLinkData = new VideoLinkData(-1, view.getTitleField().getText(), view.getLinkField().getText(),
+              view.getDescriptionTextArea().getText(), parentController.getSelectedLecture().getId());
+      lectureService.saveVideoData(parentController.getSelectedLecture().getId(),
+              videoLinkData, new ELearningAsyncCallBack<Void>(view, log) {
+                public void onSuccess(Void result) {
+                  if (window != null)
+                    window.hide();
+                }
+              });
+    } else {
+      videoLinkData.setTitle(view.getTitleField().getText());
+      videoLinkData.setUrl(view.getLinkField().getText());
+      videoLinkData.setDescription(view.getDescriptionTextArea().getText());
+      lectureService.updateVideoData(parentController.getSelectedLecture().getId(),
+              videoLinkData, new ELearningAsyncCallBack<Void>(view, log) {
+                public void onSuccess(Void result) {
+                  if (window != null)
+                    window.hide();
+                }
+              });
+    }
   }
 
   private void onTestLinkSelection() {

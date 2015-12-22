@@ -121,4 +121,14 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
     testsUtil.createTestPropsFile(lectureTestData.getQuestions().size(), totalScore, lectureTestData.getName(),
         lectureTestData.getCourseId(), professorId);
   }
+
+  @Override
+  public void updateVideoData(long lectureId, VideoLinkData videoLinkData) throws ELearningException {
+    videoLinkDAO.updateVideoLinkData(lectureId, videoLinkData);
+  }
+
+  @Override
+  public void deleteVideoData(long lectureId, VideoLinkData videoLinkData) throws ELearningException {
+    videoLinkDAO.deleteVideoLinkData(lectureId, videoLinkData);
+  }
 }

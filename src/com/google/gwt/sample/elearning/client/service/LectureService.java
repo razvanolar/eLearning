@@ -44,5 +44,9 @@ public interface LectureService extends RemoteService {
 
   void saveVideoData(long lectureId, VideoLinkData videoLinkData) throws ELearningException;
 
+  void updateVideoData(long lectureId, VideoLinkData videoLinkData) throws ELearningException;
+
+  void deleteVideoData(long lectureId, VideoLinkData videoLinkData) throws ELearningException;
+
   void createTest(LectureTestData lectureTestData, long professorId) throws ELearningException;
 }

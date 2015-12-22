@@ -37,4 +37,14 @@ public class JdbcVideoLinkDAO implements VideoLinkDAO {
   public void saveVideoLinkData(long lectureId, VideoLinkData videoLinkData) throws RepositoryException {
     // TODO : implement method (see the description above)
   }
+
+  @Override
+  public void updateVideoLinkData(long lectureId, VideoLinkData videoLinkData) throws RepositoryException {
+    // TODO : implement method (see the description above)
+  }
+
+  @Override
+  public void deleteVideoLinkData(long lectureId, VideoLinkData videoLinkData) throws RepositoryException {
+    // TODO : implement method (see the description above)
+  }
 }
