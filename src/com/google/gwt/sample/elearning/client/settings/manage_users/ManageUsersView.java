@@ -4,6 +4,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.sample.elearning.client.ELearningController;
 import com.google.gwt.sample.elearning.shared.model.UserData;
 import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
+import com.google.gwt.user.client.ui.FileUpload;
+import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.cell.core.client.form.ComboBoxCell;
 import com.sencha.gxt.core.client.IdentityValueProvider;
@@ -22,6 +25,7 @@ import com.sencha.gxt.widget.core.client.form.SimpleComboBox;
 import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.*;
 import com.sencha.gxt.widget.core.client.toolbar.PagingToolBar;
+import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +49,10 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
   private TextField lastNameField;
   private TextField emailField;
   private SimpleComboBox<UserRoleTypes> roleComboBox;
+  private TextButton downloadUsersButton;
+  private TextButton uploadUsersButton;
+  private FormPanel fileFormPanel;
+  private FileUpload fileUpload;
 
   private Logger log = Logger.getLogger(ManageUsersView.class.getName());
 
@@ -66,11 +74,27 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
         return item.name();
       }
     });
+    ToolBar toolBar = new ToolBar();
+    downloadUsersButton = new TextButton("Download users", ELearningController.ICONS.download());
+    uploadUsersButton = new TextButton("Upload users", ELearningController.ICONS.upload());
+    fileFormPanel = new FormPanel();
+    fileUpload = new FileUpload();
+    HorizontalPanel fileUploadContainer = new HorizontalPanel();
     CenterLayoutContainer formContainer = new CenterLayoutContainer();
     VerticalLayoutContainer formPanel = new VerticalLayoutContainer();
     BorderLayoutContainer gridContainer = new BorderLayoutContainer();
     HBoxLayoutContainer buttonsContainer = new HBoxLayoutContainer(HBoxLayoutContainer.HBoxLayoutAlign.MIDDLE);
     userDataGridView = createGrid();
+
+    fileFormPanel.setEncoding(FormPanel.ENCODING_MULTIPART);
+    fileFormPanel.setMethod(FormPanel.METHOD_POST);
+    fileFormPanel.setWidget(fileUploadContainer);
+    fileUpload.setName("fileUpload");
+    fileUploadContainer.add(fileUpload);
+
+    toolBar.add(downloadUsersButton);
+    toolBar.add(uploadUsersButton);
+    toolBar.add(fileUploadContainer);
 
     BoxLayoutContainer.BoxLayoutData hBoxLayoutData = new BoxLayoutContainer.BoxLayoutData(new Margins(5));
     hBoxLayoutData.setFlex(1);
@@ -96,6 +120,7 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     formContainer.add(formPanel);
     formContainer.setStyleName("whiteBackground");
 
+    gridContainer.setSouthWidget(toolBar, new BorderLayoutContainer.BorderLayoutData(30));
     gridContainer.setCenterWidget(userDataGridView);
 
     BorderLayoutContainer.BorderLayoutData layoutData = new BorderLayoutContainer.BorderLayoutData(.65);
@@ -266,6 +291,26 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
   @Override
   public Grid<UserData> getGrid() {
     return userDataGridView;
+  }
+
+  @Override
+  public TextButton getDownloadUsersButton() {
+    return downloadUsersButton;
+  }
+
+  @Override
+  public TextButton getUploadUsersButton() {
+    return uploadUsersButton;
+  }
+
+  @Override
+  public FormPanel getFileFormPanel() {
+    return fileFormPanel;
+  }
+
+  @Override
+  public FileUpload getFileUpload() {
+    return fileUpload;
   }
 
   @Override

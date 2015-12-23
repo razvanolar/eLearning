@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
+ *
  * Created by razvanolar on 28.11.2015.
  */
 public class ManageLecturesFilesController implements IHtmlListener {
