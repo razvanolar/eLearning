@@ -23,7 +23,7 @@ public class LectureDownloadService extends HttpServlet {
       long lectureId = Long.parseLong(lecture);
 
       OutputStream outputStream = (OutputStream) resp.getOutputStream();
-      FileInputStream inputStream = new FileInputStream(ServerUtil.getUserLectureDirectoryPath(lectureId) + lecturePath + fileName);
+      FileInputStream inputStream = new FileInputStream(ServerUtil.getLectureFilesDirectoryPath(lectureId) + lecturePath + fileName);
 
       int bytes, sum=0;
       byte[] buffer = new byte[255];

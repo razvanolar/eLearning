@@ -13,12 +13,13 @@ public class LectureTestData implements IsSerializable {
   private long id;
   private String name;
   private long duration;
-  private long courseId;
+  private long lectureId;
   private List<QuestionData> questions;
 
   public LectureTestData() {}
 
-  public LectureTestData(String name, long duration, List<QuestionData> questions) {
+  public LectureTestData(long lectureId, String name, long duration, List<QuestionData> questions) {
+    this.lectureId = lectureId;
     this.name = name;
     this.duration = duration;
     this.questions = questions;
@@ -28,7 +29,7 @@ public class LectureTestData implements IsSerializable {
     this.id = id;
     this.name = name;
     this.duration = duration;
-    this.courseId = courseId;
+    this.lectureId = courseId;
     this.questions = questions;
   }
 
@@ -64,11 +65,11 @@ public class LectureTestData implements IsSerializable {
     this.id = id;
   }
 
-  public long getCourseId() {
-    return courseId;
+  public long getLectureId() {
+    return lectureId;
   }
 
-  public void setCourseId(long courseId) {
-    this.courseId = courseId;
+  public void setLectureId(long lectureId) {
+    this.lectureId = lectureId;
   }
 }

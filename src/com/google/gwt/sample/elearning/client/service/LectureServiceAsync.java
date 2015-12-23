@@ -42,5 +42,5 @@ public interface LectureServiceAsync {
 
   void deleteVideoData(long lectureId, VideoLinkData videoLinkData, AsyncCallback<Void> async);
 
-  void createTest(LectureTestData lectureTestData, long professorId, AsyncCallback<Void> async);
+  void createTest(LectureTestData lectureTestData, AsyncCallback<Void> async);
 }

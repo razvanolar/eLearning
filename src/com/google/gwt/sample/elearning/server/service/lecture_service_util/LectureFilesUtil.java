@@ -22,7 +22,7 @@ public class LectureFilesUtil {
     try {
       title = title + ".html";
       path = path != null && !path.isEmpty() ? path + "\\" : path;
-      path = ServerUtil.getUserLectureDirectoryPath(lectureId) + path;
+      path = ServerUtil.getLectureFilesDirectoryPath(lectureId) + path;
       File file = new File(path);
       if (!file.exists() && !file.mkdirs())
         throw new Exception("Unable to create missing directories");
@@ -39,14 +39,14 @@ public class LectureFilesUtil {
   }
 
   public void createFolder(UserData user, String path, String name, long lectureId) throws ELearningException {
-    String lectureDirectoryPath = ServerUtil.getUserLectureDirectoryPath(lectureId);
+    String lectureDirectoryPath = ServerUtil.getLectureFilesDirectoryPath(lectureId);
     File file = new File(lectureDirectoryPath + path + "\\" + name);
     if (!file.exists() && !file.mkdirs())
       throw new ELearningException("Folder " + name + " can not be created");
   }
 
   public Tree<FileData> getLectureFilesTree(UserData user, long lectureId) throws ELearningException {
-    String lectureDirectoryPath = ServerUtil.getUserLectureDirectoryPath(lectureId);
+    String lectureDirectoryPath = ServerUtil.getLectureFilesDirectoryPath(lectureId);
     File rootDir = new File(lectureDirectoryPath);
 
     Tree<FileData> tree = new Tree<FileData>();
@@ -73,7 +73,7 @@ public class LectureFilesUtil {
   }
 
   public String getHtmlFileBodyContent(UserData userData, long lectureId, String path, String title) throws ELearningException {
-    String lecturesDirectoryPath = ServerUtil.getUserLectureDirectoryPath(lectureId);
+    String lecturesDirectoryPath = ServerUtil.getLectureFilesDirectoryPath(lectureId);
     String filePath = lecturesDirectoryPath + path + title;
 
     File file = new File(filePath);
@@ -107,7 +107,7 @@ public class LectureFilesUtil {
   }
 
   public void deleteFile(long lectureId, String path, String title) throws ELearningException {
-    String filePath = ServerUtil.getUserLectureDirectoryPath(lectureId) + path + title;
+    String filePath = ServerUtil.getLectureFilesDirectoryPath(lectureId) + path + title;
     File file = new File(filePath);
     if (!file.exists())
       throw new ELearningException("Specified file does not exists. Path: " + path + title);

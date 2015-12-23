@@ -36,12 +36,12 @@ public class ServerUtil {
     return getUserDirectoryPath(user.getId());
   }
 
-  public static String getUserLectureDirectoryPath(long lectureId) {
-    return PATH + LECTURES_PATH + lectureId + "\\";
+  public static String getLectureFilesDirectoryPath(long lectureId) {
+    return PATH + LECTURES_PATH + lectureId + "\\" + FILES_PATH;
   }
 
-  public static String getTestsDirectoryPath(UserData user, long lectureId) {
-    return getUserDirectoryPath(user) + TESTS_PATH + lectureId + "\\";
+  public static String getLectureTestsDirectoryPath(long lectureId) {
+    return PATH + LECTURES_PATH + lectureId + "\\" + TESTS_PATH;
   }
 
   public static FileExtensionTypes getFileExensionByName(String fileName) {

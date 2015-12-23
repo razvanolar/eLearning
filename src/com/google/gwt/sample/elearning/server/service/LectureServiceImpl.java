@@ -108,18 +108,18 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   }
 
   @Override
-  public void createTest(LectureTestData lectureTestData, long professorId) throws ELearningException {
+  public void createTest(LectureTestData lectureTestData) throws ELearningException {
     // 1. Create .xml file
     TestXMLConvertor testXMLConvertor = new TestXMLConvertor();
     String xmlValue = testXMLConvertor.convertToXML(lectureTestData);
-    testsUtil.createTestXMLFile(xmlValue, lectureTestData.getName(), lectureTestData.getCourseId(), professorId);
+    testsUtil.createTestXMLFile(xmlValue, lectureTestData.getName(), lectureTestData.getLectureId());
 
     // 2. Create .props file
     int totalScore = 0;
     for(QuestionData question : lectureTestData.getQuestions())
       totalScore += question.getScore();
     testsUtil.createTestPropsFile(lectureTestData.getQuestions().size(), totalScore, lectureTestData.getName(),
-        lectureTestData.getCourseId(), professorId);
+        lectureTestData.getLectureId());
   }
 
   @Override

@@ -3,12 +3,8 @@ package com.google.gwt.sample.elearning.server.service;
 import com.google.gwt.sample.elearning.server.ServerUtil;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -33,7 +29,7 @@ public class LectureUploadService extends HttpServlet {
     try {
       long lectureId = Long.parseLong(lecture);
       path = path != null && !path.isEmpty() ? path + "\\" : path;
-      String filePath = ServerUtil.getUserLectureDirectoryPath(lectureId) + path;
+      String filePath = ServerUtil.getLectureFilesDirectoryPath(lectureId) + path;
       File dirs = new File(filePath);
       if (!dirs.exists() && !dirs.mkdirs())
         throw new Exception("Unable to create missing directories");

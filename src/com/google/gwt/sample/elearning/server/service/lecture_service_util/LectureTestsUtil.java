@@ -19,7 +19,7 @@ public class LectureTestsUtil {
 
   public LectureTestData getTest(UserData user, long lectureId, String testName) {
     try {
-      File testFile = new File(ServerUtil.getTestsDirectoryPath(user, lectureId) + testName + ".xml");
+      File testFile = new File(ServerUtil.getLectureTestsDirectoryPath(lectureId) + testName + ".xml");
       if (!testFile.exists())
         throw new FileNotFoundException();
       BufferedReader reader = new BufferedReader(new FileReader(testFile));
@@ -42,7 +42,7 @@ public class LectureTestsUtil {
 
   public List<LWLectureTestData> getAllLWTests(UserData user, long lectureId) throws ELearningException {
     try {
-      File testsPath = new File(ServerUtil.getTestsDirectoryPath(user, lectureId));
+      File testsPath = new File(ServerUtil.getLectureTestsDirectoryPath(lectureId));
       if (!testsPath.exists())
         throw new FileNotFoundException();
 
@@ -90,12 +90,13 @@ public class LectureTestsUtil {
     return null;
   }
 
-  public void createTestXMLFile(String xml, String title, long lectureId, long professorId) throws ELearningException{
+  public void createTestXMLFile(String xml, String title, long lectureId) throws ELearningException{
     try {
-      File file = new File("C:\\elearning\\lectures\\" + lectureId + "\\tests");
+      String testsPath = ServerUtil.getLectureTestsDirectoryPath(lectureId);
+      File file = new File(testsPath);
       if (!file.exists() && !file.mkdirs())
         throw new ELearningException("File " + title + " can not be created");
-      File testFile = new File("C:\\elearning\\lectures\\" + lectureId + "\\tests\\" + title + ".xml");
+      File testFile = new File(testsPath + title + ".xml");
       BufferedWriter writer = new BufferedWriter(new FileWriter(testFile));
       writer.write(xml);
       writer.close();
@@ -105,12 +106,13 @@ public class LectureTestsUtil {
     }
   }
 
-  public void createTestPropsFile(int questionNo, int totalScore, String title, long lectureId, long professorId) throws ELearningException{
+  public void createTestPropsFile(int questionNo, int totalScore, String title, long lectureId) throws ELearningException{
     try {
-      File file = new File("C:\\elearning\\lectures\\" + lectureId + "\\tests");
+      String testsPath = ServerUtil.getLectureTestsDirectoryPath(lectureId);
+      File file = new File(testsPath);
       if (!file.exists() && !file.mkdirs())
         throw new ELearningException("File " + title + " can not be created");
-      File testFile = new File("C:\\elearning\\lectures\\" + lectureId + "\\tests\\" + title + ".props");
+      File testFile = new File(testsPath + title + ".props");
       BufferedWriter writer = new BufferedWriter(new FileWriter(testFile));
       String result = "QUESTIONS_NO="+ questionNo + "\nTOTAL_SCORE="+totalScore;
       writer.write(result);

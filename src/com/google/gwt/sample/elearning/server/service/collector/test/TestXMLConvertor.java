@@ -13,7 +13,7 @@ public class TestXMLConvertor {
 
   public String convertToXML(LectureTestData test) {
     String rez = xmlHeader;
-    rez += "\n<" + TestElementTypes.TEST.name() + " id=\"" + test.getId() + "\" name=\"" + test.getName() + "\" duration=\"" + test.getDuration() + "\" course=\"" + test.getCourseId() + "\">";
+    rez += "\n<" + TestElementTypes.TEST.name() + " id=\"" + test.getId() + "\" name=\"" + test.getName() + "\" duration=\"" + test.getDuration() + "\" course=\"" + test.getLectureId() + "\">";
     rez += convertTestToXML(test);
     rez += "\n</" + TestElementTypes.TEST.name() + ">";
     return rez;

@@ -78,15 +78,16 @@ public class CreateTestController {
   private LectureTestData test;
   private List<QuestionData> questions;
   private int currentIndex;
+  private long lectureId;
   private LectureServiceAsync lectureService = GWT.create(LectureService.class);
-  private long professorId;
   private Window window;
 
-  public CreateTestController(ICreateTestView view, long professorId) {
+  public CreateTestController(ICreateTestView view, long lectureId) {
     this.view = view;
     questions = new ArrayList<QuestionData>();
     questions.add(new QuestionData());
     currentIndex = 0;
+    this.lectureId = lectureId;
     test = new LectureTestData();
   }
 
@@ -207,8 +208,8 @@ public class CreateTestController {
   }
 
   private void doOnApplyButtonSelection() {
-    LectureTestData lectureTestData = new LectureTestData(view.getTitleField().getText(),0,questions);
-    lectureService.createTest(lectureTestData, professorId, new AsyncCallback<Void>() {
+    LectureTestData lectureTestData = new LectureTestData(lectureId, view.getTitleField().getText(),0,questions);
+    lectureService.createTest(lectureTestData, new AsyncCallback<Void>() {
       @Override
       public void onFailure(Throwable caught) {
         new MessageBox("Error",caught.getMessage()).show();
@@ -216,7 +217,8 @@ public class CreateTestController {
 
       @Override
       public void onSuccess(Void result) {
-        window.hide();
+        if (window != null)
+          window.hide();
       }
     });
   }

@@ -74,7 +74,7 @@ public class ManageLecturesTestsController implements ICreateTestListener {
 
   private void onCreateTestSelection() {
     CreateTestController.ICreateTestView view = new CreateTestView();
-    CreateTestController createTestController = new CreateTestController(view, currentLecture.getProfessor().getId());
+    CreateTestController createTestController = new CreateTestController(view, currentLecture.getId());
     createTestController.bind();
     MasterWindow window = new MasterWindow();
     window.setContent(view.asWidget(), "Create Test View");
@@ -101,6 +101,7 @@ public class ManageLecturesTestsController implements ICreateTestListener {
         window.setModal(true);
         window.setPixelSize(600, 350);
         window.show();
+        createTestController.setContentWindow(window);
       }
     });
   }
