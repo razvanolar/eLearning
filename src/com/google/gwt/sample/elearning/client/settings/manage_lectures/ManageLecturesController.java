@@ -8,7 +8,7 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.sample.elearning.client.eLearningUtils.MaskableView;
-import com.google.gwt.sample.elearning.client.eLearningUtils.TextInputValidator;
+import com.google.gwt.sample.elearning.client.eLearningUtils.TextUtil;
 import com.google.gwt.sample.elearning.client.service.*;
 import com.google.gwt.sample.elearning.client.settings.ISettingsController;
 import com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_lectures_files.ManageLecturesFilesController;
@@ -173,7 +173,7 @@ public class ManageLecturesController implements ISettingsController {
         if (isLectureSelected()) {
           view.setGridState(LectureGridViewState.EDIT);
         } else {
-          if (!TextInputValidator.isEmptyString(view.getLectureNameField().getText())
+          if (!TextUtil.isEmptyString(view.getLectureNameField().getText())
                   && view.getProfessorComboBox().getValue().getId() != -1)
             view.setGridState(LectureGridViewState.ADD);
           else
@@ -241,7 +241,7 @@ public class ManageLecturesController implements ISettingsController {
 
   private void onAddButtonSelection() {
     log.info("onAdd");
-    if (!TextInputValidator.isEmptyString(view.getLectureNameField().getText())) {
+    if (!TextUtil.isEmptyString(view.getLectureNameField().getText())) {
       Lecture lecture = new Lecture(view.getProfessorComboBox().getValue(), view.getLectureNameField().getText());
       lectureService.createLecture(lecture, new ELearningAsyncCallBack<Void>(view,log) {
         @Override
@@ -286,7 +286,7 @@ public class ManageLecturesController implements ISettingsController {
       lectures.addAll(lectureList);
       view.setGridState(LectureGridViewState.ADDING);
     } else {
-      if (!TextInputValidator.isEmptyString(view.getLectureNameField().getText()))
+      if (!TextUtil.isEmptyString(view.getLectureNameField().getText()))
         view.setGridState(LectureGridViewState.ADD);
       for (Lecture lecture : lectureList) {
         if (lecture.getProfessor().getId() == selectedProfessordId) {

@@ -5,6 +5,7 @@ import com.google.gwt.sample.elearning.client.MasterWindow;
 import com.google.gwt.sample.elearning.client.eLearningUtils.HtmlEditorController;
 import com.google.gwt.sample.elearning.client.eLearningUtils.HtmlEditorView;
 import com.google.gwt.sample.elearning.client.eLearningUtils.IHtmlListener;
+import com.google.gwt.sample.elearning.client.eLearningUtils.TextUtil;
 import com.google.gwt.sample.elearning.client.service.LectureServiceAsync;
 import com.google.gwt.sample.elearning.client.settings.manage_lectures.ManageLecturesController;
 import com.google.gwt.sample.elearning.shared.Node;
@@ -107,7 +108,7 @@ public class ManageLecturesFilesController implements IHtmlListener {
         if (fileName == null || fileName.isEmpty()) {
           (new MessageBox("Warning", "Please select a file!")).show();
           event.cancel();
-        } else if (FileExtensionTypes.getFileExtensionByValue(getFileExtentsion(fileName)) != null) {
+        } else if (FileExtensionTypes.getFileExtensionByValue(TextUtil.getFileExtentsion(fileName)) != null) {
           log.info("Uploading file");
         } else {
           (new MessageBox("Warning", "Only html or pdf files can be uploaded!")).show();
@@ -360,14 +361,6 @@ public class ManageLecturesFilesController implements IHtmlListener {
     if (view.getTreeGrid() != null && view.getTreeGrid().getSelectionModel() != null)
       return view.getTreeGrid().getSelectionModel().getSelectedItem();
     return null;
-  }
-
-  private String getFileExtentsion(String fileName) {
-    StringBuilder builder = new StringBuilder(fileName);
-    int index = builder.lastIndexOf(".");
-    if (index == -1)
-      return "";
-    return builder.substring(index);
   }
 
   public void setSelectedLecture(Lecture lecture) {

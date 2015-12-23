@@ -3,7 +3,7 @@ package com.google.gwt.sample.elearning.client.eLearningUtils;
 /***
  * Created by razvanolar on 13.11.2015.
  */
-public class TextInputValidator {
+public class TextUtil {
 
   /**
    * Check if the received value is empty or not. (If value is null, we assume that is an empty string)
@@ -16,5 +16,13 @@ public class TextInputValidator {
       return true;
     value = value.trim();
     return value.isEmpty();
+  }
+
+  public static String getFileExtentsion(String fileName) {
+    StringBuilder builder = new StringBuilder(fileName);
+    int index = builder.lastIndexOf(".");
+    if (index == -1)
+      return "";
+    return builder.substring(index);
   }
 }

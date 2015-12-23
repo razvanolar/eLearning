@@ -5,7 +5,7 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.sample.elearning.client.ELearningController;
-import com.google.gwt.sample.elearning.client.eLearningUtils.TextInputValidator;
+import com.google.gwt.sample.elearning.client.eLearningUtils.TextUtil;
 import com.google.gwt.sample.elearning.client.service.LoginService;
 import com.google.gwt.sample.elearning.client.service.LoginServiceAsync;
 import com.google.gwt.sample.elearning.shared.model.UserData;
@@ -55,7 +55,7 @@ public class LoginController {
   private void login(){
     String user = view.getNameField().getText();
     String password = view.getPasswordField().getText();
-    if (TextInputValidator.isEmptyString(user) || TextInputValidator.isEmptyString(password)) {
+    if (TextUtil.isEmptyString(user) || TextUtil.isEmptyString(password)) {
       view.setErrorLabelText("Invalid input.");
       return;
     }

@@ -4,11 +4,12 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.sample.elearning.client.eLearningUtils.MaskableView;
-import com.google.gwt.sample.elearning.client.eLearningUtils.TextInputValidator;
+import com.google.gwt.sample.elearning.client.eLearningUtils.TextUtil;
 import com.google.gwt.sample.elearning.client.service.UserService;
 import com.google.gwt.sample.elearning.client.service.UserServiceAsync;
 import com.google.gwt.sample.elearning.client.settings.ISettingsController;
 import com.google.gwt.sample.elearning.shared.model.UserData;
+import com.google.gwt.sample.elearning.shared.types.FileExtensionTypes;
 import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
 import com.google.gwt.sample.elearning.client.eLearningUtils.ELearningAsyncCallBack;
 import com.google.gwt.user.client.ui.FileUpload;
@@ -33,7 +34,7 @@ import java.util.logging.Logger;
 public class ManageUsersController implements ISettingsController {
 
   public enum UserViewState {
-    ADD, EDIT, ADDING, NONE
+    ADD, EDIT, ADDING, DOWNLOAD, NONE
   }
 
   public interface IManageUsersView extends MaskableView{
@@ -90,10 +91,10 @@ public class ManageUsersController implements ISettingsController {
         if (isUserSelected()) {
           view.setState(UserViewState.EDIT);
         } else {
-          if (!TextInputValidator.isEmptyString(view.getUserNameField().getText()) &&
-              !TextInputValidator.isEmptyString(view.getFirstNameField().getText()) &&
-              !TextInputValidator.isEmptyString(view.getLastNameField().getText()) &&
-              !TextInputValidator.isEmptyString(view.getEmailField().getText()))
+          if (!TextUtil.isEmptyString(view.getUserNameField().getText()) &&
+              !TextUtil.isEmptyString(view.getFirstNameField().getText()) &&
+              !TextUtil.isEmptyString(view.getLastNameField().getText()) &&
+              !TextUtil.isEmptyString(view.getEmailField().getText()))
             view.setState(UserViewState.ADD);
           else
             view.setState(UserViewState.ADDING);
@@ -107,37 +108,69 @@ public class ManageUsersController implements ISettingsController {
     view.getEmailField().addKeyUpHandler(textFieldsValidator);
 
     view.getAddButton().addSelectHandler(new SelectEvent.SelectHandler() {
-      @Override
       public void onSelect(SelectEvent event) {
-        onnAddButtonSelection();
+        onAddButtonSelection();
       }
     });
 
     view.getEditButton().addSelectHandler(new SelectEvent.SelectHandler() {
-      @Override
       public void onSelect(SelectEvent event) {
         onEditButtonSelection();
       }
     });
 
     view.getDeleteButton().addSelectHandler(new SelectEvent.SelectHandler() {
-      @Override
       public void onSelect(SelectEvent event) {
         onDeleteButtonSelection();
       }
     });
+
+    view.getFileFormPanel().addSubmitHandler(new FormPanel.SubmitHandler() {
+      public void onSubmit(FormPanel.SubmitEvent event) {
+        String fileName = view.getFileUpload().getFilename();
+        log.info("fileName: " + fileName);
+        if (fileName == null || fileName.isEmpty()) {
+          (new MessageBox("Warning", "Please select a file!")).show();
+          event.cancel();
+        } else if (FileExtensionTypes.getFileExtensionByValue(TextUtil.getFileExtentsion(fileName)) == FileExtensionTypes.XML) {
+          log.info("Uploading file");
+        } else {
+          (new MessageBox("Warning", "Only xml files can be uploaded!")).show();
+          event.cancel();
+        }
+      }
+    });
+
+    view.getFileFormPanel().addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
+      public void onSubmitComplete(FormPanel.SubmitCompleteEvent event) {
+        log.info("Users were uploaded");
+        loadUsers();
+      }
+    });
+
+    view.getDownloadUsersButton().addSelectHandler(new SelectEvent.SelectHandler() {
+      public void onSelect(SelectEvent event) {
+        onDownloadUsersSelection();
+      }
+    });
+
+    view.getUploadUsersButton().addSelectHandler(new SelectEvent.SelectHandler() {
+      public void onSelect(SelectEvent event) {
+        onUploadUsersSelection();
+      }
+    });
   }
 
-  private void onnAddButtonSelection() {
+  private void onAddButtonSelection() {
     String fName = view.getFirstNameField().getText();
     String lName = view.getLastNameField().getText();
     String uName = view.getUserNameField().getText();
     String eMail = view.getEmailField().getText();
     //TODO collect user role
-    if(TextInputValidator.isEmptyString(fName) ||
-            TextInputValidator.isEmptyString(lName) ||
-            TextInputValidator.isEmptyString(uName) ||
-            TextInputValidator.isEmptyString(eMail) ||
+    if(TextUtil.isEmptyString(fName) ||
+            TextUtil.isEmptyString(lName) ||
+            TextUtil.isEmptyString(uName) ||
+            TextUtil.isEmptyString(eMail) ||
             view.getRoleCombo().getValue() == null){
       new MessageBox("","Invalid input").show();
       return;
@@ -159,10 +192,10 @@ public class ManageUsersController implements ISettingsController {
     String lName = view.getLastNameField().getText();
     String uName = view.getUserNameField().getText();
     String eMail = view.getEmailField().getText();
-    if(TextInputValidator.isEmptyString(fName) ||
-            TextInputValidator.isEmptyString(lName) ||
-            TextInputValidator.isEmptyString(uName) ||
-            TextInputValidator.isEmptyString(eMail) ||
+    if(TextUtil.isEmptyString(fName) ||
+            TextUtil.isEmptyString(lName) ||
+            TextUtil.isEmptyString(uName) ||
+            TextUtil.isEmptyString(eMail) ||
             view.getRoleCombo().getValue() == null){
       new MessageBox("","Invalid input").show();
       return;
@@ -171,7 +204,6 @@ public class ManageUsersController implements ISettingsController {
     UserData user = new UserData(uName, fName, lName, eMail, view.getRoleCombo().getValue());
     user.setId(id);
     userService.updateUser(user, new ELearningAsyncCallBack<Void>(view, log) {
-      @Override
       public void onSuccess(Void result) {
         new MessageBox("", "User updated").show();
         view.clearFields();
@@ -188,10 +220,19 @@ public class ManageUsersController implements ISettingsController {
     userService.removeUser(ids, new ELearningAsyncCallBack<Void>(view, log) {
       @Override
       public void onSuccess(Void result) {
-        new MessageBox("","Users deleted").show();
+        new MessageBox("", "Users deleted").show();
         loadUsers();
       }
     });
+  }
+
+  private void onDownloadUsersSelection() {
+
+  }
+
+  private void onUploadUsersSelection() {
+    view.getFileFormPanel().setAction(GWT.getModuleBaseURL() + "usersUploadService?users=");
+    view.getFileFormPanel().submit();
   }
 
   private void doGridSelectionEvent(SelectionChangedEvent<UserData> event) {
@@ -199,8 +240,12 @@ public class ManageUsersController implements ISettingsController {
     if (selection == null || selection.isEmpty())
       view.setState(UserViewState.NONE);
     else {
-      view.setState(UserViewState.EDIT);
-      view.loadUserData(selection.get(0));
+      if (selection.size() == 1) {
+        view.setState(UserViewState.EDIT);
+        view.loadUserData(selection.get(0));
+      } else {
+        view.setState(UserViewState.DOWNLOAD);
+      }
     }
   }
 

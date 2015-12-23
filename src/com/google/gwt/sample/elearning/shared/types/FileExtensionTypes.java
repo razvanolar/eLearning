@@ -1,6 +1,7 @@
 package com.google.gwt.sample.elearning.shared.types;
 
 /**
+ *
  * Created by razvanolar on 29.11.2015.
  */
 public enum FileExtensionTypes {

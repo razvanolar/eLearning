@@ -135,7 +135,7 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
   private Grid<UserData> createGrid() {
     IdentityValueProvider<UserData> identityValueProvider = new IdentityValueProvider<UserData>("sm");
     CheckBoxSelectionModel<UserData> selectionModel = new CheckBoxSelectionModel<UserData>(identityValueProvider);
-    selectionModel.setSelectionMode(Style.SelectionMode.SINGLE);
+    selectionModel.setSelectionMode(Style.SelectionMode.MULTI);
 
     List<ColumnConfig<UserData, ?>> columnConfigList = new ArrayList<ColumnConfig<UserData, ?>>();
 
@@ -189,12 +189,14 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
       addButton.setEnabled(true);
       editButton.setEnabled(false);
       deleteButton.setEnabled(false);
+      downloadUsersButton.setEnabled(false);
       setEnableFields(true);
       break;
     case EDIT:
       addButton.setEnabled(false);
       editButton.setEnabled(true);
       deleteButton.setEnabled(true);
+      downloadUsersButton.setEnabled(true);
       setEnableFields(true);
       break;
     case ADDING:
@@ -203,10 +205,19 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
       deleteButton.setEnabled(false);
       setEnableFields(true);
       break;
+    case DOWNLOAD:
+      addButton.setEnabled(false);
+      editButton.setEnabled(false);
+      deleteButton.setEnabled(false);
+      downloadUsersButton.setEnabled(true);
+      clearFields();
+      setEnableFields(false);
+      break;
     case NONE:
       addButton.setEnabled(false);
       editButton.setEnabled(false);
       deleteButton.setEnabled(false);
+      downloadUsersButton.setEnabled(false);
 //      setEnableFields(false);
       clearFields();
       break;
@@ -236,6 +247,7 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     firstNameField.setEnabled(value);
     lastNameField.setEnabled(value);
     emailField.setEnabled(value);
+    roleComboBox.setEnabled(value);
   }
 
   @Override

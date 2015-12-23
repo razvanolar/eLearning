@@ -5,9 +5,7 @@ import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.sample.elearning.client.MasterWindow;
-import com.google.gwt.sample.elearning.client.eLearningUtils.ELearningAsyncCallBack;
-import com.google.gwt.sample.elearning.client.eLearningUtils.TextInputValidator;
+import com.google.gwt.sample.elearning.client.eLearningUtils.TextUtil;
 import com.google.gwt.sample.elearning.client.service.LectureService;
 import com.google.gwt.sample.elearning.client.service.LectureServiceAsync;
 import com.google.gwt.sample.elearning.shared.model.AnswerData;
@@ -180,7 +178,7 @@ public class CreateTestController {
         if (isAnswerSelected()) {
           view.setButtonsBarState(ButtonsBarViewState.EDIT);
         } else {
-          if (!TextInputValidator.isEmptyString(view.getAnswerField().getText()))
+          if (!TextUtil.isEmptyString(view.getAnswerField().getText()))
             view.setButtonsBarState(ButtonsBarViewState.ADD);
           else
             view.setButtonsBarState(ButtonsBarViewState.NONE);
@@ -237,7 +235,7 @@ public class CreateTestController {
 
   private void onAddAnswerSelection() {
     String text = view.getAnswerField().getText();
-    if (!TextInputValidator.isEmptyString(text)) {
+    if (!TextUtil.isEmptyString(text)) {
       if (!checkIfAnswerExists(text)) {
         questions.get(currentIndex).addAnswer(new AnswerData(text, view.getIsTrueCheckBox().getValue()));
         loadQuestion(questions.get(currentIndex));
@@ -253,7 +251,7 @@ public class CreateTestController {
 
   private void onEditAnswerSelection() {
     String text = view.getAnswerField().getText();
-    if (!TextInputValidator.isEmptyString(text)) {
+    if (!TextUtil.isEmptyString(text)) {
       AnswerData selectedAnswer = getSelectedAnswer();
       if (selectedAnswer == null) {
         (new MessageBox("Error", "Cannot edit the specified answer of null!")).show();
