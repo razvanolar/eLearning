@@ -1,6 +1,8 @@
 package com.google.gwt.sample.elearning.client.settings.manage_users;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.sample.elearning.client.eLearningUtils.MaskableView;
@@ -12,6 +14,7 @@ import com.google.gwt.sample.elearning.shared.model.UserData;
 import com.google.gwt.sample.elearning.shared.types.FileExtensionTypes;
 import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
 import com.google.gwt.sample.elearning.client.eLearningUtils.ELearningAsyncCallBack;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -141,6 +144,16 @@ public class ManageUsersController implements ISettingsController {
       }
     });
 
+    view.getFileUpload().addChangeHandler(new ChangeHandler() {
+      public void onChange(ChangeEvent event) {
+        String fileName = view.getFileUpload().getFilename();
+        if (fileName == null || fileName.isEmpty()) {
+          view.getUploadUsersButton().setEnabled(false);
+        } else
+          view.getUploadUsersButton().setEnabled(true);
+      }
+    });
+
     view.getFileFormPanel().addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
       public void onSubmitComplete(FormPanel.SubmitCompleteEvent event) {
         log.info("Users were uploaded");
@@ -227,11 +240,21 @@ public class ManageUsersController implements ISettingsController {
   }
 
   private void onDownloadUsersSelection() {
-
+    String url = GWT.getModuleBaseURL() + "usersDownloadService?users=";
+    List<UserData> selectedUsers = getSelectedUsers();
+    String ids = "";
+    if (selectedUsers != null && !selectedUsers.isEmpty())
+      for (int i=0; i<selectedUsers.size(); i++) {
+        ids += selectedUsers.get(i).getId();
+        if (i != selectedUsers.size()-1)
+          ids += "$";
+      }
+    url += ids;
+    Window.open(url, "_self", "");
   }
 
   private void onUploadUsersSelection() {
-    view.getFileFormPanel().setAction(GWT.getModuleBaseURL() + "usersUploadService?users=");
+    view.getFileFormPanel().setAction(GWT.getModuleBaseURL() + "usersUploadService?");
     view.getFileFormPanel().submit();
   }
 
@@ -287,6 +310,16 @@ public class ManageUsersController implements ISettingsController {
   private UserData getSelectedUser() {
     if (view.getGrid() != null && view.getGrid().getSelectionModel() != null)
       return view.getGrid().getSelectionModel().getSelectedItem();
+    return null;
+  }
+
+  private List<UserData> getSelectedUsers() {
+    if (view.getGrid() != null && view.getGrid().getSelectionModel() != null) {
+      List<UserData> selectedItems = view.getGrid().getSelectionModel().getSelectedItems();
+      if (selectedItems == null || selectedItems.isEmpty())
+        return null;
+      return selectedItems;
+    }
     return null;
   }
 

@@ -94,7 +94,8 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
 
     toolBar.add(downloadUsersButton);
     toolBar.add(uploadUsersButton);
-    toolBar.add(fileUploadContainer);
+//    toolBar.add(fileUploadContainer);
+    toolBar.add(fileFormPanel);
 
     BoxLayoutContainer.BoxLayoutData hBoxLayoutData = new BoxLayoutContainer.BoxLayoutData(new Margins(5));
     hBoxLayoutData.setFlex(1);
@@ -129,6 +130,7 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     mainContainer.setWestWidget(gridContainer, layoutData);
     mainContainer.setCenterWidget(formContainer);
 
+    uploadUsersButton.setEnabled(false);
     setState(ManageUsersController.UserViewState.NONE);
   }
 
