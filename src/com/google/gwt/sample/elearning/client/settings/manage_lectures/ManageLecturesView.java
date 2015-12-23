@@ -3,6 +3,7 @@ package com.google.gwt.sample.elearning.client.settings.manage_lectures;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.sample.elearning.client.ELearningController;
 import com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_lectures_files.ManageLecturesFilesController;
+import com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_lectures_homework.ManageLecturesHomeworkController;
 import com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_lectures_tests.ManageLecturesTestsController;
 import com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_lectures_videos.ManageLecturesVideosController;
 import com.google.gwt.sample.elearning.shared.model.*;
@@ -52,21 +53,27 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
   private TextButton editVideoButton;
   private TextButton deleteVideoButton;
   private TextButton playVideoButton;
+  private TextButton createHomeworkButton;
+  private TextButton editHomeworkButton;
+  private TextButton deleteHomeworkButton;
   private ComboBox<Professor> professorComboBox;
   private TextField lectureNameField;
   private Grid<Lecture> lectureGridView;
   private Grid<LWLectureTestData> lectureTestDataGrid;
+  private Grid<HomeworkData> homeworkDataGrid;
   private TreeGrid<FileData> fileTreeGrid;
   private Grid<VideoLinkData> videoLinkDataGrid;
   private com.sencha.gxt.widget.core.client.button.ToggleButton filesToggleButton;
   private com.sencha.gxt.widget.core.client.button.ToggleButton testsToggleButton;
   private com.sencha.gxt.widget.core.client.button.ToggleButton videosToggleButton;
 
+  private com.sencha.gxt.widget.core.client.button.ToggleButton homeworkToggleButton;
   private ManageLecturesController.LectureGridViewState state = ManageLecturesController.LectureGridViewState.NONE;
   private static Logger log = Logger.getLogger(ManageLecturesView.class.getName());
   private BorderLayoutContainer filesPanelContainer;
   private BorderLayoutContainer testsPanelContainer;
   private BorderLayoutContainer videosPanelContainer;
+  private BorderLayoutContainer homeworkPanelContainer;
   private FormPanel fileFormPanel;
   private FileUpload fileUpload;
 
@@ -99,28 +106,36 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     editVideoButton = new TextButton("Edit video", ELearningController.ICONS.editfile());
     deleteVideoButton = new TextButton("Delete video", ELearningController.ICONS.deletefile());
     playVideoButton = new TextButton("Play video", ELearningController.ICONS.play());
+    createHomeworkButton = new TextButton("Create Homework", ELearningController.ICONS.newfile());
+    editHomeworkButton = new TextButton("Edit Homework", ELearningController.ICONS.editfile());
+    deleteHomeworkButton = new TextButton("Delete Homework", ELearningController.ICONS.deletefile());
     lectureGridView = viewUtils.createLecturesGrid();
     fileTreeGrid = viewUtils.createFileTreeGrid();
     lectureTestDataGrid = viewUtils.createTestsGrid();
+    homeworkDataGrid = viewUtils.createHomeworkGrid();
     videoLinkDataGrid = viewUtils.createVideosGrid();
     filesToggleButton = new ToggleButton("Files");
     testsToggleButton = new ToggleButton("Tests");
     videosToggleButton = new ToggleButton("Videos");
+    homeworkToggleButton = new ToggleButton("Homework");
     ToggleGroup toggleGroup = new ToggleGroup();
     BorderLayoutContainer gridContainer = new BorderLayoutContainer();
     filesPanelContainer = new BorderLayoutContainer();
     testsPanelContainer = new BorderLayoutContainer();
     videosPanelContainer = new BorderLayoutContainer();
+    homeworkPanelContainer = new BorderLayoutContainer();
     fileFormPanel = new FormPanel();
     fileUpload = new FileUpload();
     HorizontalPanel fileUploadContainer = new HorizontalPanel();
     ContentPanel filesGridContentPanel = new ContentPanel();
     ContentPanel testGridContentPanel = new ContentPanel();
     ContentPanel videosContentPanel = new ContentPanel();
+    ContentPanel homeworkContentPanel = new ContentPanel();
     ToolBar toolBar = new ToolBar();
     ToolBar filesToolBar = new ToolBar();
     ToolBar testToolBar = new ToolBar();
     ToolBar videosTooBar = new ToolBar();
+    ToolBar homeworkToolBar = new ToolBar();
 
     fileFormPanel.setEncoding(FormPanel.ENCODING_MULTIPART);
     fileFormPanel.setMethod(FormPanel.METHOD_POST);
@@ -158,11 +173,13 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     toggleGroup.add(filesToggleButton);
     toggleGroup.add(testsToggleButton);
     toggleGroup.add(videosToggleButton);
+    toggleGroup.add(homeworkToggleButton);
 
     toolBar.add(new FillToolItem());
     toolBar.add(filesToggleButton);
-    toolBar.add(testsToggleButton);
     toolBar.add(videosToggleButton);
+    toolBar.add(testsToggleButton);
+    toolBar.add(homeworkToggleButton);
     toolBar.setHorizontalSpacing(5);
 
     filesToolBar.add(createHtmlFile);
@@ -184,6 +201,10 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     videosTooBar.add(new SeparatorToolItem());
     videosTooBar.add(playVideoButton);
 
+    homeworkToolBar.add(createHomeworkButton);
+    homeworkToolBar.add(editHomeworkButton);
+    homeworkToolBar.add(deleteHomeworkButton);
+
     filesGridContentPanel.setHeaderVisible(false);
     filesGridContentPanel.add(fileTreeGrid);
     filesPanelContainer.setCenterWidget(filesGridContentPanel);
@@ -199,6 +220,11 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     videosPanelContainer.setCenterWidget(videosContentPanel);
     videosPanelContainer.setSouthWidget(videosTooBar, new BorderLayoutContainer.BorderLayoutData(30));
 
+    homeworkContentPanel.setHeaderVisible(false);
+    homeworkContentPanel.add(homeworkDataGrid);
+    homeworkPanelContainer.setCenterWidget(homeworkContentPanel);
+    homeworkPanelContainer.setSouthWidget(homeworkToolBar, new BorderLayoutContainer.BorderLayoutData(30));
+
     BorderLayoutContainer.BorderLayoutData layoutData = new BorderLayoutContainer.BorderLayoutData(.30);
     layoutData.setSplit(true);
     layoutData.setMargins(new Margins(0, 5, 0, 0));
@@ -208,6 +234,7 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     setGridState(state);
     setTreeState(ManageLecturesFilesController.LectureTreeViewState.NONE);
     setTestGridState(ManageLecturesTestsController.LectureTestsViewState.NONE);
+    setHomeworkGridState(ManageLecturesHomeworkController.ManageHomeworkToolBarState.NONE);
     setCenterWidgetState(ManageLecturesController.LecturesFilesAndTestsState.FILES);
   }
 
@@ -321,6 +348,27 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     }
   }
 
+  @Override
+  public void setHomeworkGridState(ManageLecturesHomeworkController.ManageHomeworkToolBarState state) {
+    switch (state) {
+    case ADD:
+      createHomeworkButton.setEnabled(true);
+      editHomeworkButton.setEnabled(false);
+      deleteHomeworkButton.setEnabled(false);
+      break;
+    case EDIT:
+      createHomeworkButton.setEnabled(true);
+      editHomeworkButton.setEnabled(true);
+      deleteHomeworkButton.setEnabled(true);
+      break;
+    case NONE:
+      createHomeworkButton.setEnabled(false);
+      editHomeworkButton.setEnabled(false);
+      deleteHomeworkButton.setEnabled(false);
+      break;
+    }
+  }
+
   public void setCenterWidgetState(ManageLecturesController.LecturesFilesAndTestsState state) {
     if (state == ManageLecturesController.LecturesFilesAndTestsState.FILES) {
       mainContainer.setCenterWidget(filesPanelContainer);
@@ -328,6 +376,8 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
       mainContainer.setCenterWidget(testsPanelContainer);
     } else if (state == ManageLecturesController.LecturesFilesAndTestsState.VIDEOS) {
       mainContainer.setCenterWidget(videosPanelContainer);
+    } else if (state == ManageLecturesController.LecturesFilesAndTestsState.HOMEWORK) {
+      mainContainer.setCenterWidget(homeworkPanelContainer);
     }
     mainContainer.forceLayout();
   }
@@ -413,6 +463,22 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     return videosToggleButton;
   }
 
+  public ToggleButton getHomeworkToggleButton() {
+    return homeworkToggleButton;
+  }
+
+  public TextButton getEditHomeworkButton() {
+    return editHomeworkButton;
+  }
+
+  public TextButton getCreateHomeworkButton() {
+    return createHomeworkButton;
+  }
+
+  public TextButton getDeleteHomeworkButton() {
+    return deleteHomeworkButton;
+  }
+
   public TextButton getAddVideoLinkButton() {
     return addVideoButton;
   }
@@ -439,6 +505,10 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
 
   public Grid<LWLectureTestData> getTestsGrid() {
     return lectureTestDataGrid;
+  }
+
+  public Grid<HomeworkData> getHomeworkDataGrid() {
+    return homeworkDataGrid;
   }
 
   public Grid<VideoLinkData> getVideosGrid() {

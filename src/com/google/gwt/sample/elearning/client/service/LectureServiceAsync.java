@@ -43,4 +43,10 @@ public interface LectureServiceAsync {
   void deleteVideoData(long lectureId, VideoLinkData videoLinkData, AsyncCallback<Void> async);
 
   void createTest(LectureTestData lectureTestData, AsyncCallback<Void> async);
+
+  void getAllHomeworks(UserData user, long lectureId, AsyncCallback<List<HomeworkData>> async);
+
+  void saveHomeworkData(long lectureId, HomeworkData homeworkData, AsyncCallback<Void> async);
+
+  void updateHomeworkData(long lectureId, HomeworkData homeworkData, AsyncCallback<Void> async);
 }

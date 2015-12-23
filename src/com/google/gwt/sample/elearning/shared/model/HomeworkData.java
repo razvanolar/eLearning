@@ -1,9 +1,11 @@
 package com.google.gwt.sample.elearning.shared.model;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 /**
  * Created by Ambrozie Paval on 12/12/2015.
  */
-public class HomeworkData {
+public class HomeworkData implements IsSerializable {
   private long id;
   private String title;
   private int score;

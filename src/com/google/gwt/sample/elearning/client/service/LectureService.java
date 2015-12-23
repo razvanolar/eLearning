@@ -49,4 +49,11 @@ public interface LectureService extends RemoteService {
   void deleteVideoData(long lectureId, VideoLinkData videoLinkData) throws ELearningException;
 
   void createTest(LectureTestData lectureTestData) throws ELearningException;
+
+  List<HomeworkData> getAllHomeworks(UserData user, long lectureId) throws ELearningException;
+
+  void saveHomeworkData(long lectureId, HomeworkData homeworkData) throws ELearningException;
+
+  void updateHomeworkData(long lectureId, HomeworkData homeworkData) throws ELearningException;
+
 }

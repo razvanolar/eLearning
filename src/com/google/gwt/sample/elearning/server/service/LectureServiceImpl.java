@@ -6,6 +6,7 @@ import com.google.gwt.sample.elearning.server.repository.JDBC.LectureDAO;
 import com.google.gwt.sample.elearning.server.repository.JDBC.VideoLinkDAO;
 import com.google.gwt.sample.elearning.server.service.collector.test.TestXMLConvertor;
 import com.google.gwt.sample.elearning.server.service.lecture_service_util.LectureFilesUtil;
+import com.google.gwt.sample.elearning.server.service.lecture_service_util.LectureHomeworkUtil;
 import com.google.gwt.sample.elearning.server.service.lecture_service_util.LectureTestsUtil;
 import com.google.gwt.sample.elearning.shared.Tree;
 import com.google.gwt.sample.elearning.shared.exception.ELearningException;
@@ -25,6 +26,7 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   private VideoLinkDAO videoLinkDAO = factory.getVideoLinkDAO();
   private LectureFilesUtil filesUtil = new LectureFilesUtil();
   private LectureTestsUtil testsUtil = new LectureTestsUtil();
+  private LectureHomeworkUtil homeworkUtil = new LectureHomeworkUtil();
 
   @Override
   public void createLecture(Lecture lecture) throws ELearningException{
@@ -130,5 +132,20 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   @Override
   public void deleteVideoData(long lectureId, VideoLinkData videoLinkData) throws ELearningException {
     videoLinkDAO.deleteVideoLinkData(lectureId, videoLinkData);
+  }
+
+  @Override
+  public List<HomeworkData> getAllHomeworks(UserData user, long lectureId) throws ELearningException {
+    return homeworkUtil.getAllHomeworks(user,lectureId);
+  }
+
+  @Override
+  public void saveHomeworkData(long lectureId, HomeworkData homeworkData) throws ELearningException {
+    homeworkUtil.createHomework(lectureId, homeworkData);
+  }
+
+  @Override
+  public void updateHomeworkData(long lectureId, HomeworkData homeworkData) throws ELearningException {
+    homeworkUtil.updateHomework(lectureId, homeworkData);
   }
 }

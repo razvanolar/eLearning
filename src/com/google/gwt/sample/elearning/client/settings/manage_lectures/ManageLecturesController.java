@@ -12,6 +12,7 @@ import com.google.gwt.sample.elearning.client.eLearningUtils.TextUtil;
 import com.google.gwt.sample.elearning.client.service.*;
 import com.google.gwt.sample.elearning.client.settings.ISettingsController;
 import com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_lectures_files.ManageLecturesFilesController;
+import com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_lectures_homework.ManageLecturesHomeworkController;
 import com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_lectures_tests.ManageLecturesTestsController;
 import com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_lectures_videos.ManageLecturesVideosController;
 import com.google.gwt.sample.elearning.shared.model.*;
@@ -48,13 +49,14 @@ public class ManageLecturesController implements ISettingsController {
   private ManageLecturesFilesController lecturesFilesController;
   private ManageLecturesTestsController lecturesTestsController;
   private ManageLecturesVideosController lecturesVideosController;
+  private ManageLecturesHomeworkController lecturesHomeworkController;
 
   public enum LectureGridViewState {
     ADD, EDIT, ADDING, NONE
   }
 
   public enum LecturesFilesAndTestsState {
-    FILES, TESTS, VIDEOS
+    FILES, TESTS, VIDEOS, HOMEWORK
   }
 
   public interface IManageLecturesView extends MaskableView{
@@ -65,6 +67,7 @@ public class ManageLecturesController implements ISettingsController {
     ToggleButton getFileToggleButton();
     ToggleButton getTestToggleButton();
     ToggleButton getVideosToggleButton();
+    ToggleButton getHomeworkToggleButton();
     ComboBox<Professor> getProfessorComboBox();
     TextButton getCreateHtmlButton();
     TextButton getEditHtmlButton();
@@ -79,14 +82,19 @@ public class ManageLecturesController implements ISettingsController {
     TextButton getAddVideoLinkButton();
     TextButton getEditVideoLinkButton();
     TextButton getDeleteVideoLinkButton();
+    TextButton getCreateHomeworkButton();
+    TextButton getEditHomeworkButton();
+    TextButton getDeleteHomeworkButton();
     FormPanel getFileFormPanel();
     FileUpload getFileUpload();
     TreeGrid<FileData> getTreeGrid();
     Grid<LWLectureTestData> getTestsGrid();
+    Grid<HomeworkData> getHomeworkDataGrid();
     Grid<VideoLinkData> getVideosGrid();
     void setTreeState(ManageLecturesFilesController.LectureTreeViewState state);
     void setTestGridState(ManageLecturesTestsController.LectureTestsViewState state);
     void setVideoGridState(ManageLecturesVideosController.ManageVideosToolBarState state);
+    void setHomeworkGridState(ManageLecturesHomeworkController.ManageHomeworkToolBarState state);
     void setCenterWidgetState(LecturesFilesAndTestsState state);
     Grid<Lecture> getGrid();
     void setGridState(LectureGridViewState state);
@@ -104,6 +112,7 @@ public class ManageLecturesController implements ISettingsController {
     lecturesFilesController = new ManageLecturesFilesController(view, lectureService);
     lecturesTestsController = new ManageLecturesTestsController(view, lectureService);
     lecturesVideosController = new ManageLecturesVideosController(view, lectureService);
+    lecturesHomeworkController = new ManageLecturesHomeworkController(view, lectureService);
   }
 
   public void bind() {
@@ -112,6 +121,7 @@ public class ManageLecturesController implements ISettingsController {
     lecturesFilesController.bind();
     lecturesTestsController.bind();
     lecturesVideosController.bind();
+    lecturesHomeworkController.bind();
     addListeners();
   }
 
@@ -140,21 +150,22 @@ public class ManageLecturesController implements ISettingsController {
 
   private void populateCombo() {
     view.mask();
-    userServiceAsync.getAllUsersByRole(UserRoleTypes.PROFESSOR, new ELearningAsyncCallBack<List<? extends UserData>>(view, log) {
-      public void onSuccess(List<? extends UserData> result) {
-        view.getProfessorComboBox().getStore().clear();
-        Professor all = new Professor(-1, "", "", "All", "", "");
-        professorList.clear();
-        professorList.add(all);
-        for (UserData user : result) {
-          professorList.add(new Professor(user.getId(), user.getUsername(), user.getPassword(), user.getFirstName(),
+    userServiceAsync.getAllUsersByRole(UserRoleTypes.PROFESSOR,
+        new ELearningAsyncCallBack<List<? extends UserData>>(view, log) {
+          public void onSuccess(List<? extends UserData> result) {
+            view.getProfessorComboBox().getStore().clear();
+            Professor all = new Professor(-1, "", "", "All", "", "");
+            professorList.clear();
+            professorList.add(all);
+            for (UserData user : result) {
+              professorList.add(new Professor(user.getId(), user.getUsername(), user.getPassword(), user.getFirstName(),
                   user.getLastName(), user.getEmail()));
-        }
-        view.getProfessorComboBox().getStore().addAll(professorList);
-        view.getProfessorComboBox().setValue(all);
-        view.unmask();
-      }
-    });
+            }
+            view.getProfessorComboBox().getStore().addAll(professorList);
+            view.getProfessorComboBox().setValue(all);
+            view.unmask();
+          }
+        });
   }
 
   private void addListeners() {
@@ -232,6 +243,16 @@ public class ManageLecturesController implements ISettingsController {
         if (event.getValue()) {
           view.setCenterWidgetState(LecturesFilesAndTestsState.VIDEOS);
           lecturesVideosController.loadVideos();
+        }
+      }
+    });
+
+    view.getHomeworkToggleButton().addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+      @Override
+      public void onValueChange(ValueChangeEvent<Boolean> event) {
+        if(event.getValue()) {
+          view.setCenterWidgetState(LecturesFilesAndTestsState.HOMEWORK);
+          lecturesHomeworkController.loadHomeworks();
         }
       }
     });
@@ -318,6 +339,7 @@ public class ManageLecturesController implements ISettingsController {
       lecturesFilesController.setSelectedLecture(null);
       lecturesTestsController.setSelectedLecture(null);
       lecturesVideosController.setSelectedLecture(null);
+      lecturesHomeworkController.setSelectedLecture(null);
     } else {
       view.setGridState(LectureGridViewState.EDIT);
       Lecture lecture = selection.get(0);
@@ -325,12 +347,15 @@ public class ManageLecturesController implements ISettingsController {
       lecturesFilesController.setSelectedLecture(lecture);
       lecturesTestsController.setSelectedLecture(lecture);
       lecturesVideosController.setSelectedLecture(lecture);
+      lecturesHomeworkController.setSelectedLecture(lecture);
       if (view.getFileToggleButton().getValue())
         lecturesFilesController.loadFileTree();
       else if (view.getTestToggleButton().getValue())
         lecturesTestsController.loadTests();
       else if (view.getVideosToggleButton().getValue())
         lecturesVideosController.loadVideos();
+      else if(view.getHomeworkToggleButton().getValue())
+        lecturesHomeworkController.loadHomeworks();
     }
   }
 

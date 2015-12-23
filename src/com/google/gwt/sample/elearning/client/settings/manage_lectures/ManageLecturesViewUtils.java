@@ -1,10 +1,7 @@
 package com.google.gwt.sample.elearning.client.settings.manage_lectures;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.sample.elearning.shared.model.FileData;
-import com.google.gwt.sample.elearning.shared.model.LWLectureTestData;
-import com.google.gwt.sample.elearning.shared.model.Lecture;
-import com.google.gwt.sample.elearning.shared.model.VideoLinkData;
+import com.google.gwt.sample.elearning.shared.model.*;
 import com.sencha.gxt.core.client.IdentityValueProvider;
 import com.sencha.gxt.core.client.Style;
 import com.sencha.gxt.core.client.ValueProvider;
@@ -24,6 +21,7 @@ public class ManageLecturesViewUtils {
   private static FileDataProperties fileDataProperties = GWT.create(FileDataProperties.class);
   private static LWLectureTestDataProperties testDataProperties = GWT.create(LWLectureTestDataProperties.class);
   private static VideoLinkDataProperties videoLinkDataProperties = GWT.create(VideoLinkDataProperties.class);
+  private static HomeworkDataProperties homeworkDataProperties = GWT.create(HomeworkDataProperties.class);
 
   public Grid<Lecture> createLecturesGrid() {
     IdentityValueProvider<Lecture> identityValueProvider = new IdentityValueProvider<Lecture>("sm");
@@ -107,6 +105,27 @@ public class ManageLecturesViewUtils {
 
     ColumnModel<VideoLinkData> columnModel = new ColumnModel<VideoLinkData>(columns);
     Grid<VideoLinkData> grid = new Grid<VideoLinkData>(store, columnModel);
+    grid.getView().setAutoFill(true);
+    grid.setSelectionModel(checkBoxSelectionModel);
+
+    return grid;
+  }
+
+  public Grid<HomeworkData> createHomeworkGrid() {
+    IdentityValueProvider<HomeworkData> identityValueProvider = new IdentityValueProvider<HomeworkData>("sm");
+    CheckBoxSelectionModel<HomeworkData> checkBoxSelectionModel = new CheckBoxSelectionModel<HomeworkData>(identityValueProvider);
+    checkBoxSelectionModel.setSelectionMode(Style.SelectionMode.SINGLE);
+
+    ListStore<HomeworkData> store = new ListStore<HomeworkData>(homeworkDataProperties.key());
+
+    List<ColumnConfig<HomeworkData, ?>> columns = new ArrayList<ColumnConfig<HomeworkData, ?>>();
+    columns.add(checkBoxSelectionModel.getColumn());
+    columns.add(new ColumnConfig<HomeworkData, Long>(homeworkDataProperties.id(), 50, "ID"));
+    columns.add(new ColumnConfig<HomeworkData, String>(homeworkDataProperties.title(), 200, "Title"));
+    columns.add(new ColumnConfig<HomeworkData, Integer>(homeworkDataProperties.score(), 100, "Score"));
+
+    ColumnModel<HomeworkData> columnModel = new ColumnModel<HomeworkData>(columns);
+    Grid<HomeworkData> grid = new Grid<HomeworkData>(store,columnModel);
     grid.getView().setAutoFill(true);
     grid.setSelectionModel(checkBoxSelectionModel);
 
