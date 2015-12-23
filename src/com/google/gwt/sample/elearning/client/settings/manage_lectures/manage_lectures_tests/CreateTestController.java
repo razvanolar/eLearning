@@ -81,21 +81,25 @@ public class CreateTestController {
   private long lectureId;
   private LectureServiceAsync lectureService = GWT.create(LectureService.class);
   private Window window;
+  private ICreateTestListener listener;
 
-  public CreateTestController(ICreateTestView view, long lectureId) {
+  public CreateTestController(ICreateTestView view, long lectureId, ICreateTestListener listener) {
     this.view = view;
     questions = new ArrayList<QuestionData>();
     questions.add(new QuestionData());
     currentIndex = 0;
     this.lectureId = lectureId;
     test = new LectureTestData();
+    this.listener = listener;
   }
 
-  public CreateTestController(ICreateTestView view, LectureTestData test, long ProfessorId) {
+  public CreateTestController(ICreateTestView view, LectureTestData test, long lectureId, ICreateTestListener listener) {
     this.view = view;
     questions = test.getQuestions();
     currentIndex = 0;
     this.test = test;
+    this.lectureId = lectureId;
+    this.listener = listener;
   }
 
   public void bind() {
@@ -103,6 +107,9 @@ public class CreateTestController {
     updatePagingLabel();
     loadQuestion(questions.get(currentIndex));
     setBottomToolbarState();
+    if (test != null) {
+      view.getTitleField().setText(test.getName());
+    }
     addListeners();
   }
 
@@ -208,17 +215,22 @@ public class CreateTestController {
   }
 
   private void doOnApplyButtonSelection() {
-    LectureTestData lectureTestData = new LectureTestData(lectureId, view.getTitleField().getText(),0,questions);
+    if (view.getTitleField().getText() == null || view.getTitleField().getText().isEmpty()) {
+      (new MessageBox("Error", "Please provide a title")).show();
+      return;
+    }
+
+    LectureTestData lectureTestData = new LectureTestData(lectureId, view.getTitleField().getText(), 0, questions);
     lectureService.createTest(lectureTestData, new AsyncCallback<Void>() {
-      @Override
       public void onFailure(Throwable caught) {
         new MessageBox("Error",caught.getMessage()).show();
       }
 
-      @Override
       public void onSuccess(Void result) {
         if (window != null)
           window.hide();
+        if (listener != null)
+          listener.testCreated();
       }
     });
   }

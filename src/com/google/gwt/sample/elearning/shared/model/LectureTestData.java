@@ -11,7 +11,7 @@ import java.util.List;
 public class LectureTestData implements IsSerializable {
 
   private long id;
-  private String name;
+  private String name = "";
   private long duration;
   private long lectureId;
   private List<QuestionData> questions;

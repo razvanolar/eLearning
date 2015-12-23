@@ -74,7 +74,7 @@ public class ManageLecturesTestsController implements ICreateTestListener {
 
   private void onCreateTestSelection() {
     CreateTestController.ICreateTestView view = new CreateTestView();
-    CreateTestController createTestController = new CreateTestController(view, currentLecture.getId());
+    CreateTestController createTestController = new CreateTestController(view, currentLecture.getId(), this);
     createTestController.bind();
     MasterWindow window = new MasterWindow();
     window.setContent(view.asWidget(), "Create Test View");
@@ -94,7 +94,8 @@ public class ManageLecturesTestsController implements ICreateTestListener {
         if (result == null)
           return;
         CreateTestController.ICreateTestView view = new CreateTestView();
-        CreateTestController createTestController = new CreateTestController(view, result, currentLecture.getProfessor().getId());
+        CreateTestController createTestController = new CreateTestController(view, result, currentLecture.getId(),
+                ManageLecturesTestsController.this);
         createTestController.bind();
         MasterWindow window = new MasterWindow();
         window.setContent(view.asWidget(), "Create Test View");
@@ -141,5 +142,10 @@ public class ManageLecturesTestsController implements ICreateTestListener {
 
   public void clearStore() {
     gridStore.clear();
+  }
+
+  @Override
+  public void testCreated() {
+    loadTests();
   }
 }
