@@ -36,7 +36,7 @@ public class ForumXMLConverter {
 
   private String convertCommentDataToXML(ForumCommentData commentData) {
     return "\n\t\t<" + ForumElementTypes.COMMENT.name() + " id=\"" + commentData.getId() + "\"" + " userId=\"" + commentData.getUserId() + "\">" +
-        commentData.getCommentText() +
+        "\n\t\t\t" + commentData.getCommentText() +
         "\n\t\t</" + ForumElementTypes.COMMENT.name() + ">";
   }
 }
