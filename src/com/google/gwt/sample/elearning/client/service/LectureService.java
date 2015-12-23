@@ -26,7 +26,7 @@ public interface LectureService extends RemoteService {
 
   void removeLecture(long id) throws ELearningException;
 
-  String addLectureHtmlFile(UserData user, String path, String title, long lectureId, String text) throws ELearningException;
+  String addLectureHtmlFile(String path, String title, long lectureId, String text) throws ELearningException;
 
   void createFolder(UserData user, String path, String name, long lectureId) throws ELearningException;
 
@@ -34,7 +34,7 @@ public interface LectureService extends RemoteService {
 
   String getHtmlFileBodyContent(UserData userData, long lectureId, String path, String title) throws ELearningException;
 
-  void deleteFile(UserData user, long lectureId, String path, String title) throws ELearningException;
+  void deleteFile(long lectureId, String path, String title) throws ELearningException;
 
   List<LWLectureTestData> getAllLWTests(UserData user, long lectureId) throws ELearningException;
 

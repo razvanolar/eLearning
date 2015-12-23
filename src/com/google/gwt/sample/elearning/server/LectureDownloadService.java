@@ -18,14 +18,12 @@ public class LectureDownloadService extends HttpServlet {
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     String lecturePath = req.getParameter("path");
     String fileName = req.getParameter("name");
-    String user = req.getParameter("user");
     String lecture = req.getParameter("lecture");
     try {
-      long userId = Long.parseLong(user);
       long lectureId = Long.parseLong(lecture);
 
       OutputStream outputStream = (OutputStream) resp.getOutputStream();
-      FileInputStream inputStream = new FileInputStream(ServerUtil.getUserLectureDirectoryPath(userId, lectureId) + lecturePath + fileName);
+      FileInputStream inputStream = new FileInputStream(ServerUtil.getUserLectureDirectoryPath(lectureId) + lecturePath + fileName);
 
       int bytes, sum=0;
       byte[] buffer = new byte[255];

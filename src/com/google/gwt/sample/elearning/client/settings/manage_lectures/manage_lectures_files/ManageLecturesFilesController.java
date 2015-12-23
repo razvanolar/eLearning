@@ -186,7 +186,7 @@ public class ManageLecturesFilesController implements IHtmlListener {
     FileData selectedFile = getSelectedFile();
     if (selectedFile == null || currentLecture == null)
       return;
-    lectureService.deleteFile(currentLecture.getProfessor(), currentLecture.getId(),
+    lectureService.deleteFile(currentLecture.getId(),
             getFilePathWithoutName(selectedFile), selectedFile.getName(), new AsyncCallback<Void>() {
               public void onFailure(Throwable caught) {
                 (new MessageBox("Error", caught.getMessage())).show();
@@ -218,7 +218,7 @@ public class ManageLecturesFilesController implements IHtmlListener {
   public void createHtmlFile(String path, String title, String text) {
     if (currentLecture == null)
       return;
-    lectureService.addLectureHtmlFile(currentLecture.getProfessor(), path, title, currentLecture.getId(), text, new AsyncCallback<String>() {
+    lectureService.addLectureHtmlFile(path, title, currentLecture.getId(), text, new AsyncCallback<String>() {
       public void onFailure(Throwable caught) {
         htmlEditorContr.setSaveState(HtmlEditorController.SaveStatus.FAILED);
       }

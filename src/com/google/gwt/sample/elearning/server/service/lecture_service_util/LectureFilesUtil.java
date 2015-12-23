@@ -17,14 +17,19 @@ import java.util.*;
  */
 public class LectureFilesUtil {
 
-  public String addLectureHtmlFile(UserData user, String path, String title, long lectureId, String text) throws ELearningException {
+  public String addLectureHtmlFile(String path, String title, long lectureId, String text) throws ELearningException {
     PrintWriter writer = null;
     try {
       title = title + ".html";
-      writer = new PrintWriter(ServerUtil.getUserLectureDirectoryPath(user, lectureId) + path + "\\" + title, "UTF-8");
+      path = path != null && !path.isEmpty() ? path + "\\" : path;
+      path = ServerUtil.getUserLectureDirectoryPath(lectureId) + path;
+      File file = new File(path);
+      if (!file.exists() && !file.mkdirs())
+        throw new Exception("Unable to create missing directories");
+      writer = new PrintWriter(path + title, "UTF-8");
       writer.println(ServerUtil.getHtmlDocumentText(title, text));
       return title;
-    } catch (FileNotFoundException | UnsupportedEncodingException e) {
+    } catch (Exception e) {
       e.printStackTrace();
       throw new ELearningException(e);
     } finally {
@@ -34,14 +39,14 @@ public class LectureFilesUtil {
   }
 
   public void createFolder(UserData user, String path, String name, long lectureId) throws ELearningException {
-    String lectureDirectoryPath = ServerUtil.getUserLectureDirectoryPath(user, lectureId);
+    String lectureDirectoryPath = ServerUtil.getUserLectureDirectoryPath(lectureId);
     File file = new File(lectureDirectoryPath + path + "\\" + name);
     if (!file.exists() && !file.mkdirs())
       throw new ELearningException("Folder " + name + " can not be created");
   }
 
   public Tree<FileData> getLectureFilesTree(UserData user, long lectureId) throws ELearningException {
-    String lectureDirectoryPath = ServerUtil.getUserLectureDirectoryPath(user, lectureId);
+    String lectureDirectoryPath = ServerUtil.getUserLectureDirectoryPath(lectureId);
     File rootDir = new File(lectureDirectoryPath);
 
     Tree<FileData> tree = new Tree<FileData>();
@@ -68,7 +73,7 @@ public class LectureFilesUtil {
   }
 
   public String getHtmlFileBodyContent(UserData userData, long lectureId, String path, String title) throws ELearningException {
-    String lecturesDirectoryPath = ServerUtil.getUserLectureDirectoryPath(userData, lectureId);
+    String lecturesDirectoryPath = ServerUtil.getUserLectureDirectoryPath(lectureId);
     String filePath = lecturesDirectoryPath + path + title;
 
     File file = new File(filePath);
@@ -101,8 +106,8 @@ public class LectureFilesUtil {
     }
   }
 
-  public void deleteFile(UserData user, long lectureId, String path, String title) throws ELearningException {
-    String filePath = ServerUtil.getUserLectureDirectoryPath(user, lectureId) + path + title;
+  public void deleteFile(long lectureId, String path, String title) throws ELearningException {
+    String filePath = ServerUtil.getUserLectureDirectoryPath(lectureId) + path + title;
     File file = new File(filePath);
     if (!file.exists())
       throw new ELearningException("Specified file does not exists. Path: " + path + title);

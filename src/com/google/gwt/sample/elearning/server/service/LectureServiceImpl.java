@@ -63,8 +63,8 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   }
 
   @Override
-  public String addLectureHtmlFile(UserData user, String path, String title, long lectureId, String text) throws ELearningException {
-    return filesUtil.addLectureHtmlFile(user, path, title, lectureId, text);
+  public String addLectureHtmlFile(String path, String title, long lectureId, String text) throws ELearningException {
+    return filesUtil.addLectureHtmlFile(path, title, lectureId, text);
   }
 
   @Override
@@ -83,8 +83,8 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   }
 
   @Override
-  public void deleteFile(UserData user, long lectureId, String path, String title) throws ELearningException {
-    filesUtil.deleteFile(user, lectureId, path, title);
+  public void deleteFile(long lectureId, String path, String title) throws ELearningException {
+    filesUtil.deleteFile(lectureId, path, title);
   }
 
   @Override

@@ -10,6 +10,7 @@ public class ServerUtil {
   public static final String PATH = "c:\\elearning\\";
   public static final String LECTURES_PATH = "lectures\\";
   public static final String TESTS_PATH = "tests\\";
+  public static final String FILES_PATH = "files\\";
   public static final String HTML_DOCUMENT = "<!DOCTYPE html>\n"
       + "<html>"
       + "\t<head>\n"
@@ -35,12 +36,8 @@ public class ServerUtil {
     return getUserDirectoryPath(user.getId());
   }
 
-  public static String getUserLectureDirectoryPath(UserData user, long lectureId) {
-    return getUserDirectoryPath(user) + LECTURES_PATH + lectureId + "\\";
-  }
-
-  public static String getUserLectureDirectoryPath(long userId, long lectureId) {
-    return getUserDirectoryPath(userId) + LECTURES_PATH + lectureId + "\\";
+  public static String getUserLectureDirectoryPath(long lectureId) {
+    return PATH + LECTURES_PATH + lectureId + "\\";
   }
 
   public static String getTestsDirectoryPath(UserData user, long lectureId) {

@@ -20,7 +20,7 @@ public interface LectureServiceAsync {
 
   void removeLecture(long id, AsyncCallback<Void> async);
 
-  void addLectureHtmlFile(UserData user, String path, String title, long lectureId, String text, AsyncCallback<String> async);
+  void addLectureHtmlFile(String path, String title, long lectureId, String text, AsyncCallback<String> async);
 
   void createFolder(UserData user, String path, String name, long lectureId, AsyncCallback<Void> async);
 
@@ -28,7 +28,7 @@ public interface LectureServiceAsync {
 
   void getHtmlFileBodyContent(UserData userData, long lectureId, String path, String title, AsyncCallback<String> async);
 
-  void deleteFile(UserData user, long lectureId, String path, String title, AsyncCallback<Void> async);
+  void deleteFile(long lectureId, String path, String title, AsyncCallback<Void> async);
 
   void getAllLWTests(UserData user, long lectureId, AsyncCallback<List<LWLectureTestData>> async);
 
