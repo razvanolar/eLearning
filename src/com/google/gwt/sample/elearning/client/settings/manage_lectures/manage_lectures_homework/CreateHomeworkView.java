@@ -25,7 +25,6 @@ public class CreateHomeworkView implements CreateHomeworkController.ICreateHomew
   private TextArea descriptionTextArea;
   private BorderLayoutContainer mainContainer;
 
-
   public CreateHomeworkView() {
     initGUI();
   }

@@ -7,6 +7,7 @@ import com.google.gwt.sample.elearning.client.settings.manage_lectures.ManageLec
 import com.google.gwt.sample.elearning.shared.model.HomeworkData;
 import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 
@@ -23,7 +24,7 @@ public class ManageLecturesHomeworkController {
   private Logger log = Logger.getLogger(ManageLecturesHomeworkController.class.getName());
 
   public enum ManageHomeworkToolBarState {
-    ADD, EDIT, NONE;
+    ADD, EDIT, NONE
 
   }
 
@@ -59,29 +60,50 @@ public class ManageLecturesHomeworkController {
     view.getEditButton().addSelectHandler(new SelectEvent.SelectHandler() {
       @Override
       public void onSelect(SelectEvent event) {
-//        doOnEditHomeworkSelection();
+        doOnEditHomeworkSelection();
       }
     });
 
     view.getDeleteButton().addSelectHandler(new SelectEvent.SelectHandler() {
       @Override
       public void onSelect(SelectEvent event) {
-
+        doOnDeleteHomeworkSelection();
       }
     });
   }
 
-//  private void doOnEditHomeworkSelection() {
-//    CreateHomeworkController.ICreateHomeworkView view = new CreateHomeworkView();
-//    CreateHomeworkController controller = new CreateHomeworkController(view, lectureService, this, );
-//    controller.bind();
-//    MasterWindow window = new MasterWindow();
-//    window.setContent(view.asWidget(), "Create Test View");
-//    window.setModal(true);
-//    window.setPixelSize(600, 350);
-//    window.show();
-//    controller.setContentWindow(window);
-//  }
+  private void doOnDeleteHomeworkSelection() {
+    if(currentLecture == null){
+      new MessageBox("Error", "Please select a lecture").show();
+      return;
+    }
+
+    HomeworkData homeworkData = view.getHomeworkDataGrid().getSelectionModel().getSelectedItem();
+    if(homeworkData == null){
+      new MessageBox("Error", "Please select a Homework").show();
+      return;
+    }
+    lectureService.deleteHomeworkData(currentLecture.getId(), homeworkData, new ELearningAsyncCallBack<Void>(view, log) {
+      @Override
+      public void onSuccess(Void result) {
+        new MessageBox("Info", "Homework was deleted!").show();
+      }
+    });
+  }
+
+  private void doOnEditHomeworkSelection() {
+    CreateHomeworkController.ICreateHomeworkView createView = new CreateHomeworkView();
+    CreateHomeworkController controller = new CreateHomeworkController(createView, lectureService, this, view.getHomeworkDataGrid().getSelectionModel().getSelectedItem());
+    controller.bind();
+    MasterWindow window = new MasterWindow();
+    window.setContent(createView.asWidget(), "Create Test View");
+    window.setModal(true);
+    window.setMinHeight(335);
+    window.setMinWidth(335);
+    window.setPixelSize(335, 335);
+    window.show();
+    controller.setContentWindow(window);
+  }
 
   private void doOnCreateHomeworkSelection() {
     CreateHomeworkController.ICreateHomeworkView view = new CreateHomeworkView();

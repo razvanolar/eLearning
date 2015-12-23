@@ -21,4 +21,8 @@ public class LectureHomeworkUtil {
   public void updateHomework(long lectureId, HomeworkData homeworkData) {
 
   }
+
+  public void deleteHomework(long lectureId, HomeworkData homeworkData) {
+
+  }
 }

@@ -56,4 +56,6 @@ public interface LectureService extends RemoteService {
 
   void updateHomeworkData(long lectureId, HomeworkData homeworkData) throws ELearningException;
 
+  void deleteHomeworkData(long lectureId, HomeworkData homeworkData) throws ELearningException;
+
 }

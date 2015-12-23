@@ -49,4 +49,6 @@ public interface LectureServiceAsync {
   void saveHomeworkData(long lectureId, HomeworkData homeworkData, AsyncCallback<Void> async);
 
   void updateHomeworkData(long lectureId, HomeworkData homeworkData, AsyncCallback<Void> async);
+
+  void deleteHomeworkData(long lectureId, HomeworkData homeworkData, AsyncCallback<Void> async);
 }

@@ -3,7 +3,7 @@ package com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_l
 import com.google.gwt.sample.elearning.client.MasterWindow;
 import com.google.gwt.sample.elearning.client.eLearningUtils.ELearningAsyncCallBack;
 import com.google.gwt.sample.elearning.client.eLearningUtils.MaskableView;
-import com.google.gwt.sample.elearning.client.eLearningUtils.TextInputValidator;
+import com.google.gwt.sample.elearning.client.eLearningUtils.TextUtil;
 import com.google.gwt.sample.elearning.client.service.LectureServiceAsync;
 import com.google.gwt.sample.elearning.shared.model.HomeworkData;
 import com.google.gwt.user.client.ui.Widget;
@@ -17,17 +17,23 @@ import com.sencha.gxt.widget.core.client.form.TextField;
 import java.util.logging.Logger;
 
 /**
+ *
  * Created by Cristi on 12/23/2015.
  */
 public class CreateHomeworkController {
 
-  public interface ICreateHomeworkView extends MaskableView{
+  public interface ICreateHomeworkView extends MaskableView {
     TextButton getSaveButton();
+
     TextField getTitleField();
+
     TextField getScoreField();
+
     TextArea getDescriptionTextArea();
+
     Widget asWidget();
   }
+
   private ICreateHomeworkView view;
 
   private LectureServiceAsync lectureService;
@@ -68,11 +74,11 @@ public class CreateHomeworkController {
   }
 
   private void onSaveSelection() {
-    if (TextInputValidator.isEmptyString(view.getTitleField().getText())) {
+    if (TextUtil.isEmptyString(view.getTitleField().getText())) {
       new MessageBox("Error", "Please provide a title").show();
       return;
     }
-    if (TextInputValidator.isEmptyString(view.getScoreField().getText())) {
+    if (TextUtil.isEmptyString(view.getScoreField().getText())) {
       new MessageBox("Error", "Score field is empty").show();
       return;
     }
@@ -83,7 +89,7 @@ public class CreateHomeworkController {
       new MessageBox("Error", "Score field is not a number").show();
       return;
     }
-    if (TextInputValidator.isEmptyString(view.getDescriptionTextArea().getText())) {
+    if (TextUtil.isEmptyString(view.getDescriptionTextArea().getText())) {
       new MessageBox("Error", "Description area is empty").show();
       return;
     }
@@ -91,24 +97,26 @@ public class CreateHomeworkController {
     if (homeworkData == null) {
       homeworkData = new HomeworkData(-1, view.getTitleField().getText(), score,
           view.getDescriptionTextArea().getText());
-      lectureService.saveHomeworkData(parentController.getSelectedLecture().getId(), homeworkData, new ELearningAsyncCallBack<Void>(view, logger) {
-        @Override
-        public void onSuccess(Void result) {
-          if(window != null)
-            window.hide();
-        }
-      });
+      lectureService.saveHomeworkData(parentController.getSelectedLecture().getId(), homeworkData,
+          new ELearningAsyncCallBack<Void>(view, logger) {
+            @Override
+            public void onSuccess(Void result) {
+              if (window != null)
+                window.hide();
+            }
+          });
     } else {
       homeworkData.setTitle(view.getTitleField().getText());
       homeworkData.setScore(score);
       homeworkData.setText(view.getDescriptionTextArea().getText());
-      lectureService.updateHomeworkData(parentController.getSelectedLecture().getId(), homeworkData, new ELearningAsyncCallBack<Void>(view, logger) {
-        @Override
-        public void onSuccess(Void result) {
-          if(window != null)
-            window.hide();
-        }
-      });
+      lectureService.updateHomeworkData(parentController.getSelectedLecture().getId(), homeworkData,
+          new ELearningAsyncCallBack<Void>(view, logger) {
+            @Override
+            public void onSuccess(Void result) {
+              if (window != null)
+                window.hide();
+            }
+          });
     }
   }
 

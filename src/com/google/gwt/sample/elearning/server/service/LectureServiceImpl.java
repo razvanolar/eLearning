@@ -148,4 +148,9 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   public void updateHomeworkData(long lectureId, HomeworkData homeworkData) throws ELearningException {
     homeworkUtil.updateHomework(lectureId, homeworkData);
   }
+
+  @Override
+  public void deleteHomeworkData(long lectureId, HomeworkData homeworkData) throws ELearningException {
+    homeworkUtil.deleteHomework(lectureId, homeworkData);
+  }
 }
