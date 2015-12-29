@@ -44,10 +44,9 @@ public class LoginController {
   private static Timer sessionTimeoutTimer;
   private static final int DURATION = 1000 * 60 * 10;// * 60 * 24 * 1;
 
-
-
-  public LoginController(ILoginView view) {
+  public LoginController(ILoginView view, LoginServiceAsync loginService) {
     this.view = view;
+    LoginController.loginService = loginService;
   }
   public void bind() {
     addListeners();
@@ -60,17 +59,15 @@ public class LoginController {
       return;
     }
     loginService.loginServer(user, password, new AsyncCallback<UserData>() {
-      @Override
       public void onFailure(Throwable caught) {
         view.setErrorLabelText("Wrong username or password.");
       }
 
-      @Override
       public void onSuccess(UserData userData) {
         Date expires = new Date(System.currentTimeMillis() + DURATION);
         Cookies.setCookie("sid", userData.getSessionId(), expires, null, "/", false);
         initSessionTimeoutTimer();
-        ELearningController.getInstance().onSuccessLogin();
+        ELearningController.getInstance().onSuccessLogin(userData);
       }
     });
   }

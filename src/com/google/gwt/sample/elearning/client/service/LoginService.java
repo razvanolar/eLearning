@@ -14,7 +14,7 @@ public interface LoginService extends RemoteService {
 
   UserData loginServer(String user, String pwd) throws ELearningException, IncorrectLoginException;
 
-  String loginFromSessionServer();
+  UserData loginFromSessionServer();
 
   void logout();
 

@@ -25,12 +25,12 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
     UserJDBCImpl userJDBC = new UserJDBCImpl();
     UserData userData = userJDBC.getUserData(user, pwd);
     userData.setSessionId("sessionID" + sessionId++);
-    storeUserInSession(user);
+    storeUserInSession(userData);
     return userData;
   }
 
   @Override
-  public String loginFromSessionServer() {
+  public UserData loginFromSessionServer() {
     return getUserAlreadyFromSession();
   }
 
@@ -44,19 +44,19 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
         .getLastAccessedTime()) < timeout;
   }
 
-  private void storeUserInSession(String user) {
+  private void storeUserInSession(UserData user) {
     HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
     HttpSession httpSession = httpServletRequest.getSession(true);
     httpSession.setAttribute(USER, user);
   }
 
-  private String getUserAlreadyFromSession() {
-    String user = null;
+  private UserData getUserAlreadyFromSession() {
+    UserData user = null;
     HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
     HttpSession httpSession = httpServletRequest.getSession();
     Object object = httpSession.getAttribute(USER);
-    if(object != null && object instanceof String)
-      user = (String) object;
+    if(object != null && object instanceof UserData)
+      user = (UserData) object;
     return user;
   }
 
