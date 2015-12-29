@@ -9,19 +9,19 @@ public class Lecture implements IsSerializable {
   long id;
   Professor professor;
   String lectureName;
+  String enrolmentKey;
 
-  public Lecture() {
-  }
+  public Lecture() {}
 
-  public Lecture(Professor professor, String lectureName) {
+  public Lecture(Professor professor, String lectureName, String enrolmentKey) {
     this.professor = professor;
     this.lectureName = lectureName;
+    this.enrolmentKey = enrolmentKey;
   }
 
-  public Lecture(long id, Professor professor, String lectureName) {
+  public Lecture(long id, Professor professor, String lectureName, String enrolmentKey) {
+    this(professor, lectureName, enrolmentKey);
     this.id = id;
-    this.professor = professor;
-    this.lectureName = lectureName;
   }
 
   public Lecture(String lectureName, Professor professor) {
@@ -43,6 +43,14 @@ public class Lecture implements IsSerializable {
 
   public String getLectureName() {
     return lectureName;
+  }
+
+  public String getEnrolmentKey() {
+    return enrolmentKey;
+  }
+
+  public void setEnrolmentKey(String enrolmentKey) {
+    this.enrolmentKey = enrolmentKey;
   }
 
   public long getId() {

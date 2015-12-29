@@ -57,14 +57,14 @@ public class ManageLecturesHomeworkController {
       }
     });
 
-    view.getEditButton().addSelectHandler(new SelectEvent.SelectHandler() {
+    view.getEditHomeworkButton().addSelectHandler(new SelectEvent.SelectHandler() {
       @Override
       public void onSelect(SelectEvent event) {
         doOnEditHomeworkSelection();
       }
     });
 
-    view.getDeleteButton().addSelectHandler(new SelectEvent.SelectHandler() {
+    view.getDeleteHomeworkButton().addSelectHandler(new SelectEvent.SelectHandler() {
       @Override
       public void onSelect(SelectEvent event) {
         doOnDeleteHomeworkSelection();

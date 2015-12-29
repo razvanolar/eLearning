@@ -58,6 +58,7 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
   private TextButton deleteHomeworkButton;
   private ComboBox<Professor> professorComboBox;
   private TextField lectureNameField;
+  private TextField lectureEnrolmentKeyField;
   private Grid<Lecture> lectureGridView;
   private Grid<LWLectureTestData> lectureTestDataGrid;
   private Grid<HomeworkData> homeworkDataGrid;
@@ -93,6 +94,7 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     editButton = new TextButton("Edit", ELearningController.ICONS.edit());
     deleteButton = new TextButton("Delete", ELearningController.ICONS.delete());
     lectureNameField = new TextField();
+    lectureEnrolmentKeyField = new TextField();
     createHtmlFile = new TextButton("New file", ELearningController.ICONS.newfile());
     createFolderButton = new TextButton("New folder", ELearningController.ICONS.newfolder());
     deleteFileButton = new TextButton("Delete", ELearningController.ICONS.deletefile());
@@ -160,12 +162,13 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     VerticalLayoutContainer.VerticalLayoutData verticalLayoutData = new VerticalLayoutContainer.VerticalLayoutData(1,
         -1);
     formPanel.add(new FieldLabel(lectureNameField, "Lecture Name"), verticalLayoutData);
+    formPanel.add(new FieldLabel(lectureEnrolmentKeyField, "Enrolment Key"));
     formPanel.add(buttonsContainer, verticalLayoutData);
     formContainer.add(formPanel);
     formContainer.setStyleName("whiteBackground");
 
     gridContainer.setCenterWidget(lectureGridView);
-    BorderLayoutContainer.BorderLayoutData gridLayoutData = new BorderLayoutContainer.BorderLayoutData(80);
+    BorderLayoutContainer.BorderLayoutData gridLayoutData = new BorderLayoutContainer.BorderLayoutData(110);
     gridLayoutData.setMargins(new Margins(5, 0, 0, 0));
     gridContainer.setSouthWidget(formContainer, gridLayoutData);
 
@@ -385,6 +388,7 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
 
   public void clearFields() {
     lectureNameField.setText("");
+    lectureEnrolmentKeyField.setText("");
   }
 
   public TextButton getAddButton() {
@@ -449,6 +453,10 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
 
   public TextField getLectureNameField() {
     return this.lectureNameField;
+  }
+
+  public TextField getLectureEnrolmentKeyField() {
+    return lectureEnrolmentKeyField;
   }
 
   public ToggleButton getFileToggleButton() {
@@ -517,6 +525,7 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
 
   public void loadLectures(Lecture lecture) {
     lectureNameField.setText(lecture.getLectureName());
+    lectureEnrolmentKeyField.setText(lecture.getEnrolmentKey());
   }
 
   public void mask() {

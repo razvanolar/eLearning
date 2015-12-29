@@ -64,6 +64,7 @@ public class ManageLecturesController implements ISettingsController {
     TextButton getEditButton();
     TextButton getDeleteButton();
     TextField getLectureNameField();
+    TextField getLectureEnrolmentKeyField();
     ToggleButton getFileToggleButton();
     ToggleButton getTestToggleButton();
     ToggleButton getVideosToggleButton();
@@ -263,7 +264,8 @@ public class ManageLecturesController implements ISettingsController {
   private void onAddButtonSelection() {
     log.info("onAdd");
     if (!TextUtil.isEmptyString(view.getLectureNameField().getText())) {
-      Lecture lecture = new Lecture(view.getProfessorComboBox().getValue(), view.getLectureNameField().getText());
+      Lecture lecture = new Lecture(view.getProfessorComboBox().getValue(), view.getLectureNameField().getText(),
+              view.getLectureEnrolmentKeyField().getText());
       lectureService.createLecture(lecture, new ELearningAsyncCallBack<Void>(view,log) {
         @Override
         public void onSuccess(Void result) {
@@ -291,8 +293,9 @@ public class ManageLecturesController implements ISettingsController {
 
   private void onEditButtonSelection() {
     Lecture lecture = new Lecture(view.getGrid().getSelectionModel().getSelectedItem().getId(),
-            view.getGrid().getSelectionModel().getSelectedItem().getProfessor(), view.getLectureNameField().getText());
-    lectureService.updateLecture(lecture, new ELearningAsyncCallBack<Void>(view,log) {
+            view.getGrid().getSelectionModel().getSelectedItem().getProfessor(), view.getLectureNameField().getText(),
+            view.getLectureEnrolmentKeyField().getText());
+    lectureService.updateLecture(lecture, new ELearningAsyncCallBack<Void>(view, log) {
       @Override
       public void onSuccess(Void result) {
         new MessageBox("", "Lecture updated").show();
