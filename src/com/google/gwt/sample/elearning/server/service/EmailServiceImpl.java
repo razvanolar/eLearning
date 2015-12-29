@@ -19,7 +19,14 @@ public class EmailServiceImpl extends RemoteServiceServlet implements EmailServi
     EmailUtil emailUtil = new EmailUtil();
 
     UserDAO userDAO = new JdbcUserDAO();
-    UserData userData = userDAO.getUserByEmail(email);
+    UserData userData;
+    try {
+      userData = userDAO.getUserByEmail(email);
+    } catch (Exception ex){
+      throw new ELearningException("The given email was not found in the database.");
+    }
+    if(userData == null)
+      throw new ELearningException("The given email was not found in the database.");
 
     String from = "systemelearning42";
     String password = "Test123##";
