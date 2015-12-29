@@ -1,5 +1,6 @@
 package com.google.gwt.sample.elearning.client.login;
 
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.util.Margins;
@@ -18,6 +19,7 @@ public class LoginView implements LoginController.ILoginView {
   private PasswordField passwordField;
   private TextButton loginButton;
   private FieldLabel loginFailedLabel;
+  private Label forgotPasswordButton;
 
   private BorderLayoutContainer mainContainer;
   private VBoxLayoutContainer vBoxLayoutContainer;
@@ -37,13 +39,19 @@ public class LoginView implements LoginController.ILoginView {
     label = new Label("");
     loginFailedLabel = new FieldLabel(label);
     loginFailedLabel.getElement().getStyle().setColor("red");
+    forgotPasswordButton = new Label("Forgot Password");
+    forgotPasswordButton.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+    forgotPasswordButton.setStyleName("forgotPasswordLabelBackground");
     CenterLayoutContainer centerLayoutContainer = new CenterLayoutContainer();
     vBoxLayoutContainer = new VBoxLayoutContainer();
     HBoxLayoutContainer buttonsContainer = new HBoxLayoutContainer();
 
     /* buttons container */
     buttonsContainer.setHBoxLayoutAlign(HBoxLayoutContainer.HBoxLayoutAlign.MIDDLE);
-    buttonsContainer.setPack(BoxLayoutContainer.BoxLayoutPack.END);
+    buttonsContainer.add(forgotPasswordButton, new BoxLayoutContainer.BoxLayoutData(new Margins(0)));
+    BoxLayoutContainer.BoxLayoutData flex = new BoxLayoutContainer.BoxLayoutData(new Margins(0));
+    flex.setFlex(1);
+    buttonsContainer.add(new Label(), flex);
     buttonsContainer.add(loginButton, new BoxLayoutContainer.BoxLayoutData(new Margins(0)));
 
     /* form */
@@ -91,5 +99,10 @@ public class LoginView implements LoginController.ILoginView {
   @Override
   public Widget asWidget() {
     return mainContainer;
+  }
+
+  @Override
+  public Label getForgotPasswordButton() {
+    return forgotPasswordButton;
   }
 }

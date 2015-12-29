@@ -36,6 +36,10 @@
         <servlet-name>usersUploadService</servlet-name>
         <servlet-class>com.google.gwt.sample.elearning.server.service.UsersUploadService</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>emailService</servlet-name>
+        <servlet-class>com.google.gwt.sample.elearning.server.service.EmailServiceImpl</servlet-class>
+    </servlet>
 
 
     <servlet-mapping>
@@ -69,6 +73,10 @@
     <servlet-mapping>
         <servlet-name>usersUploadService</servlet-name>
         <url-pattern>/elearning/usersUploadService</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>emailService</servlet-name>
+        <url-pattern>/elearning/EmailService</url-pattern>
     </servlet-mapping>
 
 
