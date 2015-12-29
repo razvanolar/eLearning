@@ -8,6 +8,8 @@ import com.google.gwt.sample.elearning.client.MasterWindow;
 import com.google.gwt.sample.elearning.client.login.LoginController;
 import com.google.gwt.sample.elearning.client.logs.LogsController;
 import com.google.gwt.sample.elearning.client.logs.LogsView;
+import com.google.gwt.sample.elearning.client.main_views.UserLecturesController;
+import com.google.gwt.sample.elearning.client.main_views.UserLecturesView;
 import com.google.gwt.sample.elearning.client.service.LectureService;
 import com.google.gwt.sample.elearning.client.service.LectureServiceAsync;
 import com.google.gwt.sample.elearning.client.settings.MainSettingsController;
@@ -101,10 +103,14 @@ public class ProfileBarController {
               }
 
               public void onSuccess(FilteredLecturesData result) {
-//                (new MessageBox("Info", "Ok")).show();
                 Popup popup = new Popup();
-                popup.add(new ContentPanel());
-                popup.setWidth(200);
+
+                UserLecturesController.IUserLecturesView userLecturesView = new UserLecturesView();
+                UserLecturesController controller = new UserLecturesController(userLecturesView, lectureService, result);
+                controller.bind();
+
+                popup.add(userLecturesView.asWidget());
+                popup.setWidth(250);
                 popup.setHeight(400);
                 popup.show(view.getLecturesButton());
               }
