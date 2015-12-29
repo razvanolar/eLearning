@@ -5,8 +5,12 @@ import com.google.gwt.sample.elearning.client.icons.Icons;
 import com.google.gwt.sample.elearning.client.login.LoginController;
 import com.google.gwt.sample.elearning.client.login.LoginView;
 import com.google.gwt.sample.elearning.client.logs.LogGridHandler;
+import com.google.gwt.sample.elearning.client.main_views.UserLecturesController;
+import com.google.gwt.sample.elearning.client.main_views.UserLecturesView;
 import com.google.gwt.sample.elearning.client.profilebar.ProfileBarController;
 import com.google.gwt.sample.elearning.client.profilebar.ProfileBarView;
+import com.google.gwt.sample.elearning.client.service.LectureService;
+import com.google.gwt.sample.elearning.client.service.LectureServiceAsync;
 import com.google.gwt.sample.elearning.client.service.LoginService;
 import com.google.gwt.sample.elearning.client.service.LoginServiceAsync;
 import com.google.gwt.sample.elearning.shared.model.UserData;
@@ -31,6 +35,7 @@ public class ELearningController {
   private HBoxLayoutContainer buttonsContainer;
 
   private static LoginServiceAsync loginService = GWT.create(LoginService.class);
+  private static LectureServiceAsync lectureService = GWT.create(LectureService.class);
   private UserData currentUser;
 
   private ELearningController() {}
@@ -70,8 +75,12 @@ public class ELearningController {
   }
 
   private void displayWindow() {
-    ProfileBarController.IProfileBarView profileBarView = new ProfileBarView(currentUser.getRole() != UserRoleTypes.USER);
-    ProfileBarController profileController = new ProfileBarController(profileBarView);
+    UserLecturesController.IUserLecturesView userLecturesView = new UserLecturesView();
+    UserLecturesController controller = new UserLecturesController(userLecturesView, lectureService);
+    controller.bind();
+    ProfileBarController.IProfileBarView profileBarView = new ProfileBarView(currentUser.getRole() != UserRoleTypes.USER,
+            userLecturesView.asWidget());
+    ProfileBarController profileController = new ProfileBarController(profileBarView, controller);
     profileController.bind();
     buttonsContainer.add(profileBarView.asWidget());
     buttonsContainer.forceLayout();

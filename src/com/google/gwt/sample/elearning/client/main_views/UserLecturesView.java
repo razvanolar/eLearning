@@ -27,7 +27,6 @@ public class UserLecturesView implements UserLecturesController.IUserLecturesVie
 
   private LectureDataProperties lectureProperties = GWT.create(LectureDataProperties.class);
   private BorderLayoutContainer mainContainer;
-  private Grid<Lecture> enrolledGrid;
   private Grid<Lecture> unenrolledGrid;
 
   private TextField enrollmentKeyField;
@@ -38,18 +37,17 @@ public class UserLecturesView implements UserLecturesController.IUserLecturesVie
   }
 
   private void initGUI() {
-    enrolledGrid = createEnrolledGrid();
     unenrolledGrid = createUnenrolledGrid();
     mainContainer = new BorderLayoutContainer();
     enrollmentKeyField = new TextField();
     sendKeyButton = new TextButton("Send");
-    BorderLayoutContainer gridsContainer = new BorderLayoutContainer();
+//    BorderLayoutContainer gridsContainer = new BorderLayoutContainer();
     CenterLayoutContainer centerLayoutContainer = new CenterLayoutContainer();
     VBoxLayoutContainer formPanel = new VBoxLayoutContainer(VBoxLayoutContainer.VBoxLayoutAlign.LEFT);
     HBoxLayoutContainer fieldsPanel = new HBoxLayoutContainer(HBoxLayoutContainer.HBoxLayoutAlign.MIDDLE);
 
-    gridsContainer.setNorthWidget(enrolledGrid, new BorderLayoutContainer.BorderLayoutData(150));
-    gridsContainer.setSouthWidget(unenrolledGrid, new BorderLayoutContainer.BorderLayoutData(200));
+//    gridsContainer.setNorthWidget(enrolledGrid, new BorderLayoutContainer.BorderLayoutData(150));
+//    gridsContainer.setSouthWidget(unenrolledGrid, new BorderLayoutContainer.BorderLayoutData(200));
 
     fieldsPanel.add(enrollmentKeyField);
     fieldsPanel.add(sendKeyButton, new BoxLayoutContainer.BoxLayoutData(new Margins(0, 0, 0, 5)));
@@ -60,29 +58,10 @@ public class UserLecturesView implements UserLecturesController.IUserLecturesVie
 
     centerLayoutContainer.add(formPanel);
     mainContainer.setStyleName("buttonsToolbar");
-    mainContainer.setCenterWidget(gridsContainer);
+    mainContainer.setCenterWidget(unenrolledGrid);
     mainContainer.setSouthWidget(centerLayoutContainer, new BorderLayoutContainer.BorderLayoutData(50));
-  }
-
-  private Grid<Lecture> createEnrolledGrid() {
-    ListStore<Lecture> store = new ListStore<Lecture>(lectureProperties.key());
-
-    List<ColumnConfig<Lecture, ?>> columns = new ArrayList<ColumnConfig<Lecture, ?>>();
-    columns.add(new ColumnConfig<Lecture, String>(lectureProperties.lectureName(), 250, "Enrolled Lecture Name"));
-
-    Grid<Lecture> grid = new Grid<Lecture>(store, new ColumnModel<Lecture>(columns));
-    grid.getView().setViewConfig(new GridViewConfig<Lecture>() {
-      @Override
-      public String getColStyle(Lecture model, ValueProvider<? super Lecture, ?> valueProvider, int rowIndex, int colIndex) {
-        return "enrolledLectureBackground";
-      }
-
-      @Override
-      public String getRowStyle(Lecture model, int rowIndex) {
-        return "enrolledLectureBackground";
-      }
-    });
-    return grid;
+    mainContainer.setHeight(300);
+    mainContainer.setWidth(250);
   }
 
   private Grid<Lecture> createUnenrolledGrid() {
@@ -95,15 +74,20 @@ public class UserLecturesView implements UserLecturesController.IUserLecturesVie
     return grid;
   }
 
-  public Grid<Lecture> getEnrolledGrid() {
-    return enrolledGrid;
+  @Override
+  public void mask() {
+    mainContainer.mask();
+  }
+
+  @Override
+  public void unmask() {
+    mainContainer.unmask();
   }
 
   public Grid<Lecture> getUnenrolledGrid() {
     return unenrolledGrid;
   }
 
-  @Override
   public Widget asWidget() {
     return mainContainer;
   }

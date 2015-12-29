@@ -15,15 +15,22 @@ import com.google.gwt.sample.elearning.client.service.LectureServiceAsync;
 import com.google.gwt.sample.elearning.client.settings.MainSettingsController;
 import com.google.gwt.sample.elearning.client.settings.MainSettingsView;
 import com.google.gwt.sample.elearning.shared.model.FilteredLecturesData;
+import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Popup;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.event.ActivateEvent;
+import com.sencha.gxt.widget.core.client.event.MoveEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.menu.Item;
+import com.sencha.gxt.widget.core.client.menu.Menu;
 import com.sencha.gxt.widget.core.client.menu.MenuItem;
+
+import java.util.List;
+import java.util.logging.Logger;
 
 /***
  * Created by razvanolar on 14.11.2015.
@@ -35,14 +42,19 @@ public class ProfileBarController {
     TextButton getLecturesButton();
     MenuItem getViewLogsMenuItem();
     MenuItem getLogoutMenuItem();
+    MenuItem getUnenrolledMenuItem();
+    MenuItem getUserLecturesItem();
     Widget asWidget();
   }
 
+  private Logger log = Logger.getLogger(ProfileBarController.class.getName());
   private IProfileBarView view;
+  private UserLecturesController userLecturesController;
   private LectureServiceAsync lectureService = GWT.create(LectureService.class);
 
-  public ProfileBarController(IProfileBarView view) {
+  public ProfileBarController(IProfileBarView view, UserLecturesController userLecturesController) {
     this.view = view;
+    this.userLecturesController = userLecturesController;
   }
 
   public void bind() {
@@ -71,7 +83,20 @@ public class ProfileBarController {
 
     view.getLecturesButton().addSelectHandler(new SelectEvent.SelectHandler() {
       public void onSelect(SelectEvent event) {
-        doOnLecturesSelect();
+        doOnLecturesSelection();
+      }
+    });
+  }
+
+  private void doOnLecturesSelection() {
+    lectureService.getLecturesEnrollementsListByUser(ELearningController.getInstance().getCurrentUser().getId(), new AsyncCallback<FilteredLecturesData>() {
+      public void onFailure(Throwable caught) {
+
+      }
+
+      public void onSuccess(FilteredLecturesData result) {
+        createUserLecturesSubMenu(result.getEnrolledLectures());
+        userLecturesController.setLecturesList(result.getUnenrolledLectures());
       }
     });
   }
@@ -95,26 +120,18 @@ public class ProfileBarController {
     window.show();
   }
 
-  private void doOnLecturesSelect() {
-    lectureService.getLecturesEnrollementsListByUser(ELearningController.getInstance().getCurrentUser().getId(),
-            new AsyncCallback<FilteredLecturesData>() {
-              public void onFailure(Throwable caught) {
-                (new MessageBox("Info", "Error")).show();
-              }
-
-              public void onSuccess(FilteredLecturesData result) {
-                Popup popup = new Popup();
-
-                UserLecturesController.IUserLecturesView userLecturesView = new UserLecturesView();
-                UserLecturesController controller = new UserLecturesController(userLecturesView, lectureService, result);
-                controller.bind();
-
-                popup.add(userLecturesView.asWidget());
-                popup.setWidth(250);
-                popup.setHeight(400);
-                popup.show(view.getLecturesButton());
-              }
-            });
+  private void createUserLecturesSubMenu(List<Lecture> lectures) {
+    if (lectures == null || lectures.isEmpty()) {
+      view.getUserLecturesItem().setSubMenu(null);
+      return;
+    }
+    Menu menu = new Menu();
+    for (Lecture lecture : lectures) {
+      MenuItem menuItem = new MenuItem(lecture.getLectureName());
+      menuItem.setLayoutData(lecture);
+      menu.add(menuItem);
+    }
+    view.getUserLecturesItem().setSubMenu(menu);
   }
 
   private void doOnLogoutSelect() {

@@ -2,9 +2,7 @@ package com.google.gwt.sample.elearning.client.profilebar;
 
 import com.google.gwt.sample.elearning.client.ELearningController;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.core.client.util.Padding;
 import com.sencha.gxt.widget.core.client.button.TextButton;
-import com.sencha.gxt.widget.core.client.container.HBoxLayoutContainer;
 import com.sencha.gxt.widget.core.client.menu.Menu;
 import com.sencha.gxt.widget.core.client.menu.MenuItem;
 import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
@@ -17,13 +15,16 @@ public class ProfileBarView implements ProfileBarController.IProfileBarView {
   private ToolBar toolBar;
   private Menu userMenu;
   private MenuItem showProfileItem, logoutItem, viewLogsItem, changePasswordItem;
+  private MenuItem userLecturesItem, unenrolledLecturesItem;
 
   private boolean addSettingsButton;
   private TextButton settingsButton;
   private TextButton lecturesButton;
+  private Widget userLecturesView;
 
-  public ProfileBarView(boolean addSettingsButton) {
+  public ProfileBarView(boolean addSettingsButton, Widget userLecturesView) {
     this.addSettingsButton = addSettingsButton;
+    this.userLecturesView = userLecturesView;
     initGUI();
   }
 
@@ -38,12 +39,21 @@ public class ProfileBarView implements ProfileBarController.IProfileBarView {
     viewLogsItem = new MenuItem("View logs");
     logoutItem = new MenuItem("Logout");
     userMenu = new Menu();
+    Menu lecturesMenu = new Menu();
+    userLecturesItem = new MenuItem("My Lectures");
+    unenrolledLecturesItem = new MenuItem("Unenrolled Lectures");
+
+    unenrolledLecturesItem.setSubMenu(new GridMenu(userLecturesView));
 
     logoutItem.setIcon(ELearningController.ICONS.logout());
     userMenu.add(showProfileItem);
     userMenu.add(viewLogsItem);
     userMenu.add(changePasswordItem);
     userMenu.add(logoutItem);
+
+    lecturesMenu.add(userLecturesItem);
+    lecturesMenu.add(unenrolledLecturesItem);
+    lecturesButton.setMenu(lecturesMenu);
 
     lecturesButton.setWidth(100);
     userButton.setWidth(100);
@@ -82,6 +92,14 @@ public class ProfileBarView implements ProfileBarController.IProfileBarView {
 
   public MenuItem getLogoutMenuItem() {
     return logoutItem;
+  }
+
+  public MenuItem getUserLecturesItem() {
+    return userLecturesItem;
+  }
+
+  public MenuItem getUnenrolledMenuItem() {
+    return unenrolledLecturesItem;
   }
 
   public TextButton getLecturesButton() {
