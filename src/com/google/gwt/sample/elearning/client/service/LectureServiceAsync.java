@@ -53,4 +53,6 @@ public interface LectureServiceAsync {
   void deleteHomeworkData(long lectureId, HomeworkData homeworkData, AsyncCallback<Void> async);
 
   void getLecturesEnrollementsListByUser(long userId, AsyncCallback<FilteredLecturesData> async);
+
+  void registerUserToLecture(long userId, long lectureId, String enrollmentKey, AsyncCallback<Void> async);
 }

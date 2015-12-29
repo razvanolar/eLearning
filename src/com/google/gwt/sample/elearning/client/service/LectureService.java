@@ -28,6 +28,8 @@ public interface LectureService extends RemoteService {
 
   void removeLecture(long id) throws ELearningException;
 
+  void registerUserToLecture(long userId, long lectureId, String enrollmentKey) throws ELearningException;
+
   String addLectureHtmlFile(String path, String title, long lectureId, String text) throws ELearningException;
 
   void createFolder(UserData user, String path, String name, long lectureId) throws ELearningException;

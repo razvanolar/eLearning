@@ -61,6 +61,10 @@ public class ProfileBarController {
     addListeners();
   }
 
+  public void hideLectureMenu() {
+    view.getLecturesButton().hideMenu();
+  }
+
   private void addListeners() {
     if (view.getSettingsButton() != null)
       view.getSettingsButton().addSelectHandler(new SelectEvent.SelectHandler() {

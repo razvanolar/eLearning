@@ -85,4 +85,7 @@ public interface Icons extends ClientBundle {
 
   @Source("lectures.png")
   ImageResource lectures();
+
+  @Source("send.png")
+  ImageResource send();
 }

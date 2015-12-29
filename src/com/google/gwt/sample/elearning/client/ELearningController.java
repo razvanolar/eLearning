@@ -82,6 +82,9 @@ public class ELearningController {
             userLecturesView.asWidget());
     ProfileBarController profileController = new ProfileBarController(profileBarView, controller);
     profileController.bind();
+
+    controller.setParentController(profileController);
+
     buttonsContainer.add(profileBarView.asWidget());
     buttonsContainer.forceLayout();
   }

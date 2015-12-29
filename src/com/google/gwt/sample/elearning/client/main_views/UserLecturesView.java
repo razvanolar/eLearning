@@ -1,11 +1,11 @@
 package com.google.gwt.sample.elearning.client.main_views;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.sample.elearning.client.ELearningController;
 import com.google.gwt.sample.elearning.client.settings.manage_lectures.LectureDataProperties;
 import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.button.TextButton;
@@ -14,7 +14,6 @@ import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
-import com.sencha.gxt.widget.core.client.grid.GridViewConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,14 +39,10 @@ public class UserLecturesView implements UserLecturesController.IUserLecturesVie
     unenrolledGrid = createUnenrolledGrid();
     mainContainer = new BorderLayoutContainer();
     enrollmentKeyField = new TextField();
-    sendKeyButton = new TextButton("Send");
-//    BorderLayoutContainer gridsContainer = new BorderLayoutContainer();
+    sendKeyButton = new TextButton("Send", ELearningController.ICONS.send());
     CenterLayoutContainer centerLayoutContainer = new CenterLayoutContainer();
     VBoxLayoutContainer formPanel = new VBoxLayoutContainer(VBoxLayoutContainer.VBoxLayoutAlign.LEFT);
     HBoxLayoutContainer fieldsPanel = new HBoxLayoutContainer(HBoxLayoutContainer.HBoxLayoutAlign.MIDDLE);
-
-//    gridsContainer.setNorthWidget(enrolledGrid, new BorderLayoutContainer.BorderLayoutData(150));
-//    gridsContainer.setSouthWidget(unenrolledGrid, new BorderLayoutContainer.BorderLayoutData(200));
 
     fieldsPanel.add(enrollmentKeyField);
     fieldsPanel.add(sendKeyButton, new BoxLayoutContainer.BoxLayoutData(new Margins(0, 0, 0, 5)));
@@ -62,6 +57,22 @@ public class UserLecturesView implements UserLecturesController.IUserLecturesVie
     mainContainer.setSouthWidget(centerLayoutContainer, new BorderLayoutContainer.BorderLayoutData(50));
     mainContainer.setHeight(300);
     mainContainer.setWidth(250);
+
+    setState(UserLecturesController.UsersLecturesViewState.NONE);
+  }
+
+  public void setState(UserLecturesController.UsersLecturesViewState state) {
+    switch (state) {
+      case SELECTED:
+        enrollmentKeyField.setEnabled(true);
+        sendKeyButton.setEnabled(true);
+        break;
+      case NONE:
+        enrollmentKeyField.setText("");
+        enrollmentKeyField.setEnabled(false);
+        sendKeyButton.setEnabled(false);
+        break;
+    }
   }
 
   private Grid<Lecture> createUnenrolledGrid() {
@@ -74,18 +85,24 @@ public class UserLecturesView implements UserLecturesController.IUserLecturesVie
     return grid;
   }
 
-  @Override
   public void mask() {
     mainContainer.mask();
   }
 
-  @Override
   public void unmask() {
     mainContainer.unmask();
   }
 
   public Grid<Lecture> getUnenrolledGrid() {
     return unenrolledGrid;
+  }
+
+  public TextField getEnrollmentKeyField() {
+    return enrollmentKeyField;
+  }
+
+  public TextButton getSendKeyButton() {
+    return sendKeyButton;
   }
 
   public Widget asWidget() {
