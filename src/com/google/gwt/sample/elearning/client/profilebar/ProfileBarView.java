@@ -14,13 +14,13 @@ import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
  */
 public class ProfileBarView implements ProfileBarController.IProfileBarView {
 
-  private HBoxLayoutContainer mainContainer;
   private ToolBar toolBar;
   private Menu userMenu;
   private MenuItem showProfileItem, logoutItem, viewLogsItem, changePasswordItem;
 
   private boolean addSettingsButton;
   private TextButton settingsButton;
+  private TextButton lecturesButton;
 
   public ProfileBarView(boolean addSettingsButton) {
     this.addSettingsButton = addSettingsButton;
@@ -29,10 +29,10 @@ public class ProfileBarView implements ProfileBarController.IProfileBarView {
 
   private void initGUI() {
     toolBar = new ToolBar();
-    mainContainer = new HBoxLayoutContainer();
     TextButton userButton = new TextButton("Profile");
     TextButton forumButton = new TextButton("Forum");
     TextButton chatButton = new TextButton("Chat");
+    lecturesButton = new TextButton("Lectures", ELearningController.ICONS.lectures());
     showProfileItem = new MenuItem("Show profile");
     changePasswordItem = new MenuItem("Change Password");
     viewLogsItem = new MenuItem("View logs");
@@ -45,15 +45,17 @@ public class ProfileBarView implements ProfileBarController.IProfileBarView {
     userMenu.add(changePasswordItem);
     userMenu.add(logoutItem);
 
+    lecturesButton.setWidth(100);
     userButton.setWidth(100);
     userButton.setIcon(ELearningController.ICONS.profile());
     userButton.setMenu(userMenu);
-    forumButton.setWidth(100);
+    forumButton.setWidth(80);
     forumButton.setIcon(ELearningController.ICONS.forum());
-    chatButton.setWidth(100);
+    chatButton.setWidth(80);
     chatButton.setIcon(ELearningController.ICONS.chat());
 
     toolBar.setHorizontalSpacing(5);
+    toolBar.add(lecturesButton);
     toolBar.add(userButton);
     toolBar.add(forumButton);
     toolBar.add(chatButton);
@@ -62,27 +64,27 @@ public class ProfileBarView implements ProfileBarController.IProfileBarView {
       settingsButton = new TextButton("", ELearningController.ICONS.settings());
       toolBar.add(settingsButton);
     }
-    toolBar.setWidth(355);
+    toolBar.setWidth(455);
   }
 
-  @Override
   public TextButton getSettingsButton() {
     return settingsButton;
   }
 
-  @Override
   public Widget asWidget() {
     toolBar.forceLayout();
     return toolBar;
   }
 
-  @Override
   public MenuItem getViewLogsMenuItem() {
     return viewLogsItem;
   }
 
-  @Override
   public MenuItem getLogoutMenuItem() {
     return logoutItem;
+  }
+
+  public TextButton getLecturesButton() {
+    return lecturesButton;
   }
 }

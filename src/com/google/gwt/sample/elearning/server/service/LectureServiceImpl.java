@@ -41,9 +41,9 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   }
 
   @Override
-  public List<Lecture> getAllLecturesByProfessor(long idProfessor) throws ELearningException {
+  public List<Lecture> getAllLecturesByUser(long idProfessor) throws ELearningException {
     List<Lecture> lectures;
-    lectures = lectureDAO.getLecturesByProfessor(idProfessor);
+    lectures = lectureDAO.getLecturesByUser(idProfessor);
     return lectures;
   }
 
@@ -52,6 +52,13 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
     Lecture lecture;
     lecture = lectureDAO.getLectureById(id);
     return lecture;
+  }
+
+  @Override
+  public FilteredLecturesData getLecturesEnrollementsListByUser(long userId) throws ELearningException {
+    List<Lecture> enrolledLectures = lectureDAO.getEnrolledLecturesByUser(userId);
+    List<Lecture> unenrolledLectures = lectureDAO.getUnenrolledLecturesByUser(userId);
+    return new FilteredLecturesData(enrolledLectures, unenrolledLectures);
   }
 
   @Override

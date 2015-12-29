@@ -13,10 +13,7 @@ import com.google.gwt.sample.elearning.shared.model.UserData;
 import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Label;
-import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
-import com.sencha.gxt.widget.core.client.container.Container;
 import com.sencha.gxt.widget.core.client.container.HBoxLayoutContainer;
 
 import java.util.logging.Logger;
@@ -66,18 +63,18 @@ public class ELearningController {
     loginController.bind();
   }
 
+  public void onSuccessLogin(UserData userData) {
+    currentUser = userData;
+    mainELearningContainer.setCenterWidget(null);
+    displayWindow();
+  }
+
   private void displayWindow() {
     ProfileBarController.IProfileBarView profileBarView = new ProfileBarView(currentUser.getRole() != UserRoleTypes.USER);
     ProfileBarController profileController = new ProfileBarController(profileBarView);
     profileController.bind();
     buttonsContainer.add(profileBarView.asWidget());
     buttonsContainer.forceLayout();
-  }
-
-  public void onSuccessLogin(UserData userData) {
-    currentUser = userData;
-    mainELearningContainer.setCenterWidget(null);
-    displayWindow();
   }
 
   public static ELearningController getInstance() {
