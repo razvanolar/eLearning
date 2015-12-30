@@ -1,6 +1,7 @@
 package com.google.gwt.sample.elearning.client.main_views.left_panel;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.sample.elearning.client.main_views.left_panel.filesView.LectureFilesView;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.AccordionLayoutContainer;
@@ -39,9 +40,18 @@ public class LectureDetailsView {
 
     accordionLayoutContainer.add(lectureFilesPanel);
     accordionLayoutContainer.add(lectureVideosPanel);
-    accordionLayoutContainer.setExpandMode(AccordionLayoutContainer.ExpandMode.MULTI);
+    lectureFilesPanel.setExpanded(true);
+    accordionLayoutContainer.setExpandMode(AccordionLayoutContainer.ExpandMode.SINGLE_FILL);
 
     mainContainer.setCenterWidget(accordionLayoutContainer);
+  }
+
+  public LectureFilesView getLectureFilesView() {
+    return lectureFilesView;
+  }
+
+  public LectureVideosView getLectureVideosView() {
+    return lectureVideosView;
   }
 
   public Widget asWidget() {

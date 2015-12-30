@@ -7,6 +7,9 @@ import com.google.gwt.sample.elearning.client.login.LoginView;
 import com.google.gwt.sample.elearning.client.logs.LogGridHandler;
 import com.google.gwt.sample.elearning.client.main_views.UserLecturesController;
 import com.google.gwt.sample.elearning.client.main_views.UserLecturesView;
+import com.google.gwt.sample.elearning.client.main_views.left_panel.LectureDetailsView;
+import com.google.gwt.sample.elearning.client.main_views.left_panel.filesView.LectureFilesController;
+import com.google.gwt.sample.elearning.client.main_views.left_panel.filesView.LectureFilesView;
 import com.google.gwt.sample.elearning.client.profilebar.ProfileBarController;
 import com.google.gwt.sample.elearning.client.profilebar.ProfileBarView;
 import com.google.gwt.sample.elearning.client.service.LectureService;
@@ -38,7 +41,10 @@ public class ELearningController {
 
   private static LoginServiceAsync loginService = GWT.create(LoginService.class);
   private static LectureServiceAsync lectureService = GWT.create(LectureService.class);
+
+  private LectureFilesController lectureFilesController;
   private UserData currentUser;
+  private Lecture currentLecture;
 
   private ELearningController() {}
 
@@ -93,6 +99,7 @@ public class ELearningController {
 
   public void loadLectureDetails(Lecture lecture) {
     log.info("Lecture selected: " + lecture.getLectureName());
+    currentLecture = lecture;
     if (eLearningView == null) {
       eLearningView = new ELearningView();
       mainELearningContainer.setCenterWidget(eLearningView.asWidget());
@@ -100,6 +107,14 @@ public class ELearningController {
       log.info("Initialize ELearningView widget");
     }
 
+    LectureDetailsView lectureDetailsView = eLearningView.getLectureDetailsView();
+
+    if (lectureFilesController == null) {
+      lectureFilesController = new LectureFilesController(lectureDetailsView.getLectureFilesView(), lectureService);
+      lectureFilesController.bind();
+    }
+
+    lectureFilesController.loadFiles();
   }
 
   public static ELearningController getInstance() {
@@ -115,5 +130,9 @@ public class ELearningController {
 
   public UserData getCurrentUser() {
     return currentUser;
+  }
+
+  public Lecture getCurrentLecture() {
+    return currentLecture;
   }
 }

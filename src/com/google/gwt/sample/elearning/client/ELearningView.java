@@ -42,6 +42,10 @@ public class ELearningView {
     mainContainer.setStyleName("mainELearningContainer");
   }
 
+  public LectureDetailsView getLectureDetailsView() {
+    return lectureDetailsView;
+  }
+
   public Widget asWidget() {
     return mainContainer;
   }
