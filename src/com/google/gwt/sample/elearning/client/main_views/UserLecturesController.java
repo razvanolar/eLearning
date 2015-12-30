@@ -76,7 +76,7 @@ public class UserLecturesController {
     lectureService.registerUserToLecture(ELearningController.getInstance().getCurrentUser().getId(),
             selectedLecture.getId(), view.getEnrollmentKeyField().getText(), new AsyncCallback<Void>() {
               public void onFailure(Throwable caught) {
-                (new MessageBox("Error", "Failed to register")).show();
+                (new MessageBox("Error", "Failed to register <br>Message: " + caught.getMessage())).show();
               }
 
               public void onSuccess(Void result) {

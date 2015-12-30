@@ -18,4 +18,5 @@ public interface LectureDAO {
     void insertLecture(Lecture lecture) throws RepositoryException;
     void updateLecture(Lecture user) throws RepositoryException;
     void deleteLecture(long id) throws RepositoryException;
+    void registerUserToLecture(long userId, long lectureId, String key) throws RepositoryException;
 }

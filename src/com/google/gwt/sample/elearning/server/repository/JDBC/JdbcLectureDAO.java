@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ *
  * Created by Valy on 11/22/2015.
  */
 public class JdbcLectureDAO implements LectureDAO {
@@ -150,9 +151,13 @@ public class JdbcLectureDAO implements LectureDAO {
     Connection conn = null;
     try {
       conn = JDBCUtil.getNewConnection();
-      String query = "SELECT cs.id, cs.denumire, cs.ref_profesor, cs.enrolment_key" +
-              "  FROM cursuri cs LEFT JOIN studenti_inscrisi si ON cs.id = si.ref_curs WHERE si.ref_student IS NULL OR" +
-              " si.ref_student <> ?";
+      String query = "SELECT cs.id, cs.denumire, cs.ref_profesor, cs.enrolment_key FROM cursuri cs" +
+              " LEFT JOIN" +
+              " (" +
+              " SELECT t.ref_curs FROM cursuri c INNER JOIN studenti_inscrisi t ON c.id = t.ref_curs" +
+              " WHERE t.ref_student = ?" +
+              " ) t1 ON cs.id = t1.ref_curs" +
+              " WHERE ref_curs IS NULL";
       PreparedStatement statement = conn.prepareStatement(query);
       statement.setLong(1, userId);
       ResultSet resultSet = statement.executeQuery();
@@ -216,7 +221,6 @@ public class JdbcLectureDAO implements LectureDAO {
   @Override
   public void deleteLecture(long id) throws RepositoryException {
     Connection con = null;
-
     try {
       con = JDBCUtil.getNewConnection();
       PreparedStatement pstmt = con.prepareStatement("delete from cursuri where id = ?");
@@ -228,6 +232,48 @@ public class JdbcLectureDAO implements LectureDAO {
       if (con != null)
         JDBCUtil.closeConnection(con);
     }
+  }
 
+  @Override
+  public void registerUserToLecture(long userId, long lectureId, String key) throws RepositoryException {
+    if (getLectureByIdAndKey(lectureId, key) == null)
+      throw new RepositoryException("Wrong enrolment key for the requested lecture");
+    Connection conn = null;
+    try {
+      conn = JDBCUtil.getNewConnection();
+      String query = "INSERT INTO studenti_inscrisi (ref_student, ref_curs) VALUES (?, ?)";
+      PreparedStatement statement = conn.prepareStatement(query);
+      statement.setLong(1, userId);
+      statement.setLong(2, lectureId);
+      statement.executeUpdate();
+    } catch (SQLException ex) {
+      throw new RepositoryException(ex.getMessage(), ex);
+    } finally {
+      if (conn != null)
+        JDBCUtil.closeConnection(conn);
+    }
+  }
+
+
+  private Lecture getLectureByIdAndKey(long lectureId, String key) throws RepositoryException {
+    Connection conn = null;
+    try {
+      key = key == null ? "" : key;
+      conn = JDBCUtil.getNewConnection();
+      String query = "SELECT * FROM cursuri WHERE id = ? AND enrolment_key = ?";
+      PreparedStatement statement = conn.prepareStatement(query);
+      statement.setLong(1, lectureId);
+      statement.setString(2, key);
+      ResultSet resultSet = statement.executeQuery();
+      if (resultSet.next()) {
+        return new Lecture(resultSet.getLong(1), null, resultSet.getString(2), resultSet.getString(4));
+      }
+    } catch (SQLException ex) {
+      throw new RepositoryException(ex.getMessage(), ex);
+    } finally {
+      if (conn != null)
+        JDBCUtil.closeConnection(conn);
+    }
+    return null;
   }
 }

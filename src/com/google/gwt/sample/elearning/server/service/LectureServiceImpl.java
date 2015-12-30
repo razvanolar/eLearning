@@ -71,8 +71,9 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
     lectureDAO.deleteLecture(id);
   }
 
+  @Override
   public void registerUserToLecture(long userId, long lectureId, String enrollmentKey) throws ELearningException {
-
+    lectureDAO.registerUserToLecture(userId, lectureId, enrollmentKey);
   }
 
   @Override
