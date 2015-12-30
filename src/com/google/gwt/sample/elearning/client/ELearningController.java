@@ -13,6 +13,7 @@ import com.google.gwt.sample.elearning.client.service.LectureService;
 import com.google.gwt.sample.elearning.client.service.LectureServiceAsync;
 import com.google.gwt.sample.elearning.client.service.LoginService;
 import com.google.gwt.sample.elearning.client.service.LoginServiceAsync;
+import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.google.gwt.sample.elearning.shared.model.UserData;
 import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
 import com.google.gwt.user.client.Cookies;
@@ -30,9 +31,10 @@ public class ELearningController {
   private static ELearningController INSTANCE;
   public static final Icons ICONS = GWT.create(Icons.class);
   LogGridHandler logGridHandler;
-  Logger logger = Logger.getLogger("com.google.gwt.sample.elearning.client");
+  Logger log = Logger.getLogger("com.google.gwt.sample.elearning.client");
   private BorderLayoutContainer mainELearningContainer;
   private HBoxLayoutContainer buttonsContainer;
+  private ELearningView eLearningView;
 
   private static LoginServiceAsync loginService = GWT.create(LoginService.class);
   private static LectureServiceAsync lectureService = GWT.create(LectureService.class);
@@ -42,7 +44,7 @@ public class ELearningController {
 
   public void run() {
     logGridHandler = LogGridHandler.getInstance();
-    logger.addHandler(logGridHandler);
+    log.addHandler(logGridHandler);
     String sessionID = Cookies.getCookie("sid");
     if(sessionID == null)
       displayLoginWindow();
@@ -87,6 +89,17 @@ public class ELearningController {
 
     buttonsContainer.add(profileBarView.asWidget());
     buttonsContainer.forceLayout();
+  }
+
+  public void loadLectureDetails(Lecture lecture) {
+    log.info("Lecture selected: " + lecture.getLectureName());
+    if (eLearningView == null) {
+      eLearningView = new ELearningView();
+      mainELearningContainer.setCenterWidget(eLearningView.asWidget());
+      mainELearningContainer.forceLayout();
+      log.info("Initialize ELearningView widget");
+    }
+
   }
 
   public static ELearningController getInstance() {

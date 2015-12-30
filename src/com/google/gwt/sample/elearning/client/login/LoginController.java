@@ -52,6 +52,7 @@ public class LoginController {
   public void bind() {
     addListeners();
   }
+
   private void login(){
     String user = view.getNameField().getText();
     String password = view.getPasswordField().getText();

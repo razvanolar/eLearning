@@ -121,6 +121,7 @@ public class ProfileBarController {
     LogsController logsController = new LogsController(logsView);
     MasterWindow window = new MasterWindow();
     window.setContent(logsView.asWidget(), "View Logs");
+    window.setModal(false);
     window.show();
   }
 
@@ -134,8 +135,19 @@ public class ProfileBarController {
       MenuItem menuItem = new MenuItem(lecture.getLectureName());
       menuItem.setLayoutData(lecture);
       menu.add(menuItem);
+      menuItem.addSelectionHandler(new SelectionHandler<Item>() {
+        public void onSelection(SelectionEvent<Item> event) {
+          doOnLecutureItemSelection(event);
+        }
+      });
     }
     view.getUserLecturesItem().setSubMenu(menu);
+  }
+
+  private void doOnLecutureItemSelection(SelectionEvent<Item> event) {
+    Item item = event.getSelectedItem();
+    Lecture lecture = (Lecture) item.getLayoutData();
+    ELearningController.getInstance().loadLectureDetails(lecture);
   }
 
   private void doOnLogoutSelect() {
