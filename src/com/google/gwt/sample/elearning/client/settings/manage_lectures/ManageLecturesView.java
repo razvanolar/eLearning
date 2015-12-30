@@ -2,6 +2,7 @@ package com.google.gwt.sample.elearning.client.settings.manage_lectures;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.sample.elearning.client.ELearningController;
+import com.google.gwt.sample.elearning.client.eLearningUtils.models_properties.ProfessorProperties;
 import com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_lectures_files.ManageLecturesFilesController;
 import com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_lectures_homework.ManageLecturesHomeworkController;
 import com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_lectures_tests.ManageLecturesTestsController;

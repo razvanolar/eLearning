@@ -1,4 +1,4 @@
-package com.google.gwt.sample.elearning.client.settings.manage_users;
+package com.google.gwt.sample.elearning.client.eLearningUtils.models_properties;
 
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.sample.elearning.shared.model.UserData;

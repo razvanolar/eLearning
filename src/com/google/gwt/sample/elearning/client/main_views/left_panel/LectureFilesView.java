@@ -1,7 +1,9 @@
 package com.google.gwt.sample.elearning.client.main_views.left_panel;
 
+import com.google.gwt.sample.elearning.shared.model.FileData;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
+import com.sencha.gxt.widget.core.client.grid.Grid;
 
 /**
  *
@@ -17,6 +19,10 @@ public class LectureFilesView {
 
   private void initGUI() {
     mainContainer = new BorderLayoutContainer();
+  }
+
+  private Grid<FileData> createFilesGrid() {
+    return null;
   }
 
   public Widget asWidget() {

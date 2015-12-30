@@ -2,7 +2,7 @@ package com.google.gwt.sample.elearning.client.main_views;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.sample.elearning.client.ELearningController;
-import com.google.gwt.sample.elearning.client.settings.manage_lectures.LectureDataProperties;
+import com.google.gwt.sample.elearning.client.eLearningUtils.models_properties.LectureDataProperties;
 import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;

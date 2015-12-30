@@ -2,6 +2,7 @@ package com.google.gwt.sample.elearning.client.settings.manage_users;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.sample.elearning.client.ELearningController;
+import com.google.gwt.sample.elearning.client.eLearningUtils.models_properties.UserDataProperties;
 import com.google.gwt.sample.elearning.shared.model.UserData;
 import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
 import com.google.gwt.user.client.ui.FileUpload;
@@ -15,16 +16,12 @@ import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.shared.LabelProvider;
 import com.sencha.gxt.data.shared.ListStore;
-import com.sencha.gxt.data.shared.loader.PagingLoadConfig;
-import com.sencha.gxt.data.shared.loader.PagingLoadResult;
-import com.sencha.gxt.data.shared.loader.PagingLoader;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.*;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.SimpleComboBox;
 import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.*;
-import com.sencha.gxt.widget.core.client.toolbar.PagingToolBar;
 import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 
 import java.util.ArrayList;
