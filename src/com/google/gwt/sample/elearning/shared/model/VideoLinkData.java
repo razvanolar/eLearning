@@ -23,6 +23,13 @@ public class VideoLinkData implements IsSerializable {
     this.lectureId = lectureId;
   }
 
+  public VideoLinkData(String title, String url, String description, long lectureId) {
+    this.title = title;
+    this.url = url;
+    this.description = description;
+    this.lectureId = lectureId;
+  }
+
   public long getId() {
     return id;
   }
