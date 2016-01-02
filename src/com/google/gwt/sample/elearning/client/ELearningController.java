@@ -5,13 +5,23 @@ import com.google.gwt.sample.elearning.client.icons.Icons;
 import com.google.gwt.sample.elearning.client.login.LoginController;
 import com.google.gwt.sample.elearning.client.login.LoginView;
 import com.google.gwt.sample.elearning.client.logs.LogGridHandler;
+import com.google.gwt.sample.elearning.client.main_views.UserLecturesController;
+import com.google.gwt.sample.elearning.client.main_views.UserLecturesView;
+import com.google.gwt.sample.elearning.client.main_views.left_panel.LectureDetailsView;
+import com.google.gwt.sample.elearning.client.main_views.left_panel.filesView.LectureFilesController;
+import com.google.gwt.sample.elearning.client.main_views.left_panel.filesView.LectureFilesView;
 import com.google.gwt.sample.elearning.client.profilebar.ProfileBarController;
 import com.google.gwt.sample.elearning.client.profilebar.ProfileBarView;
+import com.google.gwt.sample.elearning.client.service.LectureService;
+import com.google.gwt.sample.elearning.client.service.LectureServiceAsync;
+import com.google.gwt.sample.elearning.client.service.LoginService;
+import com.google.gwt.sample.elearning.client.service.LoginServiceAsync;
+import com.google.gwt.sample.elearning.shared.model.Lecture;
+import com.google.gwt.sample.elearning.shared.model.UserData;
+import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
 import com.google.gwt.user.client.Cookies;
-import com.google.gwt.user.client.ui.Label;
-import com.sencha.gxt.widget.core.client.box.MessageBox;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
-import com.sencha.gxt.widget.core.client.container.Container;
 import com.sencha.gxt.widget.core.client.container.HBoxLayoutContainer;
 
 import java.util.logging.Logger;
@@ -24,45 +34,87 @@ public class ELearningController {
   private static ELearningController INSTANCE;
   public static final Icons ICONS = GWT.create(Icons.class);
   LogGridHandler logGridHandler;
-  Logger logger = Logger.getLogger("com.google.gwt.sample.elearning.client");
+  Logger log = Logger.getLogger("com.google.gwt.sample.elearning.client");
   private BorderLayoutContainer mainELearningContainer;
   private HBoxLayoutContainer buttonsContainer;
+  private ELearningView eLearningView;
 
-  private ProfileBarController profileController;
+  private static LoginServiceAsync loginService = GWT.create(LoginService.class);
+  private static LectureServiceAsync lectureService = GWT.create(LectureService.class);
+
+  private LectureFilesController lectureFilesController;
+  private UserData currentUser;
+  private Lecture currentLecture;
 
   private ELearningController() {}
 
   public void run() {
     logGridHandler = LogGridHandler.getInstance();
-    logger.addHandler(logGridHandler);
+    log.addHandler(logGridHandler);
     String sessionID = Cookies.getCookie("sid");
     if(sessionID == null)
       displayLoginWindow();
     else {
-      displayWindow();
-      LoginController.initSessionTimeoutTimer();
+      loginService.loginFromSessionServer(new AsyncCallback<UserData>() {
+        public void onFailure(Throwable caught) {
+          displayLoginWindow();
+        }
+
+        public void onSuccess(UserData result) {
+          currentUser = result;
+          displayWindow();
+          LoginController.initSessionTimeoutTimer();
+        }
+      });
     }
   }
 
   private void displayLoginWindow() {
     LoginController.ILoginView loginView = new LoginView();
-    LoginController loginController = new LoginController(loginView);
+    LoginController loginController = new LoginController(loginView, loginService);
     mainELearningContainer.setCenterWidget(loginView.asWidget());
     loginController.bind();
   }
 
+  public void onSuccessLogin(UserData userData) {
+    currentUser = userData;
+    mainELearningContainer.setCenterWidget(null);
+    displayWindow();
+  }
+
   private void displayWindow() {
-    ProfileBarController.IProfileBarView profileBarView = new ProfileBarView(true);
-    profileController = new ProfileBarController(profileBarView);
+    UserLecturesController.IUserLecturesView userLecturesView = new UserLecturesView();
+    UserLecturesController controller = new UserLecturesController(userLecturesView, lectureService);
+    controller.bind();
+    ProfileBarController.IProfileBarView profileBarView = new ProfileBarView(currentUser.getRole() != UserRoleTypes.USER,
+            userLecturesView.asWidget());
+    ProfileBarController profileController = new ProfileBarController(profileBarView, controller);
     profileController.bind();
+
+    controller.setParentController(profileController);
+
     buttonsContainer.add(profileBarView.asWidget());
     buttonsContainer.forceLayout();
   }
 
-  public void onSuccessLogin() {
-    mainELearningContainer.setCenterWidget(null);
+  public void loadLectureDetails(Lecture lecture) {
+    log.info("Lecture selected: " + lecture.getLectureName());
+    currentLecture = lecture;
+    if (eLearningView == null) {
+      eLearningView = new ELearningView();
+      mainELearningContainer.setCenterWidget(eLearningView.asWidget());
+      mainELearningContainer.forceLayout();
+      log.info("Initialize ELearningView widget");
+    }
 
-    displayWindow();
+    LectureDetailsView lectureDetailsView = eLearningView.getLectureDetailsView();
+
+    if (lectureFilesController == null) {
+      lectureFilesController = new LectureFilesController(lectureDetailsView.getLectureFilesView(), lectureService);
+      lectureFilesController.bind();
+    }
+
+    lectureFilesController.loadFiles();
   }
 
   public static ELearningController getInstance() {
@@ -74,5 +126,13 @@ public class ELearningController {
   public void setViews(BorderLayoutContainer mainELearningContainer, HBoxLayoutContainer buttonsContainer) {
     this.mainELearningContainer = mainELearningContainer;
     this.buttonsContainer = buttonsContainer;
+  }
+
+  public UserData getCurrentUser() {
+    return currentUser;
+  }
+
+  public Lecture getCurrentLecture() {
+    return currentLecture;
   }
 }

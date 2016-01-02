@@ -8,6 +8,7 @@ import com.google.gwt.sample.elearning.shared.model.LWLectureTestData;
 import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.google.gwt.sample.elearning.shared.model.LectureTestData;
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 
@@ -56,6 +57,13 @@ public class ManageLecturesTestsController implements ICreateTestListener {
     view.getEditTestButton().addSelectHandler(new SelectEvent.SelectHandler() {
       public void onSelect(SelectEvent event) {
         onEditTestSelection();
+      }
+    });
+
+    view.getDeleteTestButton().addSelectHandler(new SelectEvent.SelectHandler() {
+      public void onSelect(SelectEvent event) {
+        (new MessageBox("Info", "Not implemented yet!")).show();
+        // TODO: implement functionality
       }
     });
   }

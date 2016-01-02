@@ -26,7 +26,6 @@ public class ELearningApp implements EntryPoint {
     northPanel.setStyleName("headerPanel");
     buttonsPanel.setHBoxLayoutAlign(HBoxLayoutContainer.HBoxLayoutAlign.MIDDLE);
     buttonsPanel.setPack(BoxLayoutContainer.BoxLayoutPack.END);
-//    buttonsPanel.setStyleName("headerButtonsPanel");
     buttonsPanel.setHeight(40);
     buttonsPanel.setPadding(new Padding(0, 10, 0, 0));
 

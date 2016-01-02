@@ -13,6 +13,10 @@
   background-color: #6699ee;
 }
 
+.mainELearningContainer_second {
+  background-color: #4477cc;
+}
+
 /*ProfileBarView*/
 .buttonsToolbar {
   background-color: #2a6292;
@@ -34,6 +38,14 @@
   background-color: #4fff47 !important;
 }
 
+.enrolledLectureBackground {
+  background-color: #12c25e !important;
+}
+
 .questionBarBackground {
   background-color: #5298c2 !important;
+}
+
+.forgotPasswordLabelBackground {
+  color: #811a1e;
 }

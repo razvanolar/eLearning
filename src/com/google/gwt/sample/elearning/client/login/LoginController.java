@@ -1,10 +1,9 @@
 package com.google.gwt.sample.elearning.client.login;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.sample.elearning.client.ELearningController;
+import com.google.gwt.sample.elearning.client.MasterWindow;
 import com.google.gwt.sample.elearning.client.eLearningUtils.TextUtil;
 import com.google.gwt.sample.elearning.client.service.LoginService;
 import com.google.gwt.sample.elearning.client.service.LoginServiceAsync;
@@ -13,6 +12,7 @@ import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
@@ -33,6 +33,7 @@ public class LoginController {
     TextField getNameField();
     PasswordField getPasswordField();
     TextButton getLoginButton();
+    Label getForgotPasswordButton();
     FieldLabel getLoginFailedLabel();
     void setErrorLabelText(String val);
     Widget asWidget();
@@ -44,14 +45,14 @@ public class LoginController {
   private static Timer sessionTimeoutTimer;
   private static final int DURATION = 1000 * 60 * 10;// * 60 * 24 * 1;
 
-
-
-  public LoginController(ILoginView view) {
+  public LoginController(ILoginView view, LoginServiceAsync loginService) {
     this.view = view;
+    LoginController.loginService = loginService;
   }
   public void bind() {
     addListeners();
   }
+
   private void login(){
     String user = view.getNameField().getText();
     String password = view.getPasswordField().getText();
@@ -60,17 +61,15 @@ public class LoginController {
       return;
     }
     loginService.loginServer(user, password, new AsyncCallback<UserData>() {
-      @Override
       public void onFailure(Throwable caught) {
         view.setErrorLabelText("Wrong username or password.");
       }
 
-      @Override
       public void onSuccess(UserData userData) {
         Date expires = new Date(System.currentTimeMillis() + DURATION);
         Cookies.setCookie("sid", userData.getSessionId(), expires, null, "/", false);
         initSessionTimeoutTimer();
-        ELearningController.getInstance().onSuccessLogin();
+        ELearningController.getInstance().onSuccessLogin(userData);
       }
     });
   }
@@ -139,6 +138,21 @@ public class LoginController {
         if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
           login();
         }
+      }
+    });
+
+    view.getForgotPasswordButton().addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        ForgotPasswordController.IForgotPasswordView forgotPasswordView = new ForgotPasswordView();
+        ForgotPasswordController controller = new ForgotPasswordController(forgotPasswordView);
+        controller.bind();
+        MasterWindow window = new MasterWindow();
+        window.setContent(forgotPasswordView.asWidget(), "Forgot Password");
+        window.setModal(true);
+        window.setPixelSize(300, 150);
+        window.show();
+        controller.setContentWindow(window);
       }
     });
   }

@@ -82,4 +82,10 @@ public interface Icons extends ClientBundle {
 
   @Source("play.png")
   ImageResource play();
+
+  @Source("lectures.png")
+  ImageResource lectures();
+
+  @Source("send.png")
+  ImageResource send();
 }

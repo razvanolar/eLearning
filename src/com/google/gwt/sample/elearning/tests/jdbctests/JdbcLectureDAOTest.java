@@ -7,7 +7,6 @@ import com.google.gwt.sample.elearning.server.repository.JDBC.UserDAO;
 import com.google.gwt.sample.elearning.server.repository.RepositoryException;
 import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.google.gwt.sample.elearning.shared.model.Professor;
-import com.google.gwt.sample.elearning.shared.model.UserData;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,7 +45,7 @@ public class JdbcLectureDAOTest {
     @Test
     public void getLecturesByProfessorTest(){
 
-        assert lectureDAO.getLecturesByProfessor(1).size()>0;
+        assert lectureDAO.getLecturesByUser(1).size()>0;
     }
 
     @Test

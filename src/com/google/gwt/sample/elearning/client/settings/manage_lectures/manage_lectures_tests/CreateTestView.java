@@ -2,9 +2,8 @@ package com.google.gwt.sample.elearning.client.settings.manage_lectures.manage_l
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.sample.elearning.client.ELearningController;
-import com.google.gwt.sample.elearning.client.MasterWindow;
+import com.google.gwt.sample.elearning.client.eLearningUtils.models_properties.AnswerDataProperties;
 import com.google.gwt.sample.elearning.shared.model.AnswerData;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.IdentityValueProvider;
@@ -25,7 +24,6 @@ import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  *

@@ -1,6 +1,7 @@
 package com.google.gwt.sample.elearning.client.settings.manage_lectures;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.sample.elearning.client.eLearningUtils.models_properties.*;
 import com.google.gwt.sample.elearning.shared.model.*;
 import com.sencha.gxt.core.client.IdentityValueProvider;
 import com.sencha.gxt.core.client.Style;

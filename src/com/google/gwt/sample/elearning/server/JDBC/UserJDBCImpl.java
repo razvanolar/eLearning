@@ -22,7 +22,7 @@ public class UserJDBCImpl {
 
   private PreparedStatement prepareGetLoginDataStatement() throws SQLException {
     return dbConnection
-            .prepareStatement("SELECT id,userId, parola, nume, prenume, email FROM utilizatori WHERE userId = ? AND parola = ?;");
+            .prepareStatement("SELECT id, userId, parola, nume, prenume, email, rol FROM utilizatori WHERE userId = ? AND parola = ?");
   }
 
   public UserData getUserData(String userId, String pass) throws IncorrectLoginException, ELearningException {
@@ -43,7 +43,8 @@ public class UserJDBCImpl {
         String lastName = resultSet.getString(5);
         String email = resultSet.getString(6);
 
-        UserData userData = new UserData(id, userName, password, firstName, lastName, email,UserRoleTypes.USER);
+        UserData userData = new UserData(id, userName, password, firstName, lastName, email,
+                UserRoleTypes.getRoleById(resultSet.getLong(7)));
         resultSet.close();
         getLoginDataStatement.close();
         return userData;

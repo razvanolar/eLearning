@@ -6,7 +6,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface LoginServiceAsync {
   void loginServer(String user, String pwd, AsyncCallback<UserData> async);
 
-  void loginFromSessionServer(AsyncCallback<String> async);
+  void loginFromSessionServer(AsyncCallback<UserData> async);
 
   void logout(AsyncCallback<Void> async);
 

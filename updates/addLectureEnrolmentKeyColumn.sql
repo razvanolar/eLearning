@@ -1,0 +1,1 @@
+ALTER TABLE cursuri ADD enrolment_key VARCHAR(255);
