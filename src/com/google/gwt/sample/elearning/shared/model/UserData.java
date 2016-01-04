@@ -111,6 +111,10 @@ public class UserData implements IsSerializable {
     this.id = id;
   }
 
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
   @Override
   public String toString() {
     return id + " " + username;

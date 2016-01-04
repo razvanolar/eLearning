@@ -26,9 +26,15 @@ public class ForumXMLHandler {
     forumSAXHandler = new ForumSAXHandler();
   }
 
+  /**
+   *
+   * @return the forum provided from the xml file
+   * @throws IOException
+   * @throws SAXException
+   */
   public ForumData parse() throws IOException, SAXException {
-    InputStream systeamResourceAsStream = new ByteArrayInputStream(fileResource.getBytes());
-    parser.parse(systeamResourceAsStream, forumSAXHandler);
+    InputStream systemResourceAsStream = new ByteArrayInputStream(fileResource.getBytes());
+    parser.parse(systemResourceAsStream, forumSAXHandler);
     return ForumSAXHandler.getForumData();
   }
 }
