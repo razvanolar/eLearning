@@ -66,6 +66,10 @@ public class ELearningView {
     return lectureInfoView;
   }
 
+  public LectureContentView getLectureContentView() {
+    return lectureContentView;
+  }
+
   public Widget asWidget() {
     return mainContainer;
   }

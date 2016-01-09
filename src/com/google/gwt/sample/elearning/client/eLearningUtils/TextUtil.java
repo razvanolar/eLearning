@@ -25,4 +25,12 @@ public class TextUtil {
       return "";
     return builder.substring(index);
   }
+
+  public static String getFileSubpath(String filePath) {
+    StringBuilder builder = new StringBuilder(filePath);
+    int index = builder.indexOf("elearning\\app_files");
+    if (index == -1)
+      return null;
+    return builder.substring(index);
+  }
 }

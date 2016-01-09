@@ -5,7 +5,7 @@ package com.google.gwt.sample.elearning.shared.types;
  * Created by razvanolar on 29.11.2015.
  */
 public enum FileExtensionTypes {
-  HTML(".html"), PDF(".pdf"), PNG(".png"), XML(".xml");
+  HTML(".html"), PDF(".pdf"), PNG(".png"), XML(".xml"), TXT(".txt");
 
   private String value;
 

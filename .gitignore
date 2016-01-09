@@ -23,3 +23,4 @@ war/WEB-INF/logging.properties
 /.idea/dataSources.xml
 /.idea/dataSources.local.xml
 gxt_3_0_6.xml
+src/com/google/gwt/sample/elearning/app_files

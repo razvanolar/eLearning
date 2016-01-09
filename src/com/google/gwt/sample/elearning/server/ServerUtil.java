@@ -7,7 +7,7 @@ import com.google.gwt.sample.elearning.shared.types.FileExtensionTypes;
  * Created by razvanolar on 23.11.2015.
  */
 public class ServerUtil {
-  public static final String PATH = "elearning\\app_files\\";
+  public static final String PATH = "WEB-INF\\classes\\com\\google\\gwt\\sample\\elearning\\app_files\\";
   public static final String LECTURES_PATH = "lectures\\";
   public static final String TESTS_PATH = "tests\\";
   public static final String FILES_PATH = "files\\";

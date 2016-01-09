@@ -102,17 +102,20 @@ public class ELearningController {
 
   public void loadLectureDetails(Lecture lecture) {
     log.info("Lecture selected: " + lecture.getLectureName());
+
     currentLecture = lecture;
     if (eLearningView == null) {
       eLearningView = new ELearningView();
       mainELearningContainer.setCenterWidget(eLearningView.asWidget());
       mainELearningContainer.forceLayout();
       log.info("Initialize ELearningView widget");
+    } else {
+      if (eLearningView.getLectureContentView() != null)
+        eLearningView.getLectureContentView().clear();
     }
 
-    LectureDetailsView lectureDetailsView = eLearningView.getLectureDetailsView();
-
     if (lectureFilesController == null) {
+      LectureDetailsView lectureDetailsView = eLearningView.getLectureDetailsView();
       lectureFilesController = new LectureFilesController(lectureDetailsView.getLectureFilesView(), lectureService);
       lectureFilesController.bind();
     }
@@ -127,6 +130,10 @@ public class ELearningController {
     }
 
     lectureUsersController.loadUsers();
+  }
+
+  public void loadLectureFileInCenterPanel(String path, String title) {
+    eLearningView.getLectureContentView().addPanel(path, title);
   }
 
   public static ELearningController getInstance() {

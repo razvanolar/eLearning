@@ -4,14 +4,15 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.sample.elearning.client.ELearningController;
 import com.google.gwt.sample.elearning.client.eLearningUtils.ELearningAsyncCallBack;
 import com.google.gwt.sample.elearning.client.eLearningUtils.MaskableView;
+import com.google.gwt.sample.elearning.client.eLearningUtils.TextUtil;
 import com.google.gwt.sample.elearning.client.service.LectureServiceAsync;
 import com.google.gwt.sample.elearning.shared.Node;
 import com.google.gwt.sample.elearning.shared.Tree;
 import com.google.gwt.sample.elearning.shared.model.FileData;
 import com.google.gwt.sample.elearning.shared.model.Lecture;
+import com.google.gwt.sample.elearning.shared.types.FileExtensionTypes;
 import com.google.gwt.sample.elearning.shared.types.FileTypes;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.data.shared.TreeStore;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -59,9 +60,19 @@ public class LectureFilesController {
         if (event.getSelection() == null || event.getSelection().isEmpty())
           view.setState(ILectureFilesViewState.NONE);
         else {
-          if (event.getSelection().get(0).getType() == FileTypes.REGULAR)
+          if (event.getSelection().get(0).getType() == FileTypes.REGULAR) {
             view.setState(ILectureFilesViewState.SELECTED);
-          else
+            FileData selectedFile = event.getSelection().get(0);
+            /* load the file in the center area */
+            FileExtensionTypes extension = FileExtensionTypes.getFileExtensionByValue(TextUtil.getFileExtentsion(selectedFile.getName()));
+            if (extension == FileExtensionTypes.XML) {
+
+            } else if (extension != null) {
+              String subpath = TextUtil.getFileSubpath(selectedFile.getPath());
+              log.info("File subpath : " + subpath);
+              ELearningController.getInstance().loadLectureFileInCenterPanel(subpath, selectedFile.getName());
+            }
+          } else
             view.setState(ILectureFilesViewState.NONE);
         }
       }
@@ -86,6 +97,10 @@ public class LectureFilesController {
                 view.unmask();
               }
             });
+  }
+
+  private void loadXmlFile() {
+
   }
 
   private void loadTreeStore(com.google.gwt.sample.elearning.shared.Tree<FileData> tree) {
