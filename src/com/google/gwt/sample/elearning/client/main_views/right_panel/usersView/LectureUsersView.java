@@ -38,7 +38,9 @@ public class LectureUsersView implements LectureUsersController.ILectureUsersVie
       @Override
       public void render(Context context, UserData value, SafeHtmlBuilder sb) {
         if (value != null) {
-          sb.appendHtmlConstant("<div style='padding-top: 3px; padding-bottom: 3px'><img src='elearning\\user_icon.png' width='20px' hight='20px' align='top'/>  " + value.getFirstName() + " " + value.getLastName() + "</div>");
+          sb.appendHtmlConstant("<div style='padding: 3px 0px 3px 5px; padding-bottom: 3px'>" +
+                  "<img src='elearning\\user_icon.png' width='20px' hight='20px' align='top'/>  "
+                  + value.getFirstName() + " " + value.getLastName() + "</div>");
         }
       }
     }, keyProvider);
@@ -46,7 +48,7 @@ public class LectureUsersView implements LectureUsersController.ILectureUsersVie
     SelectionModel<UserData> selectionModel = new SingleSelectionModel<UserData>(keyProvider);
     cellList.setSelectionModel(selectionModel);
     ScrollPanel scrollPanel = new ScrollPanel(cellList);
-    mainContainer.setCenterWidget(scrollPanel, new MarginData(0, 0, 0, 7));
+    mainContainer.setCenterWidget(scrollPanel, new MarginData(0, 0, 0, 0));
   }
 
   @Override

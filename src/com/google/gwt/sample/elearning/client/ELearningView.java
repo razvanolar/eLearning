@@ -47,14 +47,18 @@ public class ELearningView {
     mainContainer.setCenterWidget(lectureContentView.asWidget(), new MarginData(0));
 
     ContentPanel rightPanel = new ContentPanel();
-
+    layoutData = new BorderLayoutContainer.BorderLayoutData(250);
+    layoutData.setSplit(true);
+    layoutData.setCollapsible(true);
+    layoutData.setCollapseMini(true);
+    layoutData.setMinSize(150);
+    layoutData.setMaxSize(450);
+    layoutData.setMargins(new Margins(0, 0, 0, 5));
     rightPanel.setHeaderVisible(false);
     rightPanel.setAnimCollapse(true);
     rightPanel.add(lectureInfoView.asWidget());
 
-    mainContainer.setWestWidget(leftPanel, layoutData);
     mainContainer.setEastWidget(rightPanel, layoutData);
-    mainContainer.setCenterWidget(new CenterLayoutContainer(), new MarginData(0, 0, 0, 10));
     mainContainer.setStyleName("mainELearningContainer");
   }
 
