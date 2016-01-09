@@ -10,6 +10,8 @@ import com.google.gwt.sample.elearning.client.main_views.UserLecturesView;
 import com.google.gwt.sample.elearning.client.main_views.left_panel.LectureDetailsView;
 import com.google.gwt.sample.elearning.client.main_views.left_panel.filesView.LectureFilesController;
 import com.google.gwt.sample.elearning.client.main_views.left_panel.filesView.LectureFilesView;
+import com.google.gwt.sample.elearning.client.main_views.right_panel.LectureInfoView;
+import com.google.gwt.sample.elearning.client.main_views.right_panel.usersView.LectureUsersController;
 import com.google.gwt.sample.elearning.client.profilebar.ProfileBarController;
 import com.google.gwt.sample.elearning.client.profilebar.ProfileBarView;
 import com.google.gwt.sample.elearning.client.service.LectureService;
@@ -43,6 +45,7 @@ public class ELearningController {
   private static LectureServiceAsync lectureService = GWT.create(LectureService.class);
 
   private LectureFilesController lectureFilesController;
+  private LectureUsersController lectureUsersController;
   private UserData currentUser;
   private Lecture currentLecture;
 
@@ -115,6 +118,15 @@ public class ELearningController {
     }
 
     lectureFilesController.loadFiles();
+
+    LectureInfoView lectureInfoView = eLearningView.getLectureInfoView();
+
+    if (lectureUsersController == null) {
+      lectureUsersController = new LectureUsersController(lectureInfoView.getLectureUsersView());
+      lectureUsersController.bind();
+    }
+
+    lectureUsersController.loadUsers();
   }
 
   public static ELearningController getInstance() {

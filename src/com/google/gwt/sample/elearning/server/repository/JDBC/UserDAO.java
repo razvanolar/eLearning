@@ -17,4 +17,5 @@ public interface UserDAO {
     void insertUser(UserData user) throws RepositoryException;
     void updateUser(UserData user) throws RepositoryException;
     void deleteUser(long id) throws RepositoryException;
+    List<UserData> getAllUsersByLecture(long id);
 }

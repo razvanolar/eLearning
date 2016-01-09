@@ -2,6 +2,7 @@ package com.google.gwt.sample.elearning.client;
 
 import com.google.gwt.sample.elearning.client.main_views.center_panel.LectureContentView;
 import com.google.gwt.sample.elearning.client.main_views.left_panel.LectureDetailsView;
+import com.google.gwt.sample.elearning.client.main_views.right_panel.LectureInfoView;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.widget.core.client.ContentPanel;
@@ -17,6 +18,7 @@ public class ELearningView {
 
   private BorderLayoutContainer mainContainer;
   private LectureDetailsView lectureDetailsView;
+  private LectureInfoView lectureInfoView;
   private LectureContentView lectureContentView;
 
   public ELearningView() {
@@ -25,6 +27,7 @@ public class ELearningView {
 
   private void initGUI() {
     lectureDetailsView = new LectureDetailsView();
+    lectureInfoView = new LectureInfoView();
     lectureContentView = new LectureContentView();
     mainContainer = new BorderLayoutContainer();
     ContentPanel leftPanel = new ContentPanel();
@@ -33,20 +36,34 @@ public class ELearningView {
     leftPanel.setAnimCollapse(true);
     leftPanel.add(lectureDetailsView.asWidget());
 
-    BorderLayoutContainer.BorderLayoutData leftData = new BorderLayoutContainer.BorderLayoutData(250);
-    leftData.setSplit(true);
-    leftData.setCollapsible(true);
-    leftData.setCollapseMini(true);
-    leftData.setMinSize(150);
-    leftData.setMaxSize(450);
-    leftData.setMargins(new Margins(0, 5, 0, 0));
-    mainContainer.setWestWidget(leftPanel, leftData);
+    BorderLayoutContainer.BorderLayoutData layoutData = new BorderLayoutContainer.BorderLayoutData(250);
+    layoutData.setSplit(true);
+    layoutData.setCollapsible(true);
+    layoutData.setCollapseMini(true);
+    layoutData.setMinSize(150);
+    layoutData.setMaxSize(450);
+    layoutData.setMargins(new Margins(0, 5, 0, 0));
+    mainContainer.setWestWidget(leftPanel, layoutData);
     mainContainer.setCenterWidget(lectureContentView.asWidget(), new MarginData(0));
+
+    ContentPanel rightPanel = new ContentPanel();
+
+    rightPanel.setHeaderVisible(false);
+    rightPanel.setAnimCollapse(true);
+    rightPanel.add(lectureInfoView.asWidget());
+
+    mainContainer.setWestWidget(leftPanel, layoutData);
+    mainContainer.setEastWidget(rightPanel, layoutData);
+    mainContainer.setCenterWidget(new CenterLayoutContainer(), new MarginData(0, 0, 0, 10));
     mainContainer.setStyleName("mainELearningContainer");
   }
 
   public LectureDetailsView getLectureDetailsView() {
     return lectureDetailsView;
+  }
+
+  public LectureInfoView getLectureInfoView(){
+    return lectureInfoView;
   }
 
   public Widget asWidget() {
