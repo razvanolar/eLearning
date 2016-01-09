@@ -9,12 +9,15 @@ import java.util.List;
  * Created by Valy on 12/28/2015.
  */
 public interface GradeDAO {
-  List<Grade> getTestGrades() throws RepositoryException;
-  List<Grade> getHomeworkGrades() throws RepositoryException;
-  List<Grade> getLectureGrades(long lectureId) throws RepositoryException;
-  void saveGrade(Grade grade) throws RepositoryException;
-  void updateGrade(Grade grade) throws RepositoryException;
-  void deleteGrade(Grade grade) throws RepositoryException;
-  void deleteStudentGrades(long studentId) throws  RepositoryException;
+  List<Grade> getAllHomeworkGrades() throws RepositoryException;
+  List<Grade> getAllLectureTestGrades() throws RepositoryException;
+  List<Grade> getHomeworkGrades(long homeworkId) throws RepositoryException;
+  List<Grade> getLectureTestGrades(long lectureId) throws RepositoryException;
+  List<Grade> getStudentLecturesTestGrades(List<Long> lectureIds, long studentId) throws RepositoryException;
+  List<Grade> getStudentHomeworkGrades(List<Long> lectureIds, long studentId) throws RepositoryException;
 
+  void saveGrade(Grade grade, String className) throws RepositoryException;
+  void updateGrade(Grade grade, String className) throws RepositoryException;
+  void deleteGrade(Grade grade, String className) throws RepositoryException;
+  void deleteStudentGrades(long studentId) throws  RepositoryException;
 }

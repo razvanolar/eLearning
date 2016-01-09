@@ -15,14 +15,14 @@ public class Grade implements IsSerializable {
   public Grade(){
   }
 
-  public Grade(long id, int grade, long studentId, long testId){
+  public Grade(long id, long studentId, long testId, int grade){
     this.id = id;
     this.grade = grade;
     this.studentId = studentId;
     this.testId = testId;
   }
 
-  public Grade(int grade, long studentId, long testId){
+  public Grade(long studentId, long testId, int grade){
     this.grade = grade;
     this.studentId = studentId;
     this.testId = testId;
