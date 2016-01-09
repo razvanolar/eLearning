@@ -78,7 +78,7 @@ public class LectureFilesController {
   }
 
   public void loadFiles() {
-    view.mask();
+//    view.mask();
     lectureService.getLectureFilesTree(ELearningController.getInstance().getCurrentUser(),
             ELearningController.getInstance().getCurrentLecture().getId(), new ELearningAsyncCallBack<Tree<FileData>>(view, log) {
               public void onSuccess(Tree<FileData> result) {

@@ -1,5 +1,6 @@
 package com.google.gwt.sample.elearning.client;
 
+import com.google.gwt.sample.elearning.client.main_views.center_panel.LectureContentView;
 import com.google.gwt.sample.elearning.client.main_views.left_panel.LectureDetailsView;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.util.Margins;
@@ -16,6 +17,7 @@ public class ELearningView {
 
   private BorderLayoutContainer mainContainer;
   private LectureDetailsView lectureDetailsView;
+  private LectureContentView lectureContentView;
 
   public ELearningView() {
     initGUI();
@@ -23,6 +25,7 @@ public class ELearningView {
 
   private void initGUI() {
     lectureDetailsView = new LectureDetailsView();
+    lectureContentView = new LectureContentView();
     mainContainer = new BorderLayoutContainer();
     ContentPanel leftPanel = new ContentPanel();
 
@@ -38,7 +41,7 @@ public class ELearningView {
     leftData.setMaxSize(450);
     leftData.setMargins(new Margins(0, 5, 0, 0));
     mainContainer.setWestWidget(leftPanel, leftData);
-    mainContainer.setCenterWidget(new CenterLayoutContainer(), new MarginData(0, 0, 0, 10));
+    mainContainer.setCenterWidget(lectureContentView.asWidget(), new MarginData(0));
     mainContainer.setStyleName("mainELearningContainer");
   }
 
