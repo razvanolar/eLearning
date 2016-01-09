@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TEST id="0" name="test1" duration="0" course="3">
+	<QUESTION value="q1" score="1">
+		<ANSWER isCorrect="false">sda</ANSWER>
+	</QUESTION>
+	<QUESTION value="testq" score="0">
+		<ANSWER isCorrect="true">das</ANSWER>
+		<ANSWER isCorrect="false">dddd</ANSWER>
+	</QUESTION>
+	<QUESTION value="q2" score="2">
+		<ANSWER isCorrect="false">dasdd</ANSWER>
+	</QUESTION>
+	<QUESTION value="q3" score="5">
+		<ANSWER isCorrect="false">dasdsa</ANSWER>
+	</QUESTION>
+</TEST>

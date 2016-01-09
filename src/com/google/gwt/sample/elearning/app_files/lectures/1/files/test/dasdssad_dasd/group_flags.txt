@@ -1,0 +1,30 @@
+For the following scenarios we'll present the flags for the Unknown group creation:
+	-when creating a new group type map from the GUI which does not have already an unknown group:
+		flags: no flag is set
+		status: DISCOVERED
+
+	-for CJM collector handler:
+		flags: AUTOMATIC
+		status: ACTIVE
+		-we are using the the unknown logic to link the new hosts with the unknown group
+
+	-for Disk handler:
+		an Unknown group is created only for PROJECT_GROUP
+			flags: ACTIVE; AUTOMATIC and VRG only if the flags are provided from the xml
+
+	-for Ganglia handler:
+		if topology is not available
+			for CLUSTER
+				flags: AUTOMATIC 
+				status: ACTIVE
+		if topology is not available or if the grid name is empty
+			for GRID
+				flags: no flag is set
+				status: ACTIVE
+		
+	-for GPFS handler:
+		flags: AUTOMATIC
+		status: DISCOVERED
+
+If we receive a parentless group and we have a parent map we will link to Unknown.
+If we do not have a create rule or the status that should be used when creating the element, an Unknown group is created.

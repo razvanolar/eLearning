@@ -1,0 +1,15 @@
+<test duration="30" name="first_test">
+	<question value="Is this a question? (1)" score="40">
+		<answer isCorrect="true">YES</answer>
+		<answer isCorrect="false">NO</answer>
+		<answer isCorrect="false">MAYBE</answer>
+	</question>
+
+
+	<question value="Is this a question? (2)" score="60">
+		<answer isCorrect="false">NO</answer>
+		<answer isCorrect="false">MAYBE</answer>
+		<answer isCorrect="true">YES</answer>
+		<answer isCorrect="false">Don't know</answer>
+	</question>
+</test>
