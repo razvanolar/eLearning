@@ -2,6 +2,7 @@ package com.google.gwt.sample.elearning.shared.model;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -12,6 +13,8 @@ public class LectureTestData implements IsSerializable {
 
   private long id;
   private String name = "";
+  private Date beginDate;
+  private Date endDate;
   private long duration;
   private long lectureId;
   private List<QuestionData> questions;
@@ -31,6 +34,23 @@ public class LectureTestData implements IsSerializable {
     this.duration = duration;
     this.lectureId = courseId;
     this.questions = questions;
+  }
+
+  public LectureTestData(long id, String name, Date beginDate, Date endDate, long duration, long lectureId) {
+    this.id = id;
+    this.name = name;
+    this.beginDate = beginDate;
+    this.endDate = endDate;
+    this.duration = duration;
+    this.lectureId = lectureId;
+  }
+
+  public LectureTestData(String name, Date beginDate, Date endDate, long duration, long lectureId) {
+    this.name = name;
+    this.beginDate = beginDate;
+    this.endDate = endDate;
+    this.duration = duration;
+    this.lectureId = lectureId;
   }
 
   public String getName() {
@@ -71,5 +91,21 @@ public class LectureTestData implements IsSerializable {
 
   public void setLectureId(long lectureId) {
     this.lectureId = lectureId;
+  }
+
+  public Date getBeginDate() {
+    return beginDate;
+  }
+
+  public void setBeginDate(Date beginDate) {
+    this.beginDate = beginDate;
+  }
+
+  public Date getEndDate() {
+    return endDate;
+  }
+
+  public void setEndDate(Date endDate) {
+    this.endDate = endDate;
   }
 }
