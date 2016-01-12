@@ -60,4 +60,9 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
       userDAO.deleteUser(id);
     }
   }
+
+  @Override
+  public List<UserData> getUsersByLecture(long id) throws ELearningException {
+    return userDAO.getAllUsersByLecture(id);
+  }
 }

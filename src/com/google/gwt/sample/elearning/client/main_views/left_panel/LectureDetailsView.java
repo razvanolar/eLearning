@@ -40,8 +40,8 @@ public class LectureDetailsView {
 
     accordionLayoutContainer.add(lectureFilesPanel);
     accordionLayoutContainer.add(lectureVideosPanel);
-    lectureFilesPanel.setExpanded(true);
     accordionLayoutContainer.setExpandMode(AccordionLayoutContainer.ExpandMode.SINGLE_FILL);
+    lectureFilesPanel.setExpanded(true);
 
     mainContainer.setCenterWidget(accordionLayoutContainer);
   }

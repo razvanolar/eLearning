@@ -43,6 +43,31 @@ public class JdbcUserDAO implements UserDAO {
   }
 
   @Override
+  public List<UserData> getAllUsersByLecture(long id) {
+    ArrayList<UserData> userlist = new ArrayList<UserData>();
+    Connection con = null;
+    try {
+      con = JDBCUtil.getNewConnection();
+      PreparedStatement pstmt = con.prepareStatement("select ut.* from utilizatori ut INNER JOIN studenti_inscrisi si on ut.id = si.ref_student WHERE si.ref_curs = ?");
+      pstmt.setLong(1, id);
+      ResultSet rs = pstmt.executeQuery();
+      while (rs.next()) {
+        UserData user = new UserData(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+            rs.getString(6), UserRoleTypes.getRoleById(rs.getLong(7)));
+        userlist.add(user);
+      }
+
+    } catch (SQLException e) {
+      throw new RepositoryException("Eroare la comunicarea cu BD", e);
+
+    } finally {
+      if (con != null)
+        JDBCUtil.closeConnection(con);
+    }
+    return userlist;
+  }
+
+  @Override
   public UserData getUserById(long id) throws RepositoryException {
     Connection con = null;
 

@@ -10,6 +10,8 @@ import com.google.gwt.sample.elearning.client.main_views.UserLecturesView;
 import com.google.gwt.sample.elearning.client.main_views.left_panel.LectureDetailsView;
 import com.google.gwt.sample.elearning.client.main_views.left_panel.filesView.LectureFilesController;
 import com.google.gwt.sample.elearning.client.main_views.left_panel.filesView.LectureFilesView;
+import com.google.gwt.sample.elearning.client.main_views.right_panel.LectureInfoView;
+import com.google.gwt.sample.elearning.client.main_views.right_panel.usersView.LectureUsersController;
 import com.google.gwt.sample.elearning.client.profilebar.ProfileBarController;
 import com.google.gwt.sample.elearning.client.profilebar.ProfileBarView;
 import com.google.gwt.sample.elearning.client.service.LectureService;
@@ -43,6 +45,7 @@ public class ELearningController {
   private static LectureServiceAsync lectureService = GWT.create(LectureService.class);
 
   private LectureFilesController lectureFilesController;
+  private LectureUsersController lectureUsersController;
   private UserData currentUser;
   private Lecture currentLecture;
 
@@ -99,22 +102,38 @@ public class ELearningController {
 
   public void loadLectureDetails(Lecture lecture) {
     log.info("Lecture selected: " + lecture.getLectureName());
+
     currentLecture = lecture;
     if (eLearningView == null) {
       eLearningView = new ELearningView();
       mainELearningContainer.setCenterWidget(eLearningView.asWidget());
       mainELearningContainer.forceLayout();
       log.info("Initialize ELearningView widget");
+    } else {
+      if (eLearningView.getLectureContentView() != null)
+        eLearningView.getLectureContentView().clear();
     }
 
-    LectureDetailsView lectureDetailsView = eLearningView.getLectureDetailsView();
-
     if (lectureFilesController == null) {
+      LectureDetailsView lectureDetailsView = eLearningView.getLectureDetailsView();
       lectureFilesController = new LectureFilesController(lectureDetailsView.getLectureFilesView(), lectureService);
       lectureFilesController.bind();
     }
 
     lectureFilesController.loadFiles();
+
+    LectureInfoView lectureInfoView = eLearningView.getLectureInfoView();
+
+    if (lectureUsersController == null) {
+      lectureUsersController = new LectureUsersController(lectureInfoView.getLectureUsersView());
+      lectureUsersController.bind();
+    }
+
+    lectureUsersController.loadUsers();
+  }
+
+  public void loadLectureFileInCenterPanel(String path, String title) {
+    eLearningView.getLectureContentView().addPanel(path, title);
   }
 
   public static ELearningController getInstance() {

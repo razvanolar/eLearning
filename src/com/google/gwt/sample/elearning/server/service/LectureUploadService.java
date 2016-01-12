@@ -40,23 +40,33 @@ public class LectureUploadService extends HttpServlet {
         if (item.isFormField()) {
           System.out.println();
         } else {
-          String fieldName = item.getFieldName();
-//          String fileName = item.getName();
-//          if (fieldName != null)
-//            fileName = FilenameUtils.getName(fileName);
-//          String contentType = item.getContentType();
-//          boolean isInMemory = item.isInMemory();
-//          long sizeInBytes = item.getSize();
           byte[] data = item.get();
           FileOutputStream fileOutSt = new FileOutputStream(filePath + item.getName());
           fileOutSt.write(data);
           fileOutSt.close();
+
+          saveAdditionalXmlFile(filePath, item.getName(), data);
         }
       }
     } catch (Exception ex) {
       ex.printStackTrace();
     } finally {
 
+    }
+  }
+
+  private void saveAdditionalXmlFile(String dirPath, String fileName, byte[] data) {
+    try {
+      String text = new String(data);
+      text = text.replace("<", "&lt;");
+      text = text.replace(">", "&gt;");
+
+      fileName += "_";
+      PrintWriter writer = new PrintWriter(new File(dirPath + fileName));
+      writer.write(text);
+      writer.close();
+    } catch (Exception ex) {
+      ex.printStackTrace();
     }
   }
 }
