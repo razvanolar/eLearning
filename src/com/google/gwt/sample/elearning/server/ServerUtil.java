@@ -10,6 +10,7 @@ public class ServerUtil {
   public static final String PATH = "elearning\\app_files\\";
   public static final String LECTURES_PATH = "lectures\\";
   public static final String TESTS_PATH = "tests\\";
+  public static final String HOMEWORKS_PATH = "homeworks\\";
   public static final String FILES_PATH = "files\\";
   public static final String HTML_DOCUMENT = "<!DOCTYPE html>\n"
       + "<html>"
@@ -64,5 +65,9 @@ public class ServerUtil {
     if (extension == FileExtensionTypes.XML)
       return "application/xml";
     return "application/octet-stream";
+  }
+
+  public static String getLectureHomeworksDirectoryPath(long lectureId) {
+    return PATH + LECTURES_PATH + lectureId + "\\" + HOMEWORKS_PATH;
   }
 }

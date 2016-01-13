@@ -4,6 +4,7 @@ import com.google.gwt.sample.elearning.client.service.LectureService;
 import com.google.gwt.sample.elearning.server.repository.DAOFactory;
 import com.google.gwt.sample.elearning.server.repository.JDBC.LectureDAO;
 import com.google.gwt.sample.elearning.server.repository.JDBC.VideoLinkDAO;
+import com.google.gwt.sample.elearning.server.service.collector.homework.HomeworkXMLConverter;
 import com.google.gwt.sample.elearning.server.service.collector.test.TestXMLConvertor;
 import com.google.gwt.sample.elearning.server.service.lecture_service_util.LectureFilesUtil;
 import com.google.gwt.sample.elearning.server.service.lecture_service_util.LectureHomeworkUtil;
@@ -153,7 +154,9 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
 
   @Override
   public void saveHomeworkData(long lectureId, HomeworkData homeworkData) throws ELearningException {
-    homeworkUtil.createHomework(lectureId, homeworkData);
+    HomeworkXMLConverter homeworkXMLConverter = new HomeworkXMLConverter();
+    String xmlValue = homeworkXMLConverter.convertToXML(homeworkData);
+    homeworkUtil.createHomework(xmlValue, lectureId, homeworkData);
   }
 
   @Override

@@ -2,8 +2,6 @@ package com.google.gwt.sample.elearning.server.repository.JDBC;
 
 import com.google.gwt.sample.elearning.server.JDBC.JDBCUtil;
 import com.google.gwt.sample.elearning.server.repository.RepositoryException;
-import com.google.gwt.sample.elearning.shared.model.Lecture;
-import com.google.gwt.sample.elearning.shared.model.Professor;
 import com.google.gwt.sample.elearning.shared.model.VideoLinkData;
 
 import java.sql.Connection;
@@ -40,7 +38,7 @@ public class JdbcVideoLinkDAO implements VideoLinkDAO {
       pstmt.setLong(1, lectureId);
       ResultSet rs = pstmt.executeQuery();
       while (rs.next()) {
-        VideoLinkData videoLinkData = new VideoLinkData(rs.getLong(0),rs.getString(1),rs.getString(2),rs.getString(3), rs.getLong(4));
+        VideoLinkData videoLinkData = new VideoLinkData(rs.getLong(1),rs.getString(2),rs.getString(3),rs.getString(4), rs.getLong(5));
         result.add(videoLinkData);
       }
 
