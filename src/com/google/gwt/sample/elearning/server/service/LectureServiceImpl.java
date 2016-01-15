@@ -161,7 +161,9 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
 
   @Override
   public void updateHomeworkData(long lectureId, HomeworkData homeworkData) throws ELearningException {
-    homeworkUtil.updateHomework(lectureId, homeworkData);
+    HomeworkXMLConverter homeworkXMLConverter = new HomeworkXMLConverter();
+    String xmlValue = homeworkXMLConverter.convertToXML(homeworkData);
+    homeworkUtil.updateHomework(xmlValue,lectureId, homeworkData);
   }
 
   @Override

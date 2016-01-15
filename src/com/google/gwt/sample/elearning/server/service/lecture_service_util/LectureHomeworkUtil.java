@@ -5,6 +5,7 @@ import com.google.gwt.sample.elearning.server.service.collector.homework.Homewor
 import com.google.gwt.sample.elearning.shared.exception.ELearningException;
 import com.google.gwt.sample.elearning.shared.model.HomeworkData;
 import com.google.gwt.sample.elearning.shared.model.UserData;
+import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -43,8 +44,7 @@ public class LectureHomeworkUtil {
   }
 
   private HomeworkData createHomeworkFromXML(File file) {
-    try {
-      BufferedReader reader = new BufferedReader(new FileReader(file));
+    try (BufferedReader reader = new BufferedReader(new FileReader(file))){
       StringBuilder stringBuilder = new StringBuilder();
       String line;
       while ((line = reader.readLine()) != null)
@@ -76,11 +76,36 @@ public class LectureHomeworkUtil {
     }
   }
 
-  public void updateHomework(long lectureId, HomeworkData homeworkData) {
+  public void updateHomework(String xml,long lectureId, HomeworkData homeworkData) {
+    String homeworkPath = ServerUtil.getLectureHomeworksDirectoryPath(lectureId)+homeworkData.getTitle()+ ".xml";
+    File file = new File(homeworkPath);
+    if (!file.exists())
+      throw new ELearningException("File " + homeworkData.getTitle() + " can not be updated");
+    else{
+      try {
+        FileUtils.forceDelete(file);
+        File testFile = new File(homeworkPath);
+        BufferedWriter writer = new BufferedWriter(new FileWriter(testFile));
+        writer.write(xml);
+        writer.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
 
   }
 
   public void deleteHomework(long lectureId, HomeworkData homeworkData) {
+    try {
+      String homeworkPath = ServerUtil.getLectureHomeworksDirectoryPath(lectureId)+homeworkData.getTitle()+ ".xml";
+      File file = new File(homeworkPath);
+      if (!file.exists())
+        throw new ELearningException("File " + homeworkData.getTitle() + " can not be deleted");
+      FileUtils.forceDelete(file);
 
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new ELearningException(e.getMessage(), e);
+    }
   }
 }

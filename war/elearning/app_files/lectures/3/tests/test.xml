@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TEST id="0" name="test" duration="0" course="3">
-	<QUESTION value="test" score="13">
-		<ANSWER isCorrect="true">das</ANSWER>
-		<ANSWER isCorrect="false">dasdd</ANSWER>
-	</QUESTION>
-</TEST>
