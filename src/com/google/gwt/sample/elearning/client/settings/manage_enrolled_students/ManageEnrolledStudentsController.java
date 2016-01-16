@@ -147,7 +147,7 @@ public class ManageEnrolledStudentsController implements ISettingsController {
     if (professorId == -1)
       return;
     view.mask();
-    lectureService.getAllLecturesByUser(professorId, new ELearningAsyncCallBack<List<Lecture>>(view, log) {
+    lectureService.getAllLecturesByProfessor(professorId, new ELearningAsyncCallBack<List<Lecture>>(view, log) {
       public void onSuccess(List<Lecture> result) {
         ListStore<Lecture> lectureListStore = view.getLectureComboBox().getStore();
         lectureListStore.clear();

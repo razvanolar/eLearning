@@ -6,7 +6,6 @@ import com.google.gwt.sample.elearning.shared.model.LectureTestData;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -85,7 +84,7 @@ public class JdbcLectureTestDAO implements LectureTestDAO {
               .prepareStatement("insert into teste(denumire,timp_start,timp_sfarsit,ref_curs) values (?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
       pstmt.setString(1, lectureTestData.getName());
       pstmt.setDate(2, new java.sql.Date(lectureTestData.getBeginDate().getTime()));
-      pstmt.setDate(3, new java.sql.Date(lectureTestData.getBeginDate().getTime()));
+      pstmt.setDate(3, new java.sql.Date(lectureTestData.getEndDate().getTime()));
       pstmt.setLong(4,lectureTestData.getLectureId());
       pstmt.executeUpdate();
 

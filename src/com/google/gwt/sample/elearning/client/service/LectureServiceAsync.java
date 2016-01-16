@@ -13,7 +13,7 @@ public interface LectureServiceAsync {
 
   void getAllLectures(AsyncCallback<List<Lecture>> async);
 
-  void getAllLecturesByUser(long idProfessor, AsyncCallback<List<Lecture>> async);
+  void getAllLecturesByProfessor(long idProfessor, AsyncCallback<List<Lecture>> async);
 
   void getLectureById(long id, AsyncCallback<Lecture> async);
 
@@ -58,4 +58,6 @@ public interface LectureServiceAsync {
   void registerUserToLecture(long userId, long lectureId, String enrollmentKey, AsyncCallback<Void> async);
 
   void resolveTest(LectureTestData testData, Map<QuestionData, AnswerData> userAnswers, AsyncCallback<Long> async);
+
+  void getAllLecturesByStudent(long userId, AsyncCallback<List<Lecture>> async);
 }

@@ -2,7 +2,9 @@ package com.google.gwt.sample.elearning.server.service;
 
 import com.google.gwt.sample.elearning.client.service.LectureService;
 import com.google.gwt.sample.elearning.server.repository.DAOFactory;
+import com.google.gwt.sample.elearning.server.repository.JDBC.HomeworkDAO;
 import com.google.gwt.sample.elearning.server.repository.JDBC.LectureDAO;
+import com.google.gwt.sample.elearning.server.repository.JDBC.LectureTestDAO;
 import com.google.gwt.sample.elearning.server.repository.JDBC.VideoLinkDAO;
 import com.google.gwt.sample.elearning.server.service.collector.homework.HomeworkXMLConverter;
 import com.google.gwt.sample.elearning.server.service.collector.test.TestXMLConvertor;
@@ -25,6 +27,8 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   private DAOFactory factory = DAOFactory.getInstance();
   private LectureDAO lectureDAO = factory.getLectureDAO();
   private VideoLinkDAO videoLinkDAO = factory.getVideoLinkDAO();
+  private HomeworkDAO homeworkDAO = factory.getHomeworkDAO();
+  private LectureTestDAO testDAO = factory.getLectureTestDAO();
   private LectureFilesUtil filesUtil = new LectureFilesUtil();
   private LectureTestsUtil testsUtil = new LectureTestsUtil();
   private LectureHomeworkUtil homeworkUtil = new LectureHomeworkUtil();
@@ -42,10 +46,15 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   }
 
   @Override
-  public List<Lecture> getAllLecturesByUser(long idProfessor) throws ELearningException {
+  public List<Lecture> getAllLecturesByProfessor(long idProfessor) throws ELearningException {
     List<Lecture> lectures;
     lectures = lectureDAO.getLecturesByProfessor(idProfessor);
     return lectures;
+  }
+
+  @Override
+  public List<Lecture> getAllLecturesByStudent(long userId) throws ELearningException {
+    return lectureDAO.getAllLecturesByStudent(userId);
   }
 
   @Override
@@ -124,6 +133,7 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
 
   @Override
   public void createTest(LectureTestData lectureTestData) throws ELearningException {
+    testDAO.insertLectureTest(lectureTestData);
     // 1. Create .xml file
     TestXMLConvertor testXMLConvertor = new TestXMLConvertor();
     String xmlValue = testXMLConvertor.convertToXML(lectureTestData);
@@ -154,6 +164,7 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
 
   @Override
   public void saveHomeworkData(long lectureId, HomeworkData homeworkData) throws ELearningException {
+    homeworkDAO.insertHomework(homeworkData);
     HomeworkXMLConverter homeworkXMLConverter = new HomeworkXMLConverter();
     String xmlValue = homeworkXMLConverter.convertToXML(homeworkData);
     homeworkUtil.createHomework(xmlValue, lectureId, homeworkData);
@@ -161,6 +172,7 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
 
   @Override
   public void updateHomeworkData(long lectureId, HomeworkData homeworkData) throws ELearningException {
+    homeworkDAO.updateHomework(homeworkData);
     HomeworkXMLConverter homeworkXMLConverter = new HomeworkXMLConverter();
     String xmlValue = homeworkXMLConverter.convertToXML(homeworkData);
     homeworkUtil.updateHomework(xmlValue,lectureId, homeworkData);
@@ -168,6 +180,7 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
 
   @Override
   public void deleteHomeworkData(long lectureId, HomeworkData homeworkData) throws ELearningException {
+    homeworkDAO.deleteHomework(homeworkData.getId());
     homeworkUtil.deleteHomework(lectureId, homeworkData);
   }
 

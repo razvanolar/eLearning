@@ -152,7 +152,7 @@ public class ManageLecturesController implements ISettingsController {
         }
       });
     } else if (user.getRole() == UserRoleTypes.PROFESSOR) {
-      lectureService.getAllLecturesByUser(ELearningController.getInstance().getCurrentUser().getId(), new ELearningAsyncCallBack<List<Lecture>>(view, log) {
+      lectureService.getAllLecturesByProfessor(ELearningController.getInstance().getCurrentUser().getId(), new ELearningAsyncCallBack<List<Lecture>>(view, log) {
         public void onSuccess(List<Lecture> result) {
           view.getGrid().getStore().clear();
           lectureList.clear();

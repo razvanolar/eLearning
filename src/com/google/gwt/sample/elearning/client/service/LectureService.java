@@ -19,7 +19,9 @@ public interface LectureService extends RemoteService {
 
   List<Lecture> getAllLectures() throws ELearningException;
 
-  List<Lecture> getAllLecturesByUser(long idProfessor) throws ELearningException;
+  List<Lecture> getAllLecturesByProfessor(long idProfessor) throws ELearningException;
+
+  List<Lecture> getAllLecturesByStudent(long userId) throws ELearningException;
 
   Lecture getLectureById(long id) throws ELearningException;
 

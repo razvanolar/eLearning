@@ -112,7 +112,7 @@ public class JdbcHomeworkDAO implements HomeworkDAO {
 
       pstmt.setString(1, homeworkData.getTitle());
       pstmt.setDate(2, new Date(homeworkData.getBeginDate().getTime()));
-      pstmt.setDate(3, new Date(homeworkData.getBeginDate().getTime()));
+      pstmt.setDate(3, new Date(homeworkData.getEndDate().getTime()));
       pstmt.setLong(4,homeworkData.getCourseId());
       pstmt.setInt(5,homeworkData.getScore());
       pstmt.setLong(6,homeworkData.getId());
