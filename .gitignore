@@ -24,3 +24,4 @@ war/WEB-INF/logging.properties
 /.idea/dataSources.local.xml
 gxt_3_0_6.xml
 app_files
+ProjectDirPath.java
