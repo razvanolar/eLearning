@@ -13,7 +13,7 @@ public class ForumXMLConverter {
 
   public String convertToXML(ForumData forumData) {
     String rez = xmlHeader;
-    rez += "\n<" + ForumElementTypes.FORUM.name() + " id=\"" + forumData.getId() + " courseId=\"" + forumData.getCourseId() + "\"" +  "\">";
+    rez += "\n<" + ForumElementTypes.FORUM.name() + " id=\"" + forumData.getId() + "\" courseId=\"" + forumData.getCourseId() + "\"" +  "\">";
     rez += convertForumDataToXML(forumData);
     rez += "\n</" + ForumElementTypes.FORUM.name() + ">";
     return rez;

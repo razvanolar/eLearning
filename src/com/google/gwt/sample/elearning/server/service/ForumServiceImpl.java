@@ -50,8 +50,22 @@ public class ForumServiceImpl extends RemoteServiceServlet implements ForumServi
 
   private ForumData getForumByLectureId(long lectureId) {
     try {
-      FileInputStream inputStream = new FileInputStream(ServerUtil.getLectureForumsPath(lectureId) + "\\forum.xml");
-      String forumStringXml = IOUtils.toString(inputStream);
+      String forumPath = ServerUtil.getLectureForumsPath(lectureId) + "\\forum.xml";
+      String forumStringXml;
+
+      File f = new File(forumPath);
+      if(f.exists() && !f.isDirectory()) {
+        FileInputStream inputStream = new FileInputStream(forumPath);
+        forumStringXml = IOUtils.toString(inputStream);
+      } else {
+        forumStringXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+            "<FORUM id=\"" + lectureId + "\" courseId=\"" + lectureId + "\">\n" +
+            "</FORUM>";
+        byte[] forum = forumStringXml.getBytes();
+        FileOutputStream fileOutputStream = new FileOutputStream(forumPath);
+        fileOutputStream.write(forum);
+        fileOutputStream.close();
+      }
 
       ForumXMLHandler forumXMLHandler = new ForumXMLHandler(forumStringXml);
       return forumXMLHandler.parse();
