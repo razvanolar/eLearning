@@ -35,4 +35,12 @@ public class EmailServiceImpl extends RemoteServiceServlet implements EmailServi
     String[] to = {email};
     emailUtil.sendFromGMail(from, password, to, subject, body);
   }
+
+  @Override
+  public void sendCustomEmail(String to, String from, String fromPwd, String subject, String body)
+      throws ELearningException {
+    EmailUtil emailUtil = new EmailUtil();
+    String[] toEmail = {to};
+    emailUtil.sendFromGMail(from, fromPwd, toEmail, subject, body);
+  }
 }

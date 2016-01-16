@@ -6,4 +6,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 public interface EmailServiceAsync {
   void sendForgetEmailPassword(String email, AsyncCallback<Void> async);
+
+  void sendCustomEmail(String to, String from, String fromPwd, String subject, String body, AsyncCallback<Void> async);
 }

@@ -15,6 +15,7 @@ public class UserData implements IsSerializable {
   private String email;
   private String sessionId;
   private UserRoleTypes role;
+  private String imagePath = "elearning\\app_files\\user_icons\\default.png";
 
   public UserData() {
   }
@@ -118,5 +119,13 @@ public class UserData implements IsSerializable {
   @Override
   public String toString() {
     return id + " " + username;
+  }
+
+  public String getImagePath() {
+    return imagePath;
+  }
+
+  public void setImagePath(String imagePath) {
+    this.imagePath = imagePath;
   }
 }

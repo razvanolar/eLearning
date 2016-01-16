@@ -110,7 +110,7 @@ public class ManageLecturesHomeworkController {
     CreateHomeworkController controller = new CreateHomeworkController(view, lectureService, this);
     controller.bind();
     MasterWindow window = new MasterWindow();
-    window.setContent(view.asWidget(), "Create Test View");
+    window.setContent(view.asWidget(), "Create Homework");
     window.setModal(true);
     window.setMinHeight(335);
     window.setMinWidth(335);
