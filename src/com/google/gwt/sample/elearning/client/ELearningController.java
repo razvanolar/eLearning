@@ -18,10 +18,7 @@ import com.google.gwt.sample.elearning.client.lecture_views.right_panel.calendar
 import com.google.gwt.sample.elearning.client.lecture_views.right_panel.usersView.LectureUsersController;
 import com.google.gwt.sample.elearning.client.profilebar.ProfileBarController;
 import com.google.gwt.sample.elearning.client.profilebar.ProfileBarView;
-import com.google.gwt.sample.elearning.client.service.LectureService;
-import com.google.gwt.sample.elearning.client.service.LectureServiceAsync;
-import com.google.gwt.sample.elearning.client.service.LoginService;
-import com.google.gwt.sample.elearning.client.service.LoginServiceAsync;
+import com.google.gwt.sample.elearning.client.service.*;
 import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.google.gwt.sample.elearning.shared.model.UserData;
 import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
@@ -47,6 +44,7 @@ public class ELearningController {
 
   private static LoginServiceAsync loginService = GWT.create(LoginService.class);
   private static LectureServiceAsync lectureService = GWT.create(LectureService.class);
+  private static ForumServiceAsync forumService = GWT.create(ForumService.class);
 
   private LectureFilesController lectureFilesController;
   private LectureVideosController lectureVideosController;
@@ -162,7 +160,7 @@ public class ELearningController {
 
   public void loadForumDetails() {
     ForumController.IForumView forumView = new ForumView();
-    ForumController forumController = new ForumController(forumView);
+    ForumController forumController = new ForumController(forumView, forumService);
     forumController.bind();
     mainELearningContainer.setCenterWidget(forumView.asWidget());
     mainELearningContainer.forceLayout();
