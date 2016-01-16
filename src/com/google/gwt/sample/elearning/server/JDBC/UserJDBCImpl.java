@@ -62,24 +62,4 @@ public class UserJDBCImpl {
     }
 
   }
-
-  public UserData getUserById(int id) {
-    throw new ELearningException("Not implemented yet");
-  }
-
-  public UserData createUser(UserData user) {
-    throw new ELearningException("Not implemented yet");
-  }
-
-  public UserData updateUser(UserData newUser) {
-    throw new ELearningException("Not implemented yet");
-  }
-
-  public UserData removeUser(List<Long> id) {
-    throw new ELearningException("Not implemented yet");
-  }
-
-  public List<? extends UserData> getAllUsersByRole(UserRoleTypes role) {
-    throw new ELearningException("Not implemented yet");
-  }
 }

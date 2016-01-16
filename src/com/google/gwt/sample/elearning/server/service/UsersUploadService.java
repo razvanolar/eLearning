@@ -1,10 +1,10 @@
 package com.google.gwt.sample.elearning.server.service;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
+import com.google.gwt.sample.elearning.server.repository.JDBC.JdbcUserDAO;
+import com.google.gwt.sample.elearning.server.service.collector.user.UserXMLHandler;
+import com.google.gwt.sample.elearning.shared.model.UserData;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import javax.servlet.ServletException;
@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -42,27 +41,14 @@ public class UsersUploadService extends HttpServlet {
           rez += s;
         }
         System.out.println(rez);
-      }
 
-//      List<FileItem> items = upload.parseRequest(req);
-//      Iterator<FileItem> iterator = items.iterator();
-//      while (iterator.hasNext()) {
-//        FileItem item = iterator.next();
-//        if (item.isFormField()) {
-//          System.out.println();
-//        } else {
-//          byte[] data = item.get();
-//          InputStream in = item.getInputStream();
-//          byte []buff = new byte[1024];
-//          int readSize = 0;
-//          while ((readSize = in.read(buff, 0, 1024)) > 0) {
-//            String rez = new String(buff, 0, readSize);
-//            // TODO: Add string concatenations here
-//            System.out.println(rez);
-//          }
-//          in.close();
-//        }
-//      }
+        UserXMLHandler userXMLHandler = new UserXMLHandler(rez);
+        List<UserData> users = userXMLHandler.parse();
+        JdbcUserDAO jdbcUserDAO = new JdbcUserDAO();
+        for(UserData userData : users){
+          jdbcUserDAO.insertUser(userData);
+        }
+      }
     } catch (Exception ex) {
       ex.printStackTrace();
     }
