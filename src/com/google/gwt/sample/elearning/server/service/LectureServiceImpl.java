@@ -2,10 +2,7 @@ package com.google.gwt.sample.elearning.server.service;
 
 import com.google.gwt.sample.elearning.client.service.LectureService;
 import com.google.gwt.sample.elearning.server.repository.DAOFactory;
-import com.google.gwt.sample.elearning.server.repository.JDBC.HomeworkDAO;
-import com.google.gwt.sample.elearning.server.repository.JDBC.LectureDAO;
-import com.google.gwt.sample.elearning.server.repository.JDBC.LectureTestDAO;
-import com.google.gwt.sample.elearning.server.repository.JDBC.VideoLinkDAO;
+import com.google.gwt.sample.elearning.server.repository.JDBC.*;
 import com.google.gwt.sample.elearning.server.service.collector.homework.HomeworkXMLConverter;
 import com.google.gwt.sample.elearning.server.service.collector.test.TestXMLConvertor;
 import com.google.gwt.sample.elearning.server.service.lecture_service_util.LectureFilesUtil;
@@ -29,6 +26,7 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   private VideoLinkDAO videoLinkDAO = factory.getVideoLinkDAO();
   private HomeworkDAO homeworkDAO = factory.getHomeworkDAO();
   private LectureTestDAO testDAO = factory.getLectureTestDAO();
+  private GradeDAO gradeDAO = factory.getGradeDAO();
   private LectureFilesUtil filesUtil = new LectureFilesUtil();
   private LectureTestsUtil testsUtil = new LectureTestsUtil();
   private LectureHomeworkUtil homeworkUtil = new LectureHomeworkUtil();
@@ -185,14 +183,30 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   }
 
   @Override
-  public long resolveTest(LectureTestData testData, Map<QuestionData, AnswerData> userAnswers) throws ELearningException {
+  public long resolveTest(long userId, LectureTestData testData) throws ELearningException {
     /* save the result in DB */
+    Grade grade = new Grade(userId, testData.getId(), 0);
+    long totalPoints = 0;
+    long points =0;
+    for(QuestionData questionData: testData.getQuestions()){
+      List<AnswerData> answers = questionData.getAnswers();
+      boolean isCorrect = true;
+      for(AnswerData answer :answers){
+        if((answer.isSelected()==true && answer.isTrue() == false) || (answer.isSelected()==false && answer.isTrue()==true))
+          isCorrect = false;
+      }
+      totalPoints+=questionData.getScore();
+      if(isCorrect==true)
+        points = points+questionData.getScore();
+    }
 
-
+    grade.setGrade((int) (points*10/totalPoints));
+    gradeDAO.saveGrade(grade,LectureTestData.class.getName());
     /* call LectureTestsUtil to update the files */
     testsUtil.updateTestFiles();
 
     /* return : test final score */
-    return 0;
+    return grade.getGrade();
+
   }
 }
