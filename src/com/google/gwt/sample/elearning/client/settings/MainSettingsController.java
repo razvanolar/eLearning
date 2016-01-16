@@ -7,6 +7,8 @@ import com.google.gwt.sample.elearning.client.settings.manage_enrolled_students.
 import com.google.gwt.sample.elearning.client.settings.manage_enrolled_students.ManageEnrolledStudentsView;
 import com.google.gwt.sample.elearning.client.settings.manage_lectures.ManageLecturesController;
 import com.google.gwt.sample.elearning.client.settings.manage_lectures.ManageLecturesView;
+import com.google.gwt.sample.elearning.client.settings.manage_logs.ManageLogsController;
+import com.google.gwt.sample.elearning.client.settings.manage_logs.ManageLogsView;
 import com.google.gwt.sample.elearning.client.settings.manage_users.ManageUsersController;
 import com.google.gwt.sample.elearning.client.settings.manage_users.ManageUsersView;
 import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
@@ -66,6 +68,14 @@ public class MainSettingsController {
     enrolledStudentsController.bind();
     enrolledStudentsView.asWidget().setLayoutData(enrolledStudentsController);
     view.addTab(enrolledStudentsView.asWidget(), "Manage Enrolled Students");
+
+    /* Add system logs controller */
+    if (ELearningController.getInstance().getCurrentUser().getRole() == UserRoleTypes.ADMIN) {
+      ManageLogsController.IManageLogsView logsView = new ManageLogsView();
+      ManageLogsController logsController = new ManageLogsController(logsView);
+      logsController.bind();
+      view.addTab(logsView.asWidget(), "System Logs");
+    }
   }
 
   private void addListeners() {
