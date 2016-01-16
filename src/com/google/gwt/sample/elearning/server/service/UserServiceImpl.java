@@ -70,4 +70,8 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
   public List<UserData> getUsersByLecture(long id) throws ELearningException {
     return userDAO.getAllUsersByLecture(id);
   }
+
+  public List<UserData> getEnrolledStudentsByProfessorId(long id) throws ELearningException {
+    return userDAO.getAllUsersByProfessor(id);
+  }
 }
