@@ -83,14 +83,17 @@ public class JdbcHomeworkDAO implements HomeworkDAO {
     try {
       con = JDBCUtil.getNewConnection();
       PreparedStatement pstmt = con
-              .prepareStatement("insert into teme(denumire,timp_start,timp_sfarsit,ref_curs,punctaj) values (?,?,?,?,?)");
+              .prepareStatement("insert into teme(denumire,timp_start,timp_sfarsit,ref_curs,punctaj) values (?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
       pstmt.setString(1, homeworkData.getTitle());
       pstmt.setDate(2, new Date(homeworkData.getBeginDate().getTime()));
       pstmt.setDate(3, new Date(homeworkData.getBeginDate().getTime()));
       pstmt.setLong(4,homeworkData.getCourseId());
       pstmt.setInt(5,homeworkData.getScore());
       pstmt.executeUpdate();
-
+      ResultSet generatedKeys = pstmt.getGeneratedKeys();
+      if (generatedKeys.next()) {
+        homeworkData.setId(generatedKeys.getLong(1));
+      }
     } catch (SQLException e) {
       throw new RepositoryException("Tema nu a putut fi adaugata!", e);
     } finally {

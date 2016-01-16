@@ -23,4 +23,19 @@ public class JdbcDAOFactory extends DAOFactory {
   public VideoLinkDAO getVideoLinkDAO() {
     return new JdbcVideoLinkDAO();
   }
+
+  @Override
+  public HomeworkDAO getHomeworkDAO() {
+    return new JdbcHomeworkDAO();
+  }
+
+  @Override
+  public LectureTestDAO getLectureTestDAO() {
+    return new JdbcLectureTestDAO();
+  }
+
+  @Override
+  public GradeDAO getGradeDAO() {
+    return new JdbcGradeDAO();
+  }
 }

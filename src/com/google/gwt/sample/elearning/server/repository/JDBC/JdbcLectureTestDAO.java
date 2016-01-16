@@ -82,12 +82,17 @@ public class JdbcLectureTestDAO implements LectureTestDAO {
     try {
       con = JDBCUtil.getNewConnection();
       PreparedStatement pstmt = con
-              .prepareStatement("insert into teste(denumire,timp_start,timp_sfarsit,ref_curs) values (?,?,?,?)");
+              .prepareStatement("insert into teste(denumire,timp_start,timp_sfarsit,ref_curs) values (?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
       pstmt.setString(1, lectureTestData.getName());
       pstmt.setDate(2, new java.sql.Date(lectureTestData.getBeginDate().getTime()));
       pstmt.setDate(3, new java.sql.Date(lectureTestData.getBeginDate().getTime()));
       pstmt.setLong(4,lectureTestData.getLectureId());
       pstmt.executeUpdate();
+
+      ResultSet generatedKeys = pstmt.getGeneratedKeys();
+      if (generatedKeys.next()) {
+        lectureTestData.setId(generatedKeys.getLong(1));
+      }
 
     } catch (SQLException e) {
       throw new RepositoryException("Testul nu a putut fi adaugat!", e);
