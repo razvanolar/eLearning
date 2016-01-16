@@ -4,7 +4,6 @@ import com.google.gwt.sample.elearning.server.JDBC.JDBCUtil;
 import com.google.gwt.sample.elearning.server.repository.RepositoryException;
 import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.google.gwt.sample.elearning.shared.model.Professor;
-import com.google.gwt.sample.elearning.shared.model.UserData;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -101,7 +100,7 @@ public class JdbcLectureDAO implements LectureDAO {
     Connection con = null;
     try {
       con = JDBCUtil.getNewConnection();
-      PreparedStatement pstmt = con.prepareStatement("select * from cursuri where id = ?");
+      PreparedStatement pstmt = con.prepareStatement("select * from cursuri where ref_profesor = ?");
       pstmt.setLong(1, id);
       ResultSet rs = pstmt.executeQuery();
       while (rs.next()) {

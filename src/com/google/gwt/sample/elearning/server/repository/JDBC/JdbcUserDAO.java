@@ -228,6 +228,18 @@ public class JdbcUserDAO implements UserDAO {
 
   @Override
   public void removeUserFromLecture(long lectureId, long userId) throws RepositoryException {
-
+    Connection con = null;
+    try {
+      con = JDBCUtil.getNewConnection();
+      PreparedStatement pstmt = con.prepareStatement("delete from studenti_inscrisi where ref_curs = ? and ref_student = ?");
+      pstmt.setLong(1, lectureId);
+      pstmt.setLong(2, userId);
+      pstmt.executeUpdate();
+    } catch (SQLException e) {
+      throw new RepositoryException(e.getMessage(), e);
+    } finally {
+      if (con != null)
+        JDBCUtil.closeConnection(con);
+    }
   }
 }
