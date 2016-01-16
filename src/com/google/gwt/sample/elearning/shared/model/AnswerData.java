@@ -10,6 +10,7 @@ public class AnswerData implements IsSerializable {
 
   private String value;
   private boolean isTrue;
+  private boolean isSelected;
 
   public AnswerData() {}
 
@@ -32,5 +33,13 @@ public class AnswerData implements IsSerializable {
 
   public void setIsTrue(boolean isTrue) {
     this.isTrue = isTrue;
+  }
+
+  public boolean isSelected() {
+    return isSelected;
+  }
+
+  public void setIsSelected(boolean isSelected) {
+    this.isSelected = isSelected;
   }
 }
