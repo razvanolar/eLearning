@@ -3,6 +3,7 @@ package com.google.gwt.sample.elearning.client.forum_view;
 import com.google.gwt.sample.elearning.client.eLearningUtils.MaskableView;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
+import com.sencha.gxt.widget.core.client.form.TextField;
 
 /**
  *
@@ -12,14 +13,21 @@ public class ForumView implements ForumController.IForumView, MaskableView {
 
   private BorderLayoutContainer mainContainer;
 
+  public TextField getTextField() {
+    return text;
+  }
+
+  TextField text;
+
   public ForumView() {
     initGUI();
   }
 
   private void initGUI() {
     mainContainer = new BorderLayoutContainer();
-
+    text = new TextField();
     mainContainer.setStyleName("whiteBackground");
+    mainContainer.add(text);
   }
 
   @Override

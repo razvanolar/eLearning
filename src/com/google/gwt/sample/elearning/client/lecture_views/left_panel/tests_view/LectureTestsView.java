@@ -42,11 +42,19 @@ public class LectureTestsView implements LectureTestsController.ILectureTestView
 
     mainContainer.setSouthWidget(toolBar, new BorderLayoutContainer.BorderLayoutData(30));
     mainContainer.setCenterWidget(testsGrid);
+    setState(LectureTestsController.ILectureTestsViewState.NONE);
   }
 
   @Override
   public void setState(LectureTestsController.ILectureTestsViewState state) {
-
+    switch (state) {
+      case SELECTED:
+        resolveTestButton.setEnabled(true);
+        break;
+      case NONE:
+        resolveTestButton.setEnabled(false);
+        break;
+    }
   }
 
   private Grid<LWLectureTestData> createGrid() {
