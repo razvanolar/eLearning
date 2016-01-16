@@ -62,7 +62,10 @@ public class MainSettingsController {
 
     /* Add manage enrolled students */
     ManageEnrolledStudentsController.IManageEnrolledStudentsView enrolledStudentsView = new ManageEnrolledStudentsView();
-    ManageEnrolledStudentsController enrolledStudentsController = new ManageEnrolledStudentsController();
+    ManageEnrolledStudentsController enrolledStudentsController = new ManageEnrolledStudentsController(enrolledStudentsView);
+    enrolledStudentsController.bind();
+    enrolledStudentsView.asWidget().setLayoutData(enrolledStudentsController);
+    view.addTab(enrolledStudentsView.asWidget(), "Manage Enrolled students");
   }
 
   private void addListeners() {

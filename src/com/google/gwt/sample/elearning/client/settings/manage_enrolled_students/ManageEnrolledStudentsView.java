@@ -16,7 +16,7 @@ public class ManageEnrolledStudentsView implements ManageEnrolledStudentsControl
   }
 
   private void initGUI() {
-
+    mainContainer = new BorderLayoutContainer();
   }
 
   @Override
