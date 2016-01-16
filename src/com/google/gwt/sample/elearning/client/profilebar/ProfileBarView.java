@@ -110,4 +110,8 @@ public class ProfileBarView implements ProfileBarController.IProfileBarView {
   public TextButton getLecturesButton() {
     return lecturesButton;
   }
+
+  public MenuItem getChangePasswordMenuItem() {
+    return changePasswordItem;
+  }
 }
