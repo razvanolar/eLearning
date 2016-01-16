@@ -109,13 +109,13 @@ public class ELearningController {
     currentLecture = lecture;
     if (eLearningView == null) {
       eLearningView = new ELearningView();
-      mainELearningContainer.setCenterWidget(eLearningView.asWidget());
-      mainELearningContainer.forceLayout();
       log.info("Initialize ELearningView widget");
     } else {
       if (eLearningView.getLectureContentView() != null)
         eLearningView.getLectureContentView().clear();
     }
+    mainELearningContainer.setCenterWidget(eLearningView.asWidget());
+    mainELearningContainer.forceLayout();
 
     if (lectureFilesController == null) {
       LectureDetailsView lectureDetailsView = eLearningView.getLectureDetailsView();
