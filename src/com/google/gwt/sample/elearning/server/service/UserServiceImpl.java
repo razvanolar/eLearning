@@ -62,6 +62,11 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
   }
 
   @Override
+  public List<UserData> getEnrolledStudentsByLectureId(long lectureId) throws ELearningException {
+    return userDAO.getAllUsersByLecture(lectureId);
+  }
+
+  @Override
   public List<UserData> getUsersByLecture(long id) throws ELearningException {
     return userDAO.getAllUsersByLecture(id);
   }
