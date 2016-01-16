@@ -203,7 +203,7 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   }
 
   @Override
-  public long resolveTest(LectureTestData testData, Map<QuestionData, AnswerData> userAnswers) throws ELearningException {
+  public long resolveTest(LectureTestData testData) throws ELearningException {
     /* save the result in DB */
 
 
