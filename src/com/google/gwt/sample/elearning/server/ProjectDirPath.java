@@ -5,7 +5,7 @@ package com.google.gwt.sample.elearning.server;
  * Created by razvanolar on 16.01.2016.
  */
 public enum ProjectDirPath {
-  PROJECT_DIR_PATH("C:\\Users\\razvanolar\\Desktop\\eLearning\\eLearning\\war\\");
+  PROJECT_DIR_PATH("E:\\IntellijProj\\An 3\\PC\\eLearning\\war\\");
 
   String path;
 

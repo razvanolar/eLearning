@@ -91,10 +91,10 @@ public class ServerUtil {
   public static String getLogFile() {
     DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     Date date = new Date();
-    return PATH + LOG_PATH + "log" + dateFormat.format(date);
+    return ProjectDirPath.PROJECT_DIR_PATH.getPath() + PATH + LOG_PATH + "log" + dateFormat.format(date);
   }
 
   public static String getLogsPath() {
-    return PATH + LOG_PATH;
+    return ProjectDirPath.PROJECT_DIR_PATH.getPath() + PATH + LOG_PATH;
   }
 }
