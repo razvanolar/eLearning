@@ -8,7 +8,6 @@ import com.google.gwt.sample.elearning.client.eLearningUtils.models_properties.U
 import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.google.gwt.sample.elearning.shared.model.Professor;
 import com.google.gwt.sample.elearning.shared.model.UserData;
-import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.cell.core.client.form.ComboBoxCell;
@@ -19,7 +18,6 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import com.sencha.gxt.widget.core.client.form.ComboBox;
-import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.grid.*;
 import com.sencha.gxt.widget.core.client.toolbar.SeparatorToolItem;
 import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
@@ -115,6 +113,36 @@ public class ManageEnrolledStudentsView implements ManageEnrolledStudentsControl
     userDataGrid.setSelectionModel(selectionModel);
 
     return userDataGrid;
+  }
+
+  public TextButton getRefresButton() {
+    return refresButton;
+  }
+
+  public TextButton getRemoveFromLectureButton() {
+    return removeFromLectureButton;
+  }
+
+  public ComboBox<Lecture> getLectureComboBox() {
+    return lectureComboBox;
+  }
+
+  public ComboBox<Professor> getProfessorComboBox() {
+    return professorComboBox;
+  }
+
+  public Grid<UserData> getUserGrid() {
+    return userGrid;
+  }
+
+  @Override
+  public void mask() {
+    mainContainer.mask();
+  }
+
+  @Override
+  public void unmask() {
+    mainContainer.unmask();
   }
 
   @Override
