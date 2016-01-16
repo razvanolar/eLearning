@@ -129,4 +129,29 @@ public class LectureHomeworkUtil {
       throw new ELearningException(e.getMessage(), e);
     }
   }
+
+  public void resolveHomework(long lectureid, long professorId, long userId, String homeworkTitle, String solution) {
+    try{
+      String homeworkProjPath = ServerUtil.getResolvedHomeworksProjectPath(professorId, userId);
+      String homeworkDirPath = ServerUtil.getResolvedHomeworksDirectoryPath(professorId, userId);
+      File projFile = new File(homeworkProjPath);
+      File dirFile = new File(homeworkDirPath);
+      if (!dirFile.exists() && !dirFile.mkdirs())
+        throw new ELearningException("File " + homeworkTitle + " can not be created");
+      if (!projFile.exists() && !projFile.mkdirs())
+        throw new ELearningException("File " + homeworkTitle + " can not be created");
+
+      File homeWorkProjFile = new File(homeworkProjPath + homeworkTitle + ".txt");
+      File homeWorkDirFile = new File(homeworkDirPath + homeworkTitle + ".txt");
+      BufferedWriter dirWriter = new BufferedWriter(new FileWriter(homeWorkDirFile));
+      BufferedWriter projWriter = new BufferedWriter(new FileWriter(homeWorkProjFile));
+      dirWriter.write(solution);
+      projWriter.write(solution);
+      dirWriter.close();
+      projWriter.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new ELearningException(e.getMessage(), e);
+    }
+  }
 }
