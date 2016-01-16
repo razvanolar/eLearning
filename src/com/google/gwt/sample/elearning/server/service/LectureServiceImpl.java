@@ -213,4 +213,10 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
     /* return : test final score */
     return 0;
   }
+
+  @Override
+  public void addHomeworkSolution(long lectureid, long professorId, long userId, String homeworkTitle, String solution)
+      throws ELearningException {
+    homeworkUtil.resolveHomework(lectureid, professorId, userId, homeworkTitle, solution);
+  }
 }

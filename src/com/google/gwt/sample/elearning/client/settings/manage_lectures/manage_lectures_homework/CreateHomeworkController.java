@@ -97,6 +97,7 @@ public class CreateHomeworkController {
     if (homeworkData == null) {
       homeworkData = new HomeworkData(-1, view.getTitleField().getText(), score,
           view.getDescriptionTextArea().getText());
+      homeworkData.setCourseId(parentController.getSelectedLecture().getId());
       lectureService.saveHomeworkData(parentController.getSelectedLecture().getId(), homeworkData,
           new ELearningAsyncCallBack<Void>(view, logger) {
             @Override
@@ -109,6 +110,7 @@ public class CreateHomeworkController {
       homeworkData.setTitle(view.getTitleField().getText());
       homeworkData.setScore(score);
       homeworkData.setText(view.getDescriptionTextArea().getText());
+      homeworkData.setCourseId(parentController.getSelectedLecture().getId());
       lectureService.updateHomeworkData(parentController.getSelectedLecture().getId(), homeworkData,
           new ELearningAsyncCallBack<Void>(view, logger) {
             @Override

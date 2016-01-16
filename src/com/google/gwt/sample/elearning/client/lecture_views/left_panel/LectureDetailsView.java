@@ -2,6 +2,8 @@ package com.google.gwt.sample.elearning.client.lecture_views.left_panel;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.sample.elearning.client.lecture_views.left_panel.filesView.LectureFilesView;
+import com.google.gwt.sample.elearning.client.lecture_views.left_panel.homeworks_view.LectureHomeworksController;
+import com.google.gwt.sample.elearning.client.lecture_views.left_panel.homeworks_view.LectureHomeworksView;
 import com.google.gwt.sample.elearning.client.lecture_views.left_panel.tests_view.LectureTestsView;
 import com.google.gwt.sample.elearning.client.lecture_views.left_panel.videos_view.LectureVideosView;
 import com.google.gwt.user.client.ui.Widget;
@@ -19,6 +21,7 @@ public class LectureDetailsView {
   private LectureFilesView lectureFilesView;
   private LectureVideosView lectureVideosView;
   private LectureTestsView lectureTestsView;
+  private LectureHomeworksView lectureHomeworksView;
 
   public LectureDetailsView() {
     initGUI();
@@ -32,11 +35,13 @@ public class LectureDetailsView {
     lectureFilesView = new LectureFilesView();
     lectureVideosView = new LectureVideosView();
     lectureTestsView = new LectureTestsView();
+    lectureHomeworksView = new LectureHomeworksView();
     mainContainer = new BorderLayoutContainer();
     AccordionLayoutContainer accordionLayoutContainer = new AccordionLayoutContainer();
     ContentPanel lectureFilesPanel = new ContentPanel(appearance);
     ContentPanel lectureVideosPanel = new ContentPanel(appearance);
     ContentPanel lectureTestsPanel = new ContentPanel(appearance);
+    ContentPanel lectureHomeworksPanel = new ContentPanel(appearance);
 
     lectureFilesPanel.setHeadingText("Files");
     lectureFilesPanel.add(lectureFilesView.asWidget());
@@ -44,10 +49,13 @@ public class LectureDetailsView {
     lectureVideosPanel.add(lectureVideosView.asWidget());
     lectureTestsPanel.setHeadingText("Tests");
     lectureTestsPanel.add(lectureTestsView.asWidget());
+    lectureHomeworksPanel.setHeadingText("Homeworks");
+    lectureHomeworksPanel.add(lectureHomeworksView.asWidget());
 
     accordionLayoutContainer.add(lectureFilesPanel);
     accordionLayoutContainer.add(lectureVideosPanel);
     accordionLayoutContainer.add(lectureTestsPanel);
+    accordionLayoutContainer.add(lectureHomeworksPanel);
     accordionLayoutContainer.setExpandMode(AccordionLayoutContainer.ExpandMode.SINGLE_FILL);
     lectureFilesPanel.setExpanded(true);
 
@@ -68,5 +76,9 @@ public class LectureDetailsView {
 
   public Widget asWidget() {
     return mainContainer;
+  }
+
+  public LectureHomeworksView getLectureHomeworkView() {
+    return lectureHomeworksView;
   }
 }

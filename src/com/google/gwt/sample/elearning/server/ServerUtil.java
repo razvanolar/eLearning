@@ -19,6 +19,7 @@ public class ServerUtil {
   public static final String LOG_PATH = "logs\\";
   public static final String USER_SOLVED_TESTS_PATH = "user_solved_tests\\";
   public static final String FORUMS_PATH = "forums\\";
+  public static final String RESOLVED_HOMEWORKS_PATH = "resolved_homeworks\\";
   public static final String HTML_DOCUMENT = "<!DOCTYPE html>\n"
       + "<html>"
       + "\t<head>\n"
@@ -111,4 +112,13 @@ public class ServerUtil {
   public static String getUserSolvedTestsProjectPath(long usersId) {
     return ProjectDirPath.PROJECT_DIR_PATH.getPath() + getUserSolvedTestsDirectoryPath(usersId);
   }
+
+  public static String getResolvedHomeworksDirectoryPath(long professorId, long userId){
+    return getUserDirectoryPath(professorId) + RESOLVED_HOMEWORKS_PATH + userId + "\\";
+  }
+
+  public static String getResolvedHomeworksProjectPath(long professorId, long userId){
+    return ProjectDirPath.PROJECT_DIR_PATH.getPath() + getResolvedHomeworksDirectoryPath(professorId, userId);
+  }
+
 }
