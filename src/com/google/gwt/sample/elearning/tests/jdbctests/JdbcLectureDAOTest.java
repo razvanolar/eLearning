@@ -45,7 +45,7 @@ public class JdbcLectureDAOTest {
     @Test
     public void getLecturesByProfessorTest(){
 
-        assert lectureDAO.getLecturesByUser(1).size()>0;
+        assert lectureDAO.getLecturesByProfessor(1).size()>0;
     }
 
     @Test

@@ -95,7 +95,7 @@ public class JdbcLectureDAO implements LectureDAO {
   }
 
   @Override
-  public List<Lecture> getLecturesByUser(long id) throws RepositoryException {
+  public List<Lecture> getLecturesByProfessor(long id) throws RepositoryException {
     ArrayList<Lecture> lectures = new ArrayList<Lecture>();
     Connection con = null;
     try {
@@ -251,6 +251,31 @@ public class JdbcLectureDAO implements LectureDAO {
       if (conn != null)
         JDBCUtil.closeConnection(conn);
     }
+  }
+
+  @Override
+  public List<Lecture> getAllLecturesByStudent(long userId) throws RepositoryException {
+    ArrayList<Lecture> lectures = new ArrayList<Lecture>();
+    Connection con = null;
+    try {
+      con = JDBCUtil.getNewConnection();
+      PreparedStatement pstmt = con.prepareStatement("select cu.* from cursuri cu INNER JOIN studenti_inscrisi si on cu.id = si.ref_curs WHERE  si.ref_student = ?");
+      pstmt.setLong(1, userId);
+      ResultSet rs = pstmt.executeQuery();
+      while (rs.next()) {
+        Professor professor = new Professor(userDAO.getUserById(rs.getLong(3)));
+        Lecture lecture = new Lecture(rs.getLong(1), professor, rs.getString(2), rs.getString(4));
+        lectures.add(lecture);
+      }
+
+    } catch (SQLException e) {
+      throw new RepositoryException("Eroare la comunicarea cu BD", e);
+
+    } finally {
+      if (con != null)
+        JDBCUtil.closeConnection(con);
+    }
+    return lectures;
   }
 
 

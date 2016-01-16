@@ -12,11 +12,12 @@ public interface LectureDAO {
     List<Lecture> getAllLectures() throws RepositoryException;
     Lecture getLectureById(long id) throws RepositoryException;
     Lecture getLectureByName(String name) throws RepositoryException;
-    List<Lecture> getLecturesByUser(long id) throws RepositoryException;
+    List<Lecture> getLecturesByProfessor(long id) throws RepositoryException;
     List<Lecture> getEnrolledLecturesByUser(long userId) throws RepositoryException;
     List<Lecture> getUnenrolledLecturesByUser(long userId) throws RepositoryException;
     void insertLecture(Lecture lecture) throws RepositoryException;
     void updateLecture(Lecture user) throws RepositoryException;
     void deleteLecture(long id) throws RepositoryException;
     void registerUserToLecture(long userId, long lectureId, String key) throws RepositoryException;
+    List<Lecture> getAllLecturesByStudent(long userId) throws RepositoryException;
 }
