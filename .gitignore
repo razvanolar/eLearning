@@ -25,3 +25,4 @@ war/WEB-INF/logging.properties
 gxt_3_0_6.xml
 app_files
 ProjectDirPath.java
+src/com/google/gwt/sample/elearning/server/ProjectDirPath.java
