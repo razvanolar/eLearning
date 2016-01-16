@@ -242,4 +242,21 @@ public class JdbcUserDAO implements UserDAO {
         JDBCUtil.closeConnection(con);
     }
   }
+
+  @Override
+  public void changePassword(long id, String password) throws RepositoryException {
+    Connection con = null;
+    try{
+      con = JDBCUtil.getNewConnection();
+      PreparedStatement preparedStatement = con.prepareStatement("update utilizatori set parola = ? where id = ?");
+      preparedStatement.setString(1, password);
+      preparedStatement.setLong(2,id);
+      preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+      throw new RepositoryException(e.getMessage(), e);
+    } finally {
+      if (con != null)
+        JDBCUtil.closeConnection(con);
+    }
+  }
 }

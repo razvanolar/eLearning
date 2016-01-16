@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.sample.elearning.client.forum_view.ForumController;
 import com.google.gwt.sample.elearning.client.forum_view.ForumView;
 import com.google.gwt.sample.elearning.client.icons.Icons;
+import com.google.gwt.sample.elearning.client.lecture_views.left_panel.tests_view.LectureTestsController;
 import com.google.gwt.sample.elearning.client.lecture_views.left_panel.videos_view.LectureVideosController;
 import com.google.gwt.sample.elearning.client.login.LoginController;
 import com.google.gwt.sample.elearning.client.login.LoginView;
@@ -50,6 +51,7 @@ public class ELearningController {
   private LectureFilesController lectureFilesController;
   private LectureVideosController lectureVideosController;
   private LectureUsersController lectureUsersController;
+  private LectureTestsController lectureTestsController;
   private CalendarController calendarController;
   private UserData currentUser;
   private Lecture currentLecture;
@@ -134,6 +136,15 @@ public class ELearningController {
       lectureVideosController.bind();
     }
     lectureVideosController.loadVideos();
+
+    /* create tests controller */
+    if (lectureTestsController == null) {
+      LectureDetailsView lectureDetailsView = eLearningView.getLectureDetailsView();
+      lectureTestsController = new LectureTestsController(lectureDetailsView.getLectureTestsView(), lectureService);
+      lectureTestsController.bind();
+    }
+    lectureTestsController.loadTests();
+
 
     LectureInfoView lectureInfoView = eLearningView.getLectureInfoView();
 

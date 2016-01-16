@@ -30,4 +30,6 @@ public interface UserService extends RemoteService {
   List<UserData> getEnrolledStudentsByProfessorId(long id) throws ELearningException;
 
   void removeUserFromLecture(long lectureId, long userId) throws ELearningException;
+
+  void changePassword(long id, String password) throws ELearningException;
 }

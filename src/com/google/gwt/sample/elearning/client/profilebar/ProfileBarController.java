@@ -13,6 +13,8 @@ import com.google.gwt.sample.elearning.client.service.LectureService;
 import com.google.gwt.sample.elearning.client.service.LectureServiceAsync;
 import com.google.gwt.sample.elearning.client.settings.MainSettingsController;
 import com.google.gwt.sample.elearning.client.settings.MainSettingsView;
+import com.google.gwt.sample.elearning.client.user_profile.change_password.ChangePasswordController;
+import com.google.gwt.sample.elearning.client.user_profile.change_password.ChangePasswordView;
 import com.google.gwt.sample.elearning.shared.model.FilteredLecturesData;
 import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -38,6 +40,7 @@ public class ProfileBarController {
     MenuItem getViewLogsMenuItem();
     MenuItem getLogoutMenuItem();
     MenuItem getUnenrolledMenuItem();
+    MenuItem getChangePasswordMenuItem();
     MenuItem getUserLecturesItem();
     Widget asWidget();
   }
@@ -91,19 +94,27 @@ public class ProfileBarController {
         ELearningController.getInstance().loadForumDetails();
       }
     });
+
+    view.getChangePasswordMenuItem().addSelectionHandler(new SelectionHandler<Item>() {
+      @Override
+      public void onSelection(SelectionEvent<Item> event) {
+        doOnChangePasswordSelection();
+      }
+    });
   }
 
   private void doOnLecturesSelection() {
-    lectureService.getLecturesEnrollementsListByUser(ELearningController.getInstance().getCurrentUser().getId(), new AsyncCallback<FilteredLecturesData>() {
-      public void onFailure(Throwable caught) {
+    lectureService.getLecturesEnrollementsListByUser(ELearningController.getInstance().getCurrentUser().getId(),
+        new AsyncCallback<FilteredLecturesData>() {
+          public void onFailure(Throwable caught) {
 
-      }
+          }
 
-      public void onSuccess(FilteredLecturesData result) {
-        createUserLecturesSubMenu(result.getEnrolledLectures());
-        userLecturesController.setLecturesList(result.getUnenrolledLectures());
-      }
-    });
+          public void onSuccess(FilteredLecturesData result) {
+            createUserLecturesSubMenu(result.getEnrolledLectures());
+            userLecturesController.setLecturesList(result.getUnenrolledLectures());
+          }
+        });
   }
 
   private void doOnSettingsSelect() {
@@ -115,6 +126,21 @@ public class ProfileBarController {
     MasterWindow window = new MasterWindow();
     window.setContent(settingsView.asWidget(), "Admin manager");
     window.show();
+  }
+
+  private void doOnChangePasswordSelection() {
+    ChangePasswordController.IChangePasswordView changePasswordView = new ChangePasswordView();
+    ChangePasswordController changePasswordController = new ChangePasswordController(changePasswordView);
+    changePasswordController.bind();
+
+    MasterWindow window = new MasterWindow();
+    window.setContent(changePasswordView.asWidget(), "Change Password");
+    window.setModal(true);
+    window.setPixelSize(280, 150);
+    window.setResizable(false);
+    window.show();
+    changePasswordController.setContentWindow(window);
+
   }
 
   private void doOnViewLogsSelect() {

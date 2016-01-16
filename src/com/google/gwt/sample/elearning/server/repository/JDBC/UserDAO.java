@@ -20,4 +20,5 @@ public interface UserDAO {
     List<UserData> getAllUsersByLecture(long id);
     List<UserData> getAllUsersByProfessor(long id);
     void removeUserFromLecture(long lectureId, long userId) throws RepositoryException;
+    void changePassword(long id, String password) throws RepositoryException;
 }

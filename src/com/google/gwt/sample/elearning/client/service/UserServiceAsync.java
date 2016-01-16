@@ -25,4 +25,6 @@ public interface UserServiceAsync {
   void getEnrolledStudentsByProfessorId(long id, AsyncCallback<List<UserData>> async);
 
   void removeUserFromLecture(long lectureId, long userId, AsyncCallback<Void> async);
+
+  void changePassword(long id, String password, AsyncCallback<Void> async);
 }

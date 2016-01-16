@@ -75,4 +75,9 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
   public void removeUserFromLecture(long lectureId, long userId) throws ELearningException {
     userDAO.removeUserFromLecture(lectureId, userId);
   }
+
+  @Override
+  public void changePassword(long id, String password) throws ELearningException {
+    userDAO.changePassword(id,password);
+  }
 }

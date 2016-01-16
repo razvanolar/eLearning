@@ -114,12 +114,16 @@ public class LectureTestsUtil {
         throw new ELearningException("File " + title + " can not be created");
       File testFile = new File(testsPath + title + ".props");
       BufferedWriter writer = new BufferedWriter(new FileWriter(testFile));
-      String result = "QUESTIONS_NO="+ questionNo + "\nTOTAL_SCORE="+totalScore;
+      String result = "QUESTIONS_NO=" + questionNo + "\nTOTAL_SCORE=" + totalScore + "\nSOLVED=FALSE";
       writer.write(result);
       writer.close();
     } catch (IOException e) {
       e.printStackTrace();
       throw new ELearningException(e.getMessage(), e);
     }
+  }
+
+  public void updateTestFiles() throws ELearningException {
+
   }
 }

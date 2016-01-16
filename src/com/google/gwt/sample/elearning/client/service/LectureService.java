@@ -7,6 +7,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import java.util.List;
+import java.util.Map;
 
 /***
  * Created by Ambrozie Paval on 11/19/2015.
@@ -62,4 +63,5 @@ public interface LectureService extends RemoteService {
 
   void deleteHomeworkData(long lectureId, HomeworkData homeworkData) throws ELearningException;
 
+  long resolveTest(LectureTestData testData, Map<QuestionData, AnswerData> userAnswers) throws ELearningException;
 }
