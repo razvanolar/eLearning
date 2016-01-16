@@ -46,8 +46,16 @@ public class ServerUtil {
     return PATH + LECTURES_PATH + lectureId + "\\" + FILES_PATH;
   }
 
+  public static String getLecturesFileProjectPath(long lectureId) {
+    return ProjectDirPath.PROJECT_DIR_PATH.getPath() + getLectureFilesDirectoryPath(lectureId);
+  }
+
   public static String getLectureTestsDirectoryPath(long lectureId) {
     return PATH + LECTURES_PATH + lectureId + "\\" + TESTS_PATH;
+  }
+
+  public static String getLectureTestsProjectPath(long lectureId) {
+    return ProjectDirPath.PROJECT_DIR_PATH.getPath() + getLectureTestsDirectoryPath(lectureId);
   }
 
   public static FileExtensionTypes getFileExensionByName(String fileName) {
@@ -74,6 +82,10 @@ public class ServerUtil {
 
   public static String getLectureHomeworksDirectoryPath(long lectureId) {
     return PATH + LECTURES_PATH + lectureId + "\\" + HOMEWORKS_PATH;
+  }
+
+  public static String getLectureHomeworksProjectPath(long lectureId) {
+    return ProjectDirPath.PROJECT_DIR_PATH.getPath() + getLectureHomeworksDirectoryPath(lectureId);
   }
 
   public static String getLogFile() {

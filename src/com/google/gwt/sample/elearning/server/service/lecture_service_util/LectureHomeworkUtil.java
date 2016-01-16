@@ -19,7 +19,7 @@ public class LectureHomeworkUtil {
   public List<HomeworkData> getAllHomeworks(UserData user, long lectureId){
     try {
       File lecturesPath = new File(ServerUtil.getLectureHomeworksDirectoryPath(lectureId));
-      if (!lecturesPath.exists())
+      if (!lecturesPath.exists() && !lecturesPath.mkdirs())
         throw new FileNotFoundException();
 
       List<HomeworkData> result = new ArrayList<>();
@@ -62,14 +62,22 @@ public class LectureHomeworkUtil {
 
   public void createHomework(String xml, long lectureId, HomeworkData homeworkData) {
     try {
-      String homeworkPath = ServerUtil.getLectureHomeworksDirectoryPath(lectureId);
-      File file = new File(homeworkPath);
-      if (!file.exists() && !file.mkdirs())
+      String homeworkDirPath = ServerUtil.getLectureHomeworksDirectoryPath(lectureId);
+      String homeworkProjPath = ServerUtil.getLectureHomeworksProjectPath(lectureId);
+      File dirFile = new File(homeworkDirPath);
+      File projFile = new File(homeworkProjPath);
+      if (!dirFile.exists() && !dirFile.mkdirs())
         throw new ELearningException("File " + homeworkData.getTitle() + " can not be created");
-      File testFile = new File(homeworkPath + homeworkData.getTitle() + ".xml");
-      BufferedWriter writer = new BufferedWriter(new FileWriter(testFile));
-      writer.write(xml);
-      writer.close();
+      if (!projFile.exists() && !projFile.mkdirs())
+        throw new ELearningException("File " + homeworkData.getTitle() + " can not be created");
+      File testDirFile = new File(homeworkDirPath + homeworkData.getTitle() + ".xml");
+      File testProjFile = new File(homeworkProjPath + homeworkData.getTitle() + ".xml");
+      BufferedWriter dirWriter = new BufferedWriter(new FileWriter(testDirFile));
+      BufferedWriter projWriter = new BufferedWriter(new FileWriter(testProjFile));
+      dirWriter.write(xml);
+      projWriter.write(xml);
+      dirWriter.close();
+      projWriter.close();
     } catch (IOException e) {
       e.printStackTrace();
       throw new ELearningException(e.getMessage(), e);
@@ -77,17 +85,26 @@ public class LectureHomeworkUtil {
   }
 
   public void updateHomework(String xml,long lectureId, HomeworkData homeworkData) {
-    String homeworkPath = ServerUtil.getLectureHomeworksDirectoryPath(lectureId)+homeworkData.getTitle()+ ".xml";
-    File file = new File(homeworkPath);
-    if (!file.exists())
+    String homeworkDirPath = ServerUtil.getLectureHomeworksDirectoryPath(lectureId)+homeworkData.getTitle()+ ".xml";
+    String homeworkProjPath = ServerUtil.getLectureHomeworksProjectPath(lectureId)+homeworkData.getTitle()+ ".xml";
+    File dirFile = new File(homeworkDirPath);
+    File projFile = new File(homeworkProjPath);
+    if (!dirFile.exists())
+      throw new ELearningException("File " + homeworkData.getTitle() + " can not be updated");
+    if (!projFile.exists())
       throw new ELearningException("File " + homeworkData.getTitle() + " can not be updated");
     else{
       try {
-        FileUtils.forceDelete(file);
-        File testFile = new File(homeworkPath);
-        BufferedWriter writer = new BufferedWriter(new FileWriter(testFile));
-        writer.write(xml);
-        writer.close();
+        FileUtils.forceDelete(dirFile);
+        FileUtils.forceDelete(projFile);
+        File testDirFile = new File(homeworkDirPath);
+        File testProjFile = new File(homeworkProjPath);
+        BufferedWriter dirWriter = new BufferedWriter(new FileWriter(testDirFile));
+        BufferedWriter projWriter = new BufferedWriter(new FileWriter(testProjFile));
+        dirWriter.write(xml);
+        projWriter.write(xml);
+        dirWriter.close();
+        projWriter.close();
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -97,12 +114,16 @@ public class LectureHomeworkUtil {
 
   public void deleteHomework(long lectureId, HomeworkData homeworkData) {
     try {
-      String homeworkPath = ServerUtil.getLectureHomeworksDirectoryPath(lectureId)+homeworkData.getTitle()+ ".xml";
-      File file = new File(homeworkPath);
-      if (!file.exists())
+      String homeworkDirPath = ServerUtil.getLectureHomeworksDirectoryPath(lectureId)+homeworkData.getTitle()+ ".xml";
+      String homeworkProjPath = ServerUtil.getLectureHomeworksProjectPath(lectureId)+homeworkData.getTitle()+ ".xml";
+      File dirFile = new File(homeworkDirPath);
+      File projFile = new File(homeworkProjPath);
+      if (!dirFile.exists())
         throw new ELearningException("File " + homeworkData.getTitle() + " can not be deleted");
-      FileUtils.forceDelete(file);
-
+      if (!projFile.exists())
+        throw new ELearningException("File " + homeworkData.getTitle() + " can not be deleted");
+      FileUtils.forceDelete(dirFile);
+      FileUtils.forceDelete(projFile);
     } catch (IOException e) {
       e.printStackTrace();
       throw new ELearningException(e.getMessage(), e);

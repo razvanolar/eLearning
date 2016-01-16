@@ -17,31 +17,44 @@ import java.util.*;
  */
 public class LectureFilesUtil {
 
-  public String addLectureHtmlFile(String path, String title, long lectureId, String text) throws ELearningException {
-    PrintWriter writer = null;
+  public String addLectureHtmlFile(String dirPath, String title, long lectureId, String text) throws ELearningException {
+    PrintWriter dirWriter = null;
+    PrintWriter projectWriter = null;
     try {
       title = title + ".html";
-      path = path != null && !path.isEmpty() ? path + "\\" : path;
-      path = ServerUtil.getLectureFilesDirectoryPath(lectureId) + path;
-      File file = new File(path);
-      if (!file.exists() && !file.mkdirs())
+      dirPath = dirPath != null && !dirPath.isEmpty() ? dirPath + "\\" : dirPath;
+      String projectPath = ServerUtil.getLecturesFileProjectPath(lectureId) + dirPath;
+      dirPath = ServerUtil.getLectureFilesDirectoryPath(lectureId) + dirPath;
+      File dirFile = new File(dirPath);
+      File projectFile = new File(projectPath);
+      if (!dirFile.exists() && !dirFile.mkdirs())
         throw new Exception("Unable to create missing directories");
-      writer = new PrintWriter(path + title, "UTF-8");
-      writer.println(ServerUtil.getHtmlDocumentText(title, text));
+      if (!projectFile.exists() && !projectFile.mkdirs())
+        throw new Exception("Unable to create missing directories");
+      dirWriter = new PrintWriter(dirPath + title, "UTF-8");
+      projectWriter = new PrintWriter(projectPath + title, "UTF-8");
+      dirWriter.println(ServerUtil.getHtmlDocumentText(title, text));
+      projectWriter.println(ServerUtil.getHtmlDocumentText(title, text));
       return title;
     } catch (Exception e) {
       e.printStackTrace();
       throw new ELearningException(e);
     } finally {
-      if (writer != null)
-        writer.close();
+      if (dirWriter != null)
+        dirWriter.close();
+      if (projectWriter != null)
+        projectWriter.close();
     }
   }
 
   public void createFolder(UserData user, String path, String name, long lectureId) throws ELearningException {
     String lectureDirectoryPath = ServerUtil.getLectureFilesDirectoryPath(lectureId);
-    File file = new File(lectureDirectoryPath + path + "\\" + name);
-    if (!file.exists() && !file.mkdirs())
+    String lectureProjectPath = ServerUtil.getLecturesFileProjectPath(lectureId);
+    File dirFile = new File(lectureDirectoryPath + path + "\\" + name);
+    File projectFile = new File(lectureProjectPath + path + "\\" + name);
+    if (!dirFile.exists() && !dirFile.mkdirs())
+      throw new ELearningException("Folder " + name + " can not be created");
+    if (!projectFile.exists() && !projectFile.mkdirs())
       throw new ELearningException("Folder " + name + " can not be created");
   }
 
@@ -107,16 +120,23 @@ public class LectureFilesUtil {
   }
 
   public void deleteFile(long lectureId, String path, String title) throws ELearningException {
-    String filePath = ServerUtil.getLectureFilesDirectoryPath(lectureId) + path + title;
-    File file = new File(filePath);
-    if (!file.exists())
+    String fileDirPath = ServerUtil.getLectureFilesDirectoryPath(lectureId) + path + title;
+    String fileProjectPath = ServerUtil.getLecturesFileProjectPath(lectureId) + path + title;
+    File dirFile = new File(fileDirPath);
+    File projectFile = new File(fileProjectPath);
+    if (!dirFile.exists() || !projectFile.exists())
       throw new ELearningException("Specified file does not exists. Path: " + path + title);
 
     try {
-      if (!file.isDirectory())
-        FileUtils.forceDelete(file);
+      if (!dirFile.isDirectory())
+        FileUtils.forceDelete(dirFile);
       else
-        FileUtils.deleteDirectory(file);
+        FileUtils.deleteDirectory(dirFile);
+
+      if (!projectFile.isDirectory())
+        FileUtils.forceDelete(projectFile);
+      else
+        FileUtils.deleteDirectory(projectFile);
     } catch (IOException e) {
       throw new ELearningException(title + " can not be deleted. Error message: " + e.getMessage());
     }

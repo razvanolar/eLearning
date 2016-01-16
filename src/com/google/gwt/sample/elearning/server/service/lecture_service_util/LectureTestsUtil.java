@@ -43,7 +43,8 @@ public class LectureTestsUtil {
   public List<LWLectureTestData> getAllLWTests(UserData user, long lectureId) throws ELearningException {
     try {
       File testsPath = new File(ServerUtil.getLectureTestsDirectoryPath(lectureId));
-      if (!testsPath.exists())
+      File projectPath = new File(ServerUtil.getLectureTestsProjectPath(lectureId));
+      if (!testsPath.exists() && !testsPath.mkdirs() && !projectPath.mkdirs())
         throw new FileNotFoundException();
 
       List<LWLectureTestData> result = new ArrayList<LWLectureTestData>();
@@ -92,14 +93,23 @@ public class LectureTestsUtil {
 
   public void createTestXMLFile(String xml, String title, long lectureId) throws ELearningException{
     try {
-      String testsPath = ServerUtil.getLectureTestsDirectoryPath(lectureId);
-      File file = new File(testsPath);
-      if (!file.exists() && !file.mkdirs())
+      String testsDirPath = ServerUtil.getLectureTestsDirectoryPath(lectureId);
+      String testsProjPath = ServerUtil.getLectureTestsProjectPath(lectureId);
+
+      File dirFile = new File(testsDirPath);
+      File projFile = new File(testsProjPath);
+      if (!dirFile.exists() && !dirFile.mkdirs())
         throw new ELearningException("File " + title + " can not be created");
-      File testFile = new File(testsPath + title + ".xml");
-      BufferedWriter writer = new BufferedWriter(new FileWriter(testFile));
-      writer.write(xml);
-      writer.close();
+      if (!projFile.exists() && !projFile.mkdirs())
+        throw new ELearningException("File " + title + " can not be created");
+      File testDirFile = new File(testsDirPath + title + ".xml");
+      File testProjFile = new File(testsProjPath + title + ".xml");
+      BufferedWriter dirWriter = new BufferedWriter(new FileWriter(testDirFile));
+      BufferedWriter projWriter = new BufferedWriter(new FileWriter(testProjFile));
+      dirWriter.write(xml);
+      projWriter.write(xml);
+      dirWriter.close();
+      projWriter.close();
     } catch (IOException e) {
       e.printStackTrace();
       throw new ELearningException(e.getMessage(), e);
@@ -108,15 +118,23 @@ public class LectureTestsUtil {
 
   public void createTestPropsFile(int questionNo, int totalScore, String title, long lectureId) throws ELearningException{
     try {
-      String testsPath = ServerUtil.getLectureTestsDirectoryPath(lectureId);
-      File file = new File(testsPath);
-      if (!file.exists() && !file.mkdirs())
+      String testsDirPath = ServerUtil.getLectureTestsDirectoryPath(lectureId);
+      String testsProjPath = ServerUtil.getLectureTestsProjectPath(lectureId);
+      File dirFile = new File(testsDirPath);
+      File projFile = new File(testsProjPath);
+      if (!dirFile.exists() && !dirFile.mkdirs())
         throw new ELearningException("File " + title + " can not be created");
-      File testFile = new File(testsPath + title + ".props");
-      BufferedWriter writer = new BufferedWriter(new FileWriter(testFile));
+      if (!projFile.exists() && !projFile.mkdirs())
+        throw new ELearningException("File " + title + " can not be created");
+      File testDirFile = new File(testsDirPath + title + ".props");
+      File testProjFile = new File(testsProjPath + title + ".props");
+      BufferedWriter dirWriter = new BufferedWriter(new FileWriter(testDirFile));
+      BufferedWriter projWriter = new BufferedWriter(new FileWriter(testProjFile));
       String result = "QUESTIONS_NO=" + questionNo + "\nTOTAL_SCORE=" + totalScore + "\nSOLVED=FALSE";
-      writer.write(result);
-      writer.close();
+      dirWriter.write(result);
+      projWriter.write(result);
+      dirWriter.close();
+      projWriter.close();
     } catch (IOException e) {
       e.printStackTrace();
       throw new ELearningException(e.getMessage(), e);

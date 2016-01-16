@@ -29,9 +29,13 @@ public class LectureUploadService extends HttpServlet {
     try {
       long lectureId = Long.parseLong(lecture);
       path = path != null && !path.isEmpty() ? path + "\\" : path;
-      String filePath = ServerUtil.getLectureFilesDirectoryPath(lectureId) + path;
-      File dirs = new File(filePath);
+      String fileDirPath = ServerUtil.getLectureFilesDirectoryPath(lectureId) + path;
+      String fileProjPath = ServerUtil.getLecturesFileProjectPath(lectureId) + path;
+      File dirs = new File(fileDirPath);
+      File dirsProj = new File(fileProjPath);
       if (!dirs.exists() && !dirs.mkdirs())
+        throw new Exception("Unable to create missing directories");
+      if (!dirsProj.exists() && !dirsProj.mkdirs())
         throw new Exception("Unable to create missing directories");
       List<FileItem> items = upload.parseRequest(req);
       Iterator<FileItem> iterator = items.iterator();
@@ -41,11 +45,17 @@ public class LectureUploadService extends HttpServlet {
           System.out.println();
         } else {
           byte[] data = item.get();
-          FileOutputStream fileOutSt = new FileOutputStream(filePath + item.getName());
-          fileOutSt.write(data);
-          fileOutSt.close();
+          FileOutputStream fileOutStDir = new FileOutputStream(fileDirPath + item.getName());
+          FileOutputStream fileOutStProj = new FileOutputStream(fileProjPath + item.getName());
+          fileOutStDir.write(data);
+          fileOutStProj.write(data);
+          fileOutStDir.close();
+          fileOutStProj.close();
 
-          saveAdditionalXmlFile(filePath, item.getName(), data);
+          if (item.getName().endsWith(".xml")) {
+            saveAdditionalXmlFile(fileDirPath, item.getName(), data);
+            saveAdditionalXmlFile(fileProjPath, item.getName(), data);
+          }
         }
       }
     } catch (Exception ex) {
