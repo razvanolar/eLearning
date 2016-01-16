@@ -124,9 +124,9 @@ public class LectureTestsController implements IResolveTestListener {
   }
 
   @Override
-  public void resolveTest(LectureTestData testData, final ResolveTestController.IResolveTestView testView) {
+  public void resolveTest(long userId,LectureTestData testData, final ResolveTestController.IResolveTestView testView) {
     testView.mask();
-    lectureService.resolveTest(testData, new ELearningAsyncCallBack<Long>(testView, log) {
+    lectureService.resolveTest(userId,testData, new ELearningAsyncCallBack<Long>(testView, log) {
       public void onSuccess(Long result) {
         testView.displayScore(result);
         testView.unmask();

@@ -8,5 +8,5 @@ import com.google.gwt.sample.elearning.shared.model.LectureTestData;
  */
 public interface IResolveTestListener {
 
-  void resolveTest(LectureTestData testData, ResolveTestController.IResolveTestView testView);
+  void resolveTest(long userId, LectureTestData testData, ResolveTestController.IResolveTestView testView);
 }

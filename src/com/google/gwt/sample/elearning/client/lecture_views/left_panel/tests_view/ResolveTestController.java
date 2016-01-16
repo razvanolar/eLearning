@@ -2,6 +2,7 @@ package com.google.gwt.sample.elearning.client.lecture_views.left_panel.tests_vi
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.sample.elearning.client.ELearningController;
 import com.google.gwt.sample.elearning.client.eLearningUtils.MaskableView;
 import com.google.gwt.sample.elearning.shared.model.AnswerData;
 import com.google.gwt.sample.elearning.shared.model.LectureTestData;
@@ -81,7 +82,8 @@ public class ResolveTestController {
   }
 
   private void onApplyButton() {
-    testListener.resolveTest(testData, view);
+    long userId = ELearningController.getInstance().getCurrentUser().getId();
+    testListener.resolveTest(userId,testData, view);
   }
 
   private void displayQuestion() {
