@@ -47,6 +47,9 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
   @Override
   public void createUser(UserData user) throws ELearningException {
     userDAO.insertUser(user);
+    if(user.getRole().equals(UserRoleTypes.USER)) {
+      userDAO.addRegistrationNumber(user);
+    }
   }
 
   @Override

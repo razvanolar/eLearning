@@ -176,6 +176,11 @@ public class JdbcUserDAO implements UserDAO {
 
       pstmt.executeUpdate();
 
+      ResultSet generatedKeys = pstmt.getGeneratedKeys();
+      if (generatedKeys.next()) {
+        user.setId(generatedKeys.getLong(1));
+      }
+
     } catch (SQLException e) {
       throw new RepositoryException(e.getMessage(), e);
     } finally {
@@ -252,6 +257,25 @@ public class JdbcUserDAO implements UserDAO {
       preparedStatement.setString(1, password);
       preparedStatement.setLong(2,id);
       preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+      throw new RepositoryException(e.getMessage(), e);
+    } finally {
+      if (con != null)
+        JDBCUtil.closeConnection(con);
+    }
+  }
+
+  @Override
+  public void addRegistrationNumber(UserData user) {
+    Connection con = null;
+    try {
+      con = JDBCUtil.getNewConnection();
+      PreparedStatement pstmt = con
+              .prepareStatement("insert into numere_matricole(ref_student, nr_matricol) VALUES (?, ?)");
+      pstmt.setLong(1, user.getId());
+      pstmt.setLong(2, user.getId());
+      pstmt.executeUpdate();
+
     } catch (SQLException e) {
       throw new RepositoryException(e.getMessage(), e);
     } finally {

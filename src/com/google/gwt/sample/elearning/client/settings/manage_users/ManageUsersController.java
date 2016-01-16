@@ -197,7 +197,7 @@ public class ManageUsersController implements ISettingsController {
       return;
     }
 
-    userService.createUser(new UserData(uName, fName, lName, eMail, view.getRoleCombo().getValue()), new ELearningAsyncCallBack<Void>(view, log) {
+    userService.createUser(new UserData(uName, uName, fName, lName, eMail, view.getRoleCombo().getValue()), new ELearningAsyncCallBack<Void>(view, log) {
       @Override
       public void onSuccess(Void result) {
         new MessageBox("", "User created").show();
@@ -222,7 +222,7 @@ public class ManageUsersController implements ISettingsController {
       return;
     }
     //TODO collect user role
-    UserData user = new UserData(uName, fName, lName, eMail, view.getRoleCombo().getValue());
+    UserData user = new UserData(uName, uName, fName, lName, eMail, view.getRoleCombo().getValue());
     user.setId(id);
     userService.updateUser(user, new ELearningAsyncCallBack<Void>(view, log) {
       public void onSuccess(Void result) {
