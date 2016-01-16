@@ -44,6 +44,10 @@
         <servlet-name>forumService</servlet-name>
         <servlet-class>com.google.gwt.sample.elearning.server.service.ForumServiceImpl</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>logService</servlet-name>
+        <servlet-class>com.google.gwt.sample.elearning.server.service.LogServiceImpl</servlet-class>
+    </servlet>
 
 
     <servlet-mapping>
@@ -85,6 +89,10 @@
     <servlet-mapping>
         <servlet-name>forumService</servlet-name>
         <url-pattern>/elearning/ForumService</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>logService</servlet-name>
+        <url-pattern>/elearning/LogService</url-pattern>
     </servlet-mapping>
 
 
