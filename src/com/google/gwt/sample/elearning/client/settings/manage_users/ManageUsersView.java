@@ -37,7 +37,7 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
   private UserRoleTypes defaultRole = UserRoleTypes.USER;
 
   private BorderLayoutContainer mainContainer;
-  private TextButton addButton, editButton, deleteButton;
+  private TextButton addButton, editButton, deleteButton, refreshButton;
   private Grid<UserData> userDataGridView;
 
   private ManageUsersController.UserViewState state;
@@ -62,6 +62,7 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     addButton = new TextButton("Add", ELearningController.ICONS.add());
     editButton = new TextButton("Edit", ELearningController.ICONS.edit());
     deleteButton = new TextButton("Delete", ELearningController.ICONS.delete());
+    refreshButton = new TextButton("", ELearningController.ICONS.refresh());
     userNameField = new TextField();
     firstNameField = new TextField();
     lastNameField = new TextField();
@@ -76,6 +77,7 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     uploadUsersButton = new TextButton("Upload users", ELearningController.ICONS.upload());
     fileFormPanel = new FormPanel();
     fileUpload = new FileUpload();
+    ToolBar topToolbar = new ToolBar();
     HorizontalPanel fileUploadContainer = new HorizontalPanel();
     CenterLayoutContainer formContainer = new CenterLayoutContainer();
     VerticalLayoutContainer formPanel = new VerticalLayoutContainer();
@@ -121,9 +123,12 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
     gridContainer.setSouthWidget(toolBar, new BorderLayoutContainer.BorderLayoutData(30));
     gridContainer.setCenterWidget(userDataGridView);
 
+    topToolbar.add(refreshButton);
+
     BorderLayoutContainer.BorderLayoutData layoutData = new BorderLayoutContainer.BorderLayoutData(.65);
     layoutData.setSplit(true);
     layoutData.setMargins(new Margins(0, 5, 0, 0));
+    mainContainer.setNorthWidget(topToolbar, new BorderLayoutContainer.BorderLayoutData(30));
     mainContainer.setWestWidget(gridContainer, layoutData);
     mainContainer.setCenterWidget(formContainer);
 
@@ -312,6 +317,10 @@ public class ManageUsersView implements ManageUsersController.IManageUsersView {
   @Override
   public TextButton getUploadUsersButton() {
     return uploadUsersButton;
+  }
+
+  public TextButton getRefreshButton() {
+    return refreshButton;
   }
 
   @Override

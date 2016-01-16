@@ -47,6 +47,7 @@ public class ManageUsersController implements ISettingsController {
     TextButton getDeleteButton();
     TextButton getDownloadUsersButton();
     TextButton getUploadUsersButton();
+    TextButton getRefreshButton();
     FormPanel getFileFormPanel();
     FileUpload getFileUpload();
     TextField getUserNameField();
@@ -171,6 +172,12 @@ public class ManageUsersController implements ISettingsController {
     view.getUploadUsersButton().addSelectHandler(new SelectEvent.SelectHandler() {
       public void onSelect(SelectEvent event) {
         onUploadUsersSelection();
+      }
+    });
+
+    view.getRefreshButton().addSelectHandler(new SelectEvent.SelectHandler() {
+      public void onSelect(SelectEvent event) {
+        loadResources();
       }
     });
   }

@@ -500,6 +500,10 @@ public class ManageLecturesView implements ManageLecturesController.IManageLectu
     return deleteVideoButton;
   }
 
+  public TextButton getRefreshButton() {
+    return refreshButton;
+  }
+
   public ComboBox<Professor> getProfessorComboBox() {
     return this.professorComboBox;
   }

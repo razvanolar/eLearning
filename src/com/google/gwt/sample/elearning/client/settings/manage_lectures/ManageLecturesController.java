@@ -7,6 +7,7 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.sample.elearning.client.ELearningController;
 import com.google.gwt.sample.elearning.client.eLearningUtils.MaskableView;
 import com.google.gwt.sample.elearning.client.eLearningUtils.TextUtil;
 import com.google.gwt.sample.elearning.client.service.*;
@@ -83,6 +84,7 @@ public class ManageLecturesController implements ISettingsController {
     TextButton getAddVideoLinkButton();
     TextButton getEditVideoLinkButton();
     TextButton getDeleteVideoLinkButton();
+    TextButton getRefreshButton();
     TextButton getCreateHomeworkButton();
     TextButton getEditHomeworkButton();
     TextButton getDeleteHomeworkButton();
@@ -128,45 +130,68 @@ public class ManageLecturesController implements ISettingsController {
 
   @Override
   public void loadResources() {
+    UserData user = ELearningController.getInstance().getCurrentUser();
     ListStore<Lecture> lecturesStore = view.getGrid().getStore();
     if (lecturesStore == null || lecturesStore.getAll().isEmpty())
-      populateGrid();
+      populateGrid(user);
     ListStore<Professor> professorStore = view.getProfessorComboBox().getStore();
     if (professorStore == null || professorStore.getAll().isEmpty())
-      populateCombo();
+      populateCombo(user);
   }
 
-  private void populateGrid() {
+  private void populateGrid(UserData user) {
     view.mask();
-    lectureService.getAllLectures(new ELearningAsyncCallBack<List<Lecture>>(view,log) {
-      public void onSuccess(List<Lecture> result) {
-        view.getGrid().getStore().clear();
-        lectureList.clear();
-        lectureList.addAll(result);
-        view.getGrid().getStore().addAll(lectureList);
-        view.unmask();
-      }
-    });
+    if (user.getRole() == UserRoleTypes.ADMIN) {
+      lectureService.getAllLectures(new ELearningAsyncCallBack<List<Lecture>>(view, log) {
+        public void onSuccess(List<Lecture> result) {
+          view.getGrid().getStore().clear();
+          lectureList.clear();
+          lectureList.addAll(result);
+          view.getGrid().getStore().addAll(lectureList);
+          view.unmask();
+        }
+      });
+    } else if (user.getRole() == UserRoleTypes.PROFESSOR) {
+      lectureService.getAllLecturesByUser(ELearningController.getInstance().getCurrentUser().getId(), new ELearningAsyncCallBack<List<Lecture>>(view, log) {
+        public void onSuccess(List<Lecture> result) {
+          view.getGrid().getStore().clear();
+          lectureList.clear();
+          lectureList.addAll(result);
+          view.getGrid().getStore().addAll(lectureList);
+          view.unmask();
+        }
+      });
+    }
   }
 
-  private void populateCombo() {
+  private void populateCombo(UserData user) {
     view.mask();
-    userServiceAsync.getAllUsersByRole(UserRoleTypes.PROFESSOR,
-        new ELearningAsyncCallBack<List<? extends UserData>>(view, log) {
-          public void onSuccess(List<? extends UserData> result) {
-            view.getProfessorComboBox().getStore().clear();
-            Professor all = new Professor(-1, "", "", "All", "", "");
-            professorList.clear();
-            professorList.add(all);
-            for (UserData user : result) {
-              professorList.add(new Professor(user.getId(), user.getUsername(), user.getPassword(), user.getFirstName(),
-                  user.getLastName(), user.getEmail()));
-            }
-            view.getProfessorComboBox().getStore().addAll(professorList);
-            view.getProfessorComboBox().setValue(all);
-            view.unmask();
-          }
-        });
+    if (user.getRole() == UserRoleTypes.ADMIN) {
+      userServiceAsync.getAllUsersByRole(UserRoleTypes.PROFESSOR,
+              new ELearningAsyncCallBack<List<? extends UserData>>(view, log) {
+                public void onSuccess(List<? extends UserData> result) {
+                  view.getProfessorComboBox().getStore().clear();
+                  view.getProfessorComboBox().setEnabled(true);
+                  Professor all = new Professor(-1, "", "", "All", "", "");
+                  professorList.clear();
+                  professorList.add(all);
+                  for (UserData user : result) {
+                    professorList.add(new Professor(user.getId(), user.getUsername(), user.getPassword(), user.getFirstName(),
+                            user.getLastName(), user.getEmail()));
+                  }
+                  view.getProfessorComboBox().getStore().addAll(professorList);
+                  view.getProfessorComboBox().setValue(all);
+                  view.unmask();
+                }
+              });
+    } else if (user.getRole() == UserRoleTypes.PROFESSOR) {
+      view.getProfessorComboBox().getStore().clear();
+      view.getProfessorComboBox().setEnabled(false);
+      Professor professor = new Professor(user.getId(),
+              user.getUsername(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getEmail());
+      view.getProfessorComboBox().getStore().add(professor);
+      view.getProfessorComboBox().setValue(professor);
+    }
   }
 
   private void addListeners() {
@@ -249,12 +274,18 @@ public class ManageLecturesController implements ISettingsController {
     });
 
     view.getHomeworkToggleButton().addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-      @Override
       public void onValueChange(ValueChangeEvent<Boolean> event) {
         if(event.getValue()) {
           view.setCenterWidgetState(LecturesFilesAndTestsState.HOMEWORK);
           lecturesHomeworkController.loadHomeworks();
         }
+      }
+    });
+
+    view.getRefreshButton().addSelectHandler(new SelectEvent.SelectHandler() {
+      public void onSelect(SelectEvent event) {
+        populateGrid(ELearningController.getInstance().getCurrentUser());
+        populateCombo(ELearningController.getInstance().getCurrentUser());
       }
     });
   }
@@ -270,7 +301,7 @@ public class ManageLecturesController implements ISettingsController {
         @Override
         public void onSuccess(Void result) {
           new MessageBox("", "Lecture saved").show();
-          populateGrid();
+          populateGrid(ELearningController.getInstance().getCurrentUser());
           view.clearFields();
         }
       });
@@ -285,7 +316,7 @@ public class ManageLecturesController implements ISettingsController {
               @Override
               public void onSuccess(Void result) {
                 new MessageBox("", "Lecture removed").show();
-                populateGrid();
+                populateGrid(ELearningController.getInstance().getCurrentUser());
                 view.clearFields();
               }
             });
@@ -299,7 +330,7 @@ public class ManageLecturesController implements ISettingsController {
       @Override
       public void onSuccess(Void result) {
         new MessageBox("", "Lecture updated").show();
-        populateGrid();
+        populateGrid(ELearningController.getInstance().getCurrentUser());
       }
     });
   }
