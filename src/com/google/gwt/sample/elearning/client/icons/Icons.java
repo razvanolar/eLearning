@@ -88,4 +88,7 @@ public interface Icons extends ClientBundle {
 
   @Source("send.png")
   ImageResource send();
+
+  @Source("mail.png")
+  ImageResource mail();
 }

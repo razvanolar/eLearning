@@ -19,6 +19,7 @@ import com.sencha.gxt.widget.core.client.container.MarginData;
 public class LectureUsersView implements LectureUsersController.ILectureUsersView {
   private BorderLayoutContainer mainContainer;
   private CellList<UserData> cellList;
+  private SingleSelectionModel<UserData> selectionModel;
 
   public LectureUsersView() {
     initGUI();
@@ -39,13 +40,13 @@ public class LectureUsersView implements LectureUsersController.ILectureUsersVie
       public void render(Context context, UserData value, SafeHtmlBuilder sb) {
         if (value != null) {
           sb.appendHtmlConstant("<div style='padding: 3px 0px 3px 5px; padding-bottom: 3px'>" +
-                  "<img src='elearning\\user_icon.png' width='20px' hight='20px' align='top'/>  "
+                  "<img src='" + value.getImagePath() + "' width='20px' hight='20px' align='top'/>  "
                   + value.getFirstName() + " " + value.getLastName() + "</div>");
         }
       }
     }, keyProvider);
 
-    SelectionModel<UserData> selectionModel = new SingleSelectionModel<UserData>(keyProvider);
+    selectionModel = new SingleSelectionModel<UserData>(keyProvider);
     cellList.setSelectionModel(selectionModel);
     ScrollPanel scrollPanel = new ScrollPanel(cellList);
     mainContainer.setCenterWidget(scrollPanel, new MarginData(0, 0, 0, 0));
@@ -59,6 +60,11 @@ public class LectureUsersView implements LectureUsersController.ILectureUsersVie
   @Override
   public Widget asWidget() {
     return mainContainer;
+  }
+
+  @Override
+  public SingleSelectionModel<UserData> getSelectionModel() {
+    return selectionModel;
   }
 
   @Override

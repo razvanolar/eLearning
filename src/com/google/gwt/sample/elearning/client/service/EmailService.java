@@ -11,5 +11,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("EmailService")
 public interface EmailService extends RemoteService {
   void sendForgetEmailPassword(String email) throws ELearningException;
+  void sendCustomEmail(String to, String from, String fromPwd, String subject, String body) throws ELearningException;
 
 }
