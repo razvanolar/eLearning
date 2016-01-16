@@ -11,6 +11,7 @@ import com.google.gwt.sample.elearning.client.main_views.left_panel.LectureDetai
 import com.google.gwt.sample.elearning.client.main_views.left_panel.filesView.LectureFilesController;
 import com.google.gwt.sample.elearning.client.main_views.left_panel.filesView.LectureFilesView;
 import com.google.gwt.sample.elearning.client.main_views.right_panel.LectureInfoView;
+import com.google.gwt.sample.elearning.client.main_views.right_panel.calendarView.CalendarController;
 import com.google.gwt.sample.elearning.client.main_views.right_panel.usersView.LectureUsersController;
 import com.google.gwt.sample.elearning.client.profilebar.ProfileBarController;
 import com.google.gwt.sample.elearning.client.profilebar.ProfileBarView;
@@ -46,6 +47,7 @@ public class ELearningController {
 
   private LectureFilesController lectureFilesController;
   private LectureUsersController lectureUsersController;
+  private CalendarController calendarController;
   private UserData currentUser;
   private Lecture currentLecture;
 
@@ -130,6 +132,10 @@ public class ELearningController {
     }
 
     lectureUsersController.loadUsers();
+
+    if (calendarController == null) {
+      calendarController = new CalendarController(lectureInfoView.getCalendarView());
+    }
   }
 
   public void loadLectureFileInCenterPanel(String path, String title) {
