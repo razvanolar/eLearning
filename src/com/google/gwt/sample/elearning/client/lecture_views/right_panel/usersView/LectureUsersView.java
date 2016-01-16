@@ -1,4 +1,4 @@
-package com.google.gwt.sample.elearning.client.main_views.right_panel.usersView;
+package com.google.gwt.sample.elearning.client.lecture_views.right_panel.usersView;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;

@@ -1,4 +1,4 @@
-package com.google.gwt.sample.elearning.client.main_views.right_panel.usersView;
+package com.google.gwt.sample.elearning.client.lecture_views.right_panel.usersView;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.sample.elearning.client.ELearningController;

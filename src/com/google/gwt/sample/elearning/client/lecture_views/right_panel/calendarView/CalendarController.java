@@ -1,4 +1,4 @@
-package com.google.gwt.sample.elearning.client.main_views.right_panel.calendarView;
+package com.google.gwt.sample.elearning.client.lecture_views.right_panel.calendarView;
 
 import com.google.gwt.sample.elearning.client.eLearningUtils.MaskableView;
 import com.google.gwt.user.client.ui.Widget;

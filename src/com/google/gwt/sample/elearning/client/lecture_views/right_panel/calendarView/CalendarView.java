@@ -1,7 +1,6 @@
-package com.google.gwt.sample.elearning.client.main_views.right_panel.calendarView;
+package com.google.gwt.sample.elearning.client.lecture_views.right_panel.calendarView;
 
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.core.client.util.DateWrapper;
 import com.sencha.gxt.widget.core.client.DatePicker;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.MarginData;

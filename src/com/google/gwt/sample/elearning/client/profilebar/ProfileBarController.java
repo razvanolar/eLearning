@@ -8,8 +8,7 @@ import com.google.gwt.sample.elearning.client.MasterWindow;
 import com.google.gwt.sample.elearning.client.login.LoginController;
 import com.google.gwt.sample.elearning.client.logs.LogsController;
 import com.google.gwt.sample.elearning.client.logs.LogsView;
-import com.google.gwt.sample.elearning.client.main_views.UserLecturesController;
-import com.google.gwt.sample.elearning.client.main_views.UserLecturesView;
+import com.google.gwt.sample.elearning.client.lecture_views.UserLecturesController;
 import com.google.gwt.sample.elearning.client.service.LectureService;
 import com.google.gwt.sample.elearning.client.service.LectureServiceAsync;
 import com.google.gwt.sample.elearning.client.settings.MainSettingsController;
@@ -18,12 +17,7 @@ import com.google.gwt.sample.elearning.shared.model.FilteredLecturesData;
 import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.widget.core.client.ContentPanel;
-import com.sencha.gxt.widget.core.client.Popup;
-import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
-import com.sencha.gxt.widget.core.client.event.ActivateEvent;
-import com.sencha.gxt.widget.core.client.event.MoveEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.menu.Item;
 import com.sencha.gxt.widget.core.client.menu.Menu;
@@ -39,6 +33,7 @@ public class ProfileBarController {
 
   public interface IProfileBarView {
     TextButton getSettingsButton();
+    TextButton getForumButton();
     TextButton getLecturesButton();
     MenuItem getViewLogsMenuItem();
     MenuItem getLogoutMenuItem();
@@ -88,6 +83,12 @@ public class ProfileBarController {
     view.getLecturesButton().addSelectHandler(new SelectEvent.SelectHandler() {
       public void onSelect(SelectEvent event) {
         doOnLecturesSelection();
+      }
+    });
+
+    view.getForumButton().addSelectHandler(new SelectEvent.SelectHandler() {
+      public void onSelect(SelectEvent event) {
+        ELearningController.getInstance().loadForumDetails();
       }
     });
   }

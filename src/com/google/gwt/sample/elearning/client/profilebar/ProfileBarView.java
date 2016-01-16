@@ -21,6 +21,7 @@ public class ProfileBarView implements ProfileBarController.IProfileBarView {
   private TextButton settingsButton;
   private TextButton lecturesButton;
   private Widget userLecturesView;
+  private TextButton forumButton;
 
   public ProfileBarView(boolean addSettingsButton, Widget userLecturesView) {
     this.addSettingsButton = addSettingsButton;
@@ -31,7 +32,7 @@ public class ProfileBarView implements ProfileBarController.IProfileBarView {
   private void initGUI() {
     toolBar = new ToolBar();
     TextButton userButton = new TextButton("Profile");
-    TextButton forumButton = new TextButton("Forum");
+    forumButton = new TextButton("Forum");
     TextButton chatButton = new TextButton("Chat");
     lecturesButton = new TextButton("Lectures", ELearningController.ICONS.lectures());
     showProfileItem = new MenuItem("Show profile");
@@ -79,6 +80,10 @@ public class ProfileBarView implements ProfileBarController.IProfileBarView {
 
   public TextButton getSettingsButton() {
     return settingsButton;
+  }
+
+  public TextButton getForumButton() {
+    return forumButton;
   }
 
   public Widget asWidget() {

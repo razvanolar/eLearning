@@ -1,13 +1,12 @@
 package com.google.gwt.sample.elearning.client;
 
-import com.google.gwt.sample.elearning.client.main_views.center_panel.LectureContentView;
-import com.google.gwt.sample.elearning.client.main_views.left_panel.LectureDetailsView;
-import com.google.gwt.sample.elearning.client.main_views.right_panel.LectureInfoView;
+import com.google.gwt.sample.elearning.client.lecture_views.center_panel.LectureContentView;
+import com.google.gwt.sample.elearning.client.lecture_views.left_panel.LectureDetailsView;
+import com.google.gwt.sample.elearning.client.lecture_views.right_panel.LectureInfoView;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
-import com.sencha.gxt.widget.core.client.container.CenterLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.MarginData;
 
 /**

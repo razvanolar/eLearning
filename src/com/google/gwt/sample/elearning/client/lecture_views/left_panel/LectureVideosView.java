@@ -1,4 +1,4 @@
-package com.google.gwt.sample.elearning.client.main_views.left_panel;
+package com.google.gwt.sample.elearning.client.lecture_views.left_panel;
 
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;

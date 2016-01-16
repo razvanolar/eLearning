@@ -1,4 +1,4 @@
-package com.google.gwt.sample.elearning.client.main_views;
+package com.google.gwt.sample.elearning.client.lecture_views;
 
 import com.google.gwt.sample.elearning.client.ELearningController;
 import com.google.gwt.sample.elearning.client.eLearningUtils.MaskableView;

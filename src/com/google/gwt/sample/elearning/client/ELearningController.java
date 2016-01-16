@@ -1,18 +1,19 @@
 package com.google.gwt.sample.elearning.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.sample.elearning.client.forum_view.ForumController;
+import com.google.gwt.sample.elearning.client.forum_view.ForumView;
 import com.google.gwt.sample.elearning.client.icons.Icons;
 import com.google.gwt.sample.elearning.client.login.LoginController;
 import com.google.gwt.sample.elearning.client.login.LoginView;
 import com.google.gwt.sample.elearning.client.logs.LogGridHandler;
-import com.google.gwt.sample.elearning.client.main_views.UserLecturesController;
-import com.google.gwt.sample.elearning.client.main_views.UserLecturesView;
-import com.google.gwt.sample.elearning.client.main_views.left_panel.LectureDetailsView;
-import com.google.gwt.sample.elearning.client.main_views.left_panel.filesView.LectureFilesController;
-import com.google.gwt.sample.elearning.client.main_views.left_panel.filesView.LectureFilesView;
-import com.google.gwt.sample.elearning.client.main_views.right_panel.LectureInfoView;
-import com.google.gwt.sample.elearning.client.main_views.right_panel.calendarView.CalendarController;
-import com.google.gwt.sample.elearning.client.main_views.right_panel.usersView.LectureUsersController;
+import com.google.gwt.sample.elearning.client.lecture_views.UserLecturesController;
+import com.google.gwt.sample.elearning.client.lecture_views.UserLecturesView;
+import com.google.gwt.sample.elearning.client.lecture_views.left_panel.LectureDetailsView;
+import com.google.gwt.sample.elearning.client.lecture_views.left_panel.filesView.LectureFilesController;
+import com.google.gwt.sample.elearning.client.lecture_views.right_panel.LectureInfoView;
+import com.google.gwt.sample.elearning.client.lecture_views.right_panel.calendarView.CalendarController;
+import com.google.gwt.sample.elearning.client.lecture_views.right_panel.usersView.LectureUsersController;
 import com.google.gwt.sample.elearning.client.profilebar.ProfileBarController;
 import com.google.gwt.sample.elearning.client.profilebar.ProfileBarView;
 import com.google.gwt.sample.elearning.client.service.LectureService;
@@ -136,6 +137,14 @@ public class ELearningController {
     if (calendarController == null) {
       calendarController = new CalendarController(lectureInfoView.getCalendarView());
     }
+  }
+
+  public void loadForumDetails() {
+    ForumController.IForumView forumView = new ForumView();
+    ForumController forumController = new ForumController(forumView);
+    forumController.bind();
+    mainELearningContainer.setCenterWidget(forumView.asWidget());
+    mainELearningContainer.forceLayout();
   }
 
   public void loadLectureFileInCenterPanel(String path, String title) {

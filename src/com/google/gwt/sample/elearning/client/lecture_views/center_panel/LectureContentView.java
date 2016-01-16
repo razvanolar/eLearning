@@ -1,4 +1,4 @@
-package com.google.gwt.sample.elearning.client.main_views.center_panel;
+package com.google.gwt.sample.elearning.client.lecture_views.center_panel;
 
 import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.Widget;
