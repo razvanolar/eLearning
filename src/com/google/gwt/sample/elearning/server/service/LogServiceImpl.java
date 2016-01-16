@@ -4,6 +4,7 @@ import com.google.gwt.sample.elearning.client.service.LogService;
 import com.google.gwt.sample.elearning.server.ServerUtil;
 import com.google.gwt.sample.elearning.shared.exception.ELearningException;
 import com.google.gwt.sample.elearning.shared.model.LogData;
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * Created by Horea on 16/01/2016.
  */
-public class LogServiceImpl implements LogService {
+public class LogServiceImpl extends RemoteServiceServlet implements LogService {
   @Override
   public List<LogData> getLogDataFromFile(String filename) {
     File file  = new File(filename);
