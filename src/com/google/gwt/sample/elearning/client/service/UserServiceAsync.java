@@ -21,4 +21,8 @@ public interface UserServiceAsync {
   void getAllUsersByRole(UserRoleTypes role, AsyncCallback<List<? extends UserData>> async);
 
   void getUsersByLecture(long id, AsyncCallback<List<? extends UserData>> async);
+
+  void getEnrolledStudentsByProfessorId(long id, AsyncCallback<List<UserData>> async);
+
+  void removeUserFromLecture(long lectureId, long userId, AsyncCallback<Void> async);
 }

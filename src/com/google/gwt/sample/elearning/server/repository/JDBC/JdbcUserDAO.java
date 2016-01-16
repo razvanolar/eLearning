@@ -73,7 +73,7 @@ public class JdbcUserDAO implements UserDAO {
     Connection con = null;
     try {
       con = JDBCUtil.getNewConnection();
-      PreparedStatement pstmt = con.prepareStatement("select ut.* from utilizatori ut INNER JOIN studenti_inscrisi si on ut.id = si.ref_student WHERE si.ref_curs in (SELECT cu.id from cursuri cu where ref_profesor = ?)");
+      PreparedStatement pstmt = con.prepareStatement("select DISTINCT ut.* from utilizatori ut INNER JOIN studenti_inscrisi si on ut.id = si.ref_student WHERE si.ref_curs in (SELECT cu.id from cursuri cu where ref_profesor = ?)");
       pstmt.setLong(1, id);
       ResultSet rs = pstmt.executeQuery();
       while (rs.next()) {
@@ -226,4 +226,8 @@ public class JdbcUserDAO implements UserDAO {
 
   }
 
+  @Override
+  public void removeUserFromLecture(long lectureId, long userId) throws RepositoryException {
+
+  }
 }

@@ -26,4 +26,8 @@ public interface UserService extends RemoteService {
   void removeUser(List<Long> ids) throws ELearningException;
 
   List<? extends UserData> getUsersByLecture(long id) throws ELearningException;
+
+  List<UserData> getEnrolledStudentsByProfessorId(long id) throws ELearningException;
+
+  void removeUserFromLecture(long lectureId, long userId) throws ELearningException;
 }

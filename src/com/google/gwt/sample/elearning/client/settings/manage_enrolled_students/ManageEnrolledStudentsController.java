@@ -14,9 +14,11 @@ import com.google.gwt.sample.elearning.shared.model.Lecture;
 import com.google.gwt.sample.elearning.shared.model.Professor;
 import com.google.gwt.sample.elearning.shared.model.UserData;
 import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.ComboBox;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 
@@ -42,6 +44,8 @@ public class ManageEnrolledStudentsController implements ISettingsController {
   private UserServiceAsync userService = GWT.create(UserService.class);
   private LectureServiceAsync lectureService = GWT.create(LectureService.class);
   private Logger log = Logger.getLogger(ManageEnrolledStudentsController.class.getName());
+  private long professorId;
+  private long lectureId;
 
   public ManageEnrolledStudentsController(IManageEnrolledStudentsView view) {
     this.view = view;
@@ -55,7 +59,38 @@ public class ManageEnrolledStudentsController implements ISettingsController {
   private void addListeners() {
     view.getProfessorComboBox().addSelectionHandler(new SelectionHandler<Professor>() {
       public void onSelection(SelectionEvent<Professor> event) {
+        professorId = event.getSelectedItem().getId();
+        loadLectures(professorId);
+      }
+    });
 
+    view.getLectureComboBox().addSelectionHandler(new SelectionHandler<Lecture>() {
+      public void onSelection(SelectionEvent<Lecture> event) {
+        lectureId = event.getSelectedItem().getId();
+        loadGrid(lectureId);
+      }
+    });
+
+    view.getRemoveFromLectureButton().addSelectHandler(new SelectEvent.SelectHandler() {
+      public void onSelect(SelectEvent event) {
+        doOnRemoveUserFromLecture();
+      }
+    });
+  }
+
+  private void doOnRemoveUserFromLecture() {
+    if (lectureId == -1)
+      return;
+    UserData user = getSelectedUser();
+    if (user == null)
+      return;
+    userService.removeUserFromLecture(lectureId, user.getId(), new AsyncCallback<Void>() {
+      public void onFailure(Throwable caught) {
+        log.warning(caught.getMessage());
+      }
+
+      public void onSuccess(Void result) {
+        loadGrid(lectureId);
       }
     });
   }
@@ -63,7 +98,6 @@ public class ManageEnrolledStudentsController implements ISettingsController {
   @Override
   public void loadResources() {
     loadProfessors();
-    loadLectures();
   }
 
   private void loadProfessors() {
@@ -75,43 +109,64 @@ public class ManageEnrolledStudentsController implements ISettingsController {
           for (UserData user : result)
             professorListStore.add(new Professor(user.getId(), user.getUsername(), user.getPassword(), user.getFirstName(),
                     user.getLastName(), user.getEmail()));
+          professorId = professorListStore.get(0).getId();
           view.getProfessorComboBox().setValue(professorListStore.get(0));
         }
+        loadLectures(professorId);
       }
     });
   }
 
-  private void loadLectures() {
-    Professor professor = getSelectedProffesor();
-    if (professor == null)
+  private void loadLectures(long professorId) {
+    if (professorId == -1)
       return;
-    lectureService.getAllLecturesByUser(professor.getId(), new ELearningAsyncCallBack<List<Lecture>>(view, log) {
+    view.mask();
+    lectureService.getAllLecturesByUser(professorId, new ELearningAsyncCallBack<List<Lecture>>(view, log) {
       public void onSuccess(List<Lecture> result) {
         ListStore<Lecture> lectureListStore = view.getLectureComboBox().getStore();
         lectureListStore.clear();
-        Lecture all = new Lecture(-1, getSelectedProffesor(), "All", "");
+        Lecture all = new Lecture(-1, null, "All", "");
         lectureListStore.add(all);
         if (result != null && !result.isEmpty()) {
-          lectureListStore.addAll(result);
-          view.getLectureComboBox().setValue(lectureListStore.get(0));
+          for (Lecture lecture : result)
+            lectureListStore.add(lecture);
         }
+        view.unmask();
+        view.getLectureComboBox().setValue(lectureListStore.get(0));
+        loadGrid(-1);
       }
     });
   }
 
-  private void loadGrid() {
-    Lecture lecture = getSelectedLecture();
-    if (lecture == null)
-      return;
-    
+  private void loadGrid(long lectureId) {
+    if (lectureId == -1) {
+      userService.getEnrolledStudentsByProfessorId(professorId, new ELearningAsyncCallBack<List<UserData>>(view, log) {
+        public void onSuccess(List<UserData> result) {
+          ListStore<UserData> store = view.getUserGrid().getStore();
+          store.clear();
+          if (result != null && !result.isEmpty())
+            store.addAll(result);
+        }
+      });
+    } else {
+      userService.getUsersByLecture(lectureId, new ELearningAsyncCallBack<List<? extends UserData>>(view, log) {
+        public void onSuccess(List<? extends UserData> result) {
+          ListStore<UserData> store = view.getUserGrid().getStore();
+          store.clear();
+          if (result != null && !result.isEmpty())
+            store.addAll(result);
+        }
+      });
+    }
   }
 
-  private Lecture getSelectedLecture() {
-    return view.getLectureComboBox().getValue();
-  }
-
-  private Professor getSelectedProffesor() {
-    return view.getProfessorComboBox().getValue();
+  private UserData getSelectedUser() {
+    if (view.getUserGrid().getSelectionModel() != null) {
+      List<UserData> selectedItems = view.getUserGrid().getSelectionModel().getSelectedItems();
+      if (selectedItems != null && !selectedItems.isEmpty())
+        return selectedItems.get(0);
+    }
+    return null;
   }
 
   @Override
