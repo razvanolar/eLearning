@@ -84,6 +84,19 @@ public class ManageEnrolledStudentsView implements ManageEnrolledStudentsControl
 
     mainContainer.setNorthWidget(toolBar, new BorderLayoutContainer.BorderLayoutData(30));
     mainContainer.setCenterWidget(userGrid);
+    setState(ManageEnrolledStudentsController.IManageEnrolledStudentsState.NONE);
+  }
+
+  @Override
+  public void setState(ManageEnrolledStudentsController.IManageEnrolledStudentsState state) {
+    switch (state) {
+      case DELETE:
+        removeFromLectureButton.setEnabled(true);
+        break;
+      case NONE:
+        removeFromLectureButton.setEnabled(false);
+        break;
+    }
   }
 
   private Grid<UserData> createGrid() {
