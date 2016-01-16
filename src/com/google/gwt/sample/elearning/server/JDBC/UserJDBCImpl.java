@@ -1,5 +1,6 @@
 package com.google.gwt.sample.elearning.server.JDBC;
 
+import com.google.gwt.sample.elearning.server.service.ElearningLogger;
 import com.google.gwt.sample.elearning.shared.exception.ELearningException;
 import com.google.gwt.sample.elearning.shared.exception.IncorrectLoginException;
 import com.google.gwt.sample.elearning.shared.model.UserData;
@@ -9,7 +10,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 /***
  * Created by Horea on 01/11/2015.
@@ -47,6 +47,7 @@ public class UserJDBCImpl {
                 UserRoleTypes.getRoleById(resultSet.getLong(7)));
         resultSet.close();
         getLoginDataStatement.close();
+        ElearningLogger.log("User: " + userData.getUsername() + " has authenticated");
         return userData;
       } else {
         throw new IncorrectLoginException("User and password combination is invalid.");

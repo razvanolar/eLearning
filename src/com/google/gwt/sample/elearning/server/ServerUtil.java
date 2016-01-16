@@ -3,6 +3,10 @@ package com.google.gwt.sample.elearning.server;
 import com.google.gwt.sample.elearning.shared.model.UserData;
 import com.google.gwt.sample.elearning.shared.types.FileExtensionTypes;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /***
  * Created by razvanolar on 23.11.2015.
  */
@@ -12,6 +16,7 @@ public class ServerUtil {
   public static final String TESTS_PATH = "tests\\";
   public static final String HOMEWORKS_PATH = "homeworks\\";
   public static final String FILES_PATH = "files\\";
+  public static final String LOG_PATH = "logs\\";
   public static final String HTML_DOCUMENT = "<!DOCTYPE html>\n"
       + "<html>"
       + "\t<head>\n"
@@ -69,5 +74,15 @@ public class ServerUtil {
 
   public static String getLectureHomeworksDirectoryPath(long lectureId) {
     return PATH + LECTURES_PATH + lectureId + "\\" + HOMEWORKS_PATH;
+  }
+
+  public static String getLogFile() {
+    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    Date date = new Date();
+    return PATH + LOG_PATH + "log" + dateFormat.format(date);
+  }
+
+  public static String getLogsPath() {
+    return PATH + LOG_PATH;
   }
 }
