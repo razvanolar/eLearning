@@ -17,6 +17,7 @@ public class ServerUtil {
   public static final String HOMEWORKS_PATH = "homeworks\\";
   public static final String FILES_PATH = "files\\";
   public static final String LOG_PATH = "logs\\";
+  public static final String FORUMS_PATH = "forums\\";
   public static final String HTML_DOCUMENT = "<!DOCTYPE html>\n"
       + "<html>"
       + "\t<head>\n"
@@ -56,6 +57,10 @@ public class ServerUtil {
 
   public static String getLectureTestsProjectPath(long lectureId) {
     return ProjectDirPath.PROJECT_DIR_PATH.getPath() + getLectureTestsDirectoryPath(lectureId);
+  }
+
+  public static String getLectureForumsPath(long lectureId){
+    return ProjectDirPath.PROJECT_DIR_PATH.getPath() + PATH + LECTURES_PATH + lectureId + "\\" + FORUMS_PATH;
   }
 
   public static FileExtensionTypes getFileExensionByName(String fileName) {

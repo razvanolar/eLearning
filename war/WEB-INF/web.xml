@@ -40,6 +40,10 @@
         <servlet-name>emailService</servlet-name>
         <servlet-class>com.google.gwt.sample.elearning.server.service.EmailServiceImpl</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>com.google.gwt.sample.elearning.ELearning ForumService</servlet-name>
+        <servlet-class>com.google.gwt.sample.elearning.server.service.ForumServiceImpl</servlet-class>
+    </servlet>
 
 
     <servlet-mapping>
@@ -77,6 +81,10 @@
     <servlet-mapping>
         <servlet-name>emailService</servlet-name>
         <url-pattern>/elearning/EmailService</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>com.google.gwt.sample.elearning.ELearning ForumService</servlet-name>
+        <url-pattern>/elearning/ForumServiceImpl</url-pattern>
     </servlet-mapping>
 
 

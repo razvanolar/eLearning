@@ -1,11 +1,13 @@
 package com.google.gwt.sample.elearning.shared.model;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 import java.util.List;
 
 /**
  * Created by Ambrozie Paval on 12/22/2015.
  */
-public class ForumData {
+public class ForumData implements IsSerializable{
   private long id;
   private long courseId;
   private String topic;
