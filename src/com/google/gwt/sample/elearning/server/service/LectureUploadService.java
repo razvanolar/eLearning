@@ -26,6 +26,7 @@ public class LectureUploadService extends HttpServlet {
     ServletFileUpload upload = new ServletFileUpload(factory);
     String lecture = req.getParameter("lecture");
     String path = req.getParameter("path");
+    ElearningLogger.log("Uploading lecture " + lecture + " with path: " + path);
     try {
       long lectureId = Long.parseLong(lecture);
       path = path != null && !path.isEmpty() ? path + "\\" : path;

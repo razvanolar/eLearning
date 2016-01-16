@@ -35,7 +35,9 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
 
   @Override
   public void createLecture(Lecture lecture) throws ELearningException{
+    ElearningLogger.log("Inserting new lecture: " + lecture.getLectureName());
     lectureDAO.insertLecture(lecture);
+    ElearningLogger.log("Lecture: " + lecture.getLectureName() + " has been created.");
   }
 
   @Override
@@ -73,17 +75,23 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
 
   @Override
   public void updateLecture(Lecture lecture) throws ELearningException{
+    ElearningLogger.log("Updating lecture: " + lecture.getLectureName());
     lectureDAO.updateLecture(lecture);
+    ElearningLogger.log("Lecture: " + lecture.getLectureName() + " has been updated.");
   }
 
   @Override
   public void removeLecture(long id) throws ELearningException{
+    ElearningLogger.log("Removing lecture: " + id);
     lectureDAO.deleteLecture(id);
+    ElearningLogger.log("Lecture " + id + " has been deleted.");
   }
 
   @Override
   public void registerUserToLecture(long userId, long lectureId, String enrollmentKey) throws ELearningException {
+    ElearningLogger.log("Student: " + userId + " registering to lecture: " + lectureId + " with key: " + enrollmentKey);
     lectureDAO.registerUserToLecture(userId, lectureId, enrollmentKey);
+    ElearningLogger.log("Student: " + userId + " has been registered to lecture: " + lectureId);
   }
 
   @Override
@@ -93,11 +101,13 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
 
   @Override
   public void createFolder(UserData user, String path, String name, long lectureId) throws ELearningException {
+    ElearningLogger.log("Creating folder for user: " + user.getUsername() + " path\\name:" + path + " " + name + " lectureId: " + lectureId);
     filesUtil.createFolder(user, path, name, lectureId);
   }
 
   @Override
   public Tree<FileData> getLectureFilesTree(UserData user, long lectureId) throws ELearningException {
+    ElearningLogger.log("Retrieving files tree for user: " + user.getId() + " lecture id: " + lectureId);
     return filesUtil.getLectureFilesTree(user, lectureId);
   }
 
@@ -108,6 +118,7 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
 
   @Override
   public void deleteFile(long lectureId, String path, String title) throws ELearningException {
+    ElearningLogger.log("Deleting file - lectureId: " + lectureId + " path: " + path + " tittle" + title);
     filesUtil.deleteFile(lectureId, path, title);
   }
 
@@ -128,11 +139,13 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
 
   @Override
   public void saveVideoData(long lectureId, VideoLinkData videoLinkData) throws ELearningException {
+    ElearningLogger.log("Saving video data for lectureId: " + lectureId + " video: " + videoLinkData.getTitle());
     videoLinkDAO.saveVideoLinkData(lectureId, videoLinkData);
   }
 
   @Override
   public void createTest(LectureTestData lectureTestData) throws ELearningException {
+    ElearningLogger.log("Creating new test - " + lectureTestData.getName() + " lectureId" + lectureTestData.getLectureId());
     testDAO.insertLectureTest(lectureTestData);
     // 1. Create .xml file
     TestXMLConvertor testXMLConvertor = new TestXMLConvertor();
@@ -149,11 +162,13 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
 
   @Override
   public void updateVideoData(long lectureId, VideoLinkData videoLinkData) throws ELearningException {
+    ElearningLogger.log("Updating video data for lectureId: " + lectureId + " video: " + videoLinkData.getTitle());
     videoLinkDAO.updateVideoLinkData(lectureId, videoLinkData);
   }
 
   @Override
   public void deleteVideoData(long lectureId, VideoLinkData videoLinkData) throws ELearningException {
+    ElearningLogger.log("Deleting video data for lectureId: " + lectureId + " video: " + videoLinkData.getTitle());
     videoLinkDAO.deleteVideoLinkData(lectureId, videoLinkData);
   }
 
@@ -164,6 +179,7 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
 
   @Override
   public void saveHomeworkData(long lectureId, HomeworkData homeworkData) throws ELearningException {
+    ElearningLogger.log("Saving homework data - lectureId: " + lectureId + " homework " + homeworkData.getTitle());
     homeworkDAO.insertHomework(homeworkData);
     HomeworkXMLConverter homeworkXMLConverter = new HomeworkXMLConverter();
     String xmlValue = homeworkXMLConverter.convertToXML(homeworkData);
@@ -172,6 +188,7 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
 
   @Override
   public void updateHomeworkData(long lectureId, HomeworkData homeworkData) throws ELearningException {
+    ElearningLogger.log("Updating  homework data - lectureId: " + lectureId + " homework " + homeworkData.getTitle());
     homeworkDAO.updateHomework(homeworkData);
     HomeworkXMLConverter homeworkXMLConverter = new HomeworkXMLConverter();
     String xmlValue = homeworkXMLConverter.convertToXML(homeworkData);
@@ -180,6 +197,7 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
 
   @Override
   public void deleteHomeworkData(long lectureId, HomeworkData homeworkData) throws ELearningException {
+    ElearningLogger.log("Deleting homework data - lectureId: " + lectureId + " homework " + homeworkData.getTitle());
     homeworkDAO.deleteHomework(homeworkData.getId());
     homeworkUtil.deleteHomework(lectureId, homeworkData);
   }

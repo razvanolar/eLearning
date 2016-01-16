@@ -1,5 +1,7 @@
 package com.google.gwt.sample.elearning.server;
 
+import com.google.gwt.sample.elearning.server.service.ElearningLogger;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +21,7 @@ public class LectureDownloadService extends HttpServlet {
     String lecturePath = req.getParameter("path");
     String fileName = req.getParameter("name");
     String lecture = req.getParameter("lecture");
+    ElearningLogger.log("Downloading from lecture:" + lecture + " file name: " + fileName);
     try {
       long lectureId = Long.parseLong(lecture);
 

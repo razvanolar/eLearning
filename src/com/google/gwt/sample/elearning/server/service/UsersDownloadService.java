@@ -23,6 +23,7 @@ public class UsersDownloadService extends HttpServlet {
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     String usersParameter = req.getParameter("users");
     String[] usersIDs = usersParameter.split("\\$");
+    ElearningLogger.log("Downloading users: " + usersIDs);
 
     String usersXML = getUsersXML(usersIDs);
 

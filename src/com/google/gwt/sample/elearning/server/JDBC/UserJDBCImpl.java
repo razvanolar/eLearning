@@ -29,6 +29,7 @@ public class UserJDBCImpl {
     ResultSet resultSet;
     PreparedStatement getLoginDataStatement;
     try {
+      ElearningLogger.log("Login attempt: user= " + userId + " pass= " + pass);
       dbConnection = JDBCUtil.getNewConnection();
       getLoginDataStatement = prepareGetLoginDataStatement();
       getLoginDataStatement.setString(1, userId);
