@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.sample.elearning.client.forum_view.ForumController;
 import com.google.gwt.sample.elearning.client.forum_view.ForumView;
 import com.google.gwt.sample.elearning.client.icons.Icons;
+import com.google.gwt.sample.elearning.client.lecture_views.left_panel.videos_view.LectureVideosController;
 import com.google.gwt.sample.elearning.client.login.LoginController;
 import com.google.gwt.sample.elearning.client.login.LoginView;
 import com.google.gwt.sample.elearning.client.logs.LogGridHandler;
@@ -47,6 +48,7 @@ public class ELearningController {
   private static LectureServiceAsync lectureService = GWT.create(LectureService.class);
 
   private LectureFilesController lectureFilesController;
+  private LectureVideosController lectureVideosController;
   private LectureUsersController lectureUsersController;
   private CalendarController calendarController;
   private UserData currentUser;
@@ -117,13 +119,21 @@ public class ELearningController {
     mainELearningContainer.setCenterWidget(eLearningView.asWidget());
     mainELearningContainer.forceLayout();
 
+    /* create files controller */
     if (lectureFilesController == null) {
       LectureDetailsView lectureDetailsView = eLearningView.getLectureDetailsView();
       lectureFilesController = new LectureFilesController(lectureDetailsView.getLectureFilesView(), lectureService);
       lectureFilesController.bind();
     }
-
     lectureFilesController.loadFiles();
+
+    /* create videos controller */
+    if (lectureVideosController == null) {
+      LectureDetailsView lectureDetailsView = eLearningView.getLectureDetailsView();
+      lectureVideosController = new LectureVideosController(lectureDetailsView.getLectureVideosView(), lectureService);
+      lectureVideosController.bind();
+    }
+    lectureVideosController.loadVideos();
 
     LectureInfoView lectureInfoView = eLearningView.getLectureInfoView();
 

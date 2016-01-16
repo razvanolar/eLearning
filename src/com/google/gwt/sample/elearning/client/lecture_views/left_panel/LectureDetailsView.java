@@ -2,6 +2,7 @@ package com.google.gwt.sample.elearning.client.lecture_views.left_panel;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.sample.elearning.client.lecture_views.left_panel.filesView.LectureFilesView;
+import com.google.gwt.sample.elearning.client.lecture_views.left_panel.videos_view.LectureVideosView;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.AccordionLayoutContainer;
