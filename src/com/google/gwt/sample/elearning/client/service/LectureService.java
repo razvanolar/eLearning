@@ -65,5 +65,8 @@ public interface LectureService extends RemoteService {
 
   void deleteHomeworkData(long lectureId, HomeworkData homeworkData) throws ELearningException;
 
-  long resolveTest(LectureTestData testData, Map<QuestionData, AnswerData> userAnswers) throws ELearningException;
+  long resolveTest(LectureTestData testData) throws ELearningException;
+
+  void addHomeworkSolution(long lectureid, long professorId, long userId, String homeworkTitle, String solution) throws ELearningException;
+
 }

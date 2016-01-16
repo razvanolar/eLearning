@@ -23,6 +23,7 @@ import java.util.List;
 public class ForumServiceImpl extends RemoteServiceServlet implements ForumService {
 
   private void persistForumToFile(ForumData forumData) throws Exception {
+    ElearningLogger.log("Updated forum for lecture: " + forumData.getCourseId());
     String filePath = ServerUtil.getLectureForumsPath(forumData.getCourseId());
     File dirs = new File(filePath);
     if (!dirs.exists() && !dirs.mkdirs())

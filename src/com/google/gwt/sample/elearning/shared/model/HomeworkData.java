@@ -10,8 +10,8 @@ import java.util.Date;
 public class HomeworkData implements IsSerializable {
   private long id;
   private String title;
-  private Date beginDate;
-  private Date endDate;
+  private Date beginDate = new Date();
+  private Date endDate = new Date();
   private String text;
   private long courseId;
   private int score;

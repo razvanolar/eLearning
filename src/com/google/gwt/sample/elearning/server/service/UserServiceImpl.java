@@ -29,8 +29,8 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
   public List<? extends UserData> getAllUsersByRole(UserRoleTypes role) throws ELearningException {
     List<UserData> result = new ArrayList<>();
     List<? extends UserData> allUsers = userDAO.getAllUsers();
-    for(UserData user : allUsers) {
-      if(user.getRole().getId() == role.getId()) {
+    for (UserData user : allUsers) {
+      if (user.getRole().getId() == role.getId()) {
         result.add(user);
       }
     }
@@ -46,6 +46,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 
   @Override
   public void createUser(UserData user) throws ELearningException {
+    ElearningLogger.log("Creating new user: id=" + user.getId() + " role" + user.getRole());
     userDAO.insertUser(user);
     if(user.getRole().equals(UserRoleTypes.USER)) {
       userDAO.addRegistrationNumber(user);
@@ -54,12 +55,17 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 
   @Override
   public void updateUser(UserData newUser) throws ELearningException {
+    ElearningLogger.log("Updating new user: id=" + newUser.getId() + " role" + newUser.getRole());
     userDAO.updateUser(newUser);
   }
 
   @Override
   public void removeUser(List<Long> ids) throws ELearningException {
-    for(long id : ids) {
+    String idsStr = "";
+    for (Long l : ids)
+      idsStr += ", " + l;
+    ElearningLogger.log("Removing users: " + idsStr);
+    for (long id : ids) {
       userDAO.deleteUser(id);
     }
   }
@@ -76,11 +82,13 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 
   @Override
   public void removeUserFromLecture(long lectureId, long userId) throws ELearningException {
+    ElearningLogger.log("Removing user: " + userId + " from lecture: " + lectureId);
     userDAO.removeUserFromLecture(lectureId, userId);
   }
 
   @Override
   public void changePassword(long id, String password) throws ELearningException {
-    userDAO.changePassword(id,password);
+    ElearningLogger.log("Changing password for: " + id + " with pwd: " + password);
+    userDAO.changePassword(id, password);
   }
 }

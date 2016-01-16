@@ -57,7 +57,9 @@ public interface LectureServiceAsync {
 
   void registerUserToLecture(long userId, long lectureId, String enrollmentKey, AsyncCallback<Void> async);
 
-  void resolveTest(LectureTestData testData, Map<QuestionData, AnswerData> userAnswers, AsyncCallback<Long> async);
+  void resolveTest(LectureTestData testData, AsyncCallback<Long> async);
 
   void getAllLecturesByStudent(long userId, AsyncCallback<List<Lecture>> async);
+
+  void addHomeworkSolution(long lectureid, long professorId, long userId, String homeworkTitle, String solution, AsyncCallback<Void> async);
 }
