@@ -57,4 +57,11 @@ public class QuestionData implements IsSerializable {
       answers = new ArrayList<AnswerData>();
     answers.add(answer);
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null || !(obj instanceof QuestionData))
+      return false;
+    return question.equals(((QuestionData) obj).question);
+  }
 }

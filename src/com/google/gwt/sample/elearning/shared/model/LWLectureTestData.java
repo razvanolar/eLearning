@@ -12,6 +12,7 @@ public class LWLectureTestData implements IsSerializable {
   private String name;
   private int questionsNo;
   private int totalScore;
+  private boolean isSolved;
 
   public LWLectureTestData() {}
 
@@ -43,5 +44,13 @@ public class LWLectureTestData implements IsSerializable {
 
   public void setTotalScore(int totalScore) {
     this.totalScore = totalScore;
+  }
+
+  public boolean isSolved() {
+    return isSolved;
+  }
+
+  public void setIsSolved(boolean isSolved) {
+    this.isSolved = isSolved;
   }
 }

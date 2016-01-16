@@ -170,4 +170,16 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
   public void deleteHomeworkData(long lectureId, HomeworkData homeworkData) throws ELearningException {
     homeworkUtil.deleteHomework(lectureId, homeworkData);
   }
+
+  @Override
+  public long resolveTest(LectureTestData testData, Map<QuestionData, AnswerData> userAnswers) throws ELearningException {
+    /* save the result in DB */
+
+
+    /* call LectureTestsUtil to update the files */
+    testsUtil.updateTestFiles();
+
+    /* return : test final score */
+    return 0;
+  }
 }

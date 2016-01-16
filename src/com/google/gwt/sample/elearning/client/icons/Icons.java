@@ -91,4 +91,7 @@ public interface Icons extends ClientBundle {
 
   @Source("mail.png")
   ImageResource mail();
+
+  @Source("solve.png")
+  ImageResource solve();
 }
