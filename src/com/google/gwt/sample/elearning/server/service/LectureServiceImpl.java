@@ -210,11 +210,11 @@ public class LectureServiceImpl extends RemoteServiceServlet implements LectureS
       List<AnswerData> answers = questionData.getAnswers();
       boolean isCorrect = true;
       for(AnswerData answer :answers){
-        if((answer.isSelected()==true && answer.isTrue() == false) || (answer.isSelected()==false && answer.isTrue()==true))
+        if((answer.isSelected() && !answer.isTrue()) || (!answer.isSelected() && answer.isTrue()))
           isCorrect = false;
       }
       totalPoints+=questionData.getScore();
-      if(isCorrect==true)
+      if(isCorrect)
         points = points+questionData.getScore();
     }
 

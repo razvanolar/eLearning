@@ -26,6 +26,8 @@ public class LectureTestData implements IsSerializable {
     this.name = name;
     this.duration = duration;
     this.questions = questions;
+    this.beginDate = new Date();
+    this.endDate = new Date();
   }
 
   public LectureTestData(long id, String name, long duration, long courseId, List<QuestionData> questions) {
