@@ -17,7 +17,7 @@ import java.util.List;
 public class LogServiceImpl extends RemoteServiceServlet implements LogService {
   @Override
   public List<LogData> getLogDataFromFile(String filename) {
-    File file  = new File(filename);
+    File file  = new File(ServerUtil.getLogsPath() + filename);
     if(!file.exists()) {
       throw new ELearningException("Log file does not exist!");
     }
