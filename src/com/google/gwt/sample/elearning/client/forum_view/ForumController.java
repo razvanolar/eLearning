@@ -40,7 +40,7 @@ public class ForumController {
   }
 
   public void loadResources() {
-    forumService.getUserAvailableForums(ELearningController.getInstance().getCurrentUser().getId(), new AsyncCallback<List<ForumData>>() {
+    forumService.getUserAvailableForums(ELearningController.getInstance().getCurrentUser(), new AsyncCallback<List<ForumData>>() {
       @Override
       public void onFailure(Throwable caught) {
         (new MessageBox("Error", "Failed to load forum <br>Message: " + caught.getMessage())).show();

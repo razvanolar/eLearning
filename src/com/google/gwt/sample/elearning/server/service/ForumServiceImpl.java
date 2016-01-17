@@ -8,12 +8,14 @@ import com.google.gwt.sample.elearning.shared.exception.ELearningException;
 import com.google.gwt.sample.elearning.shared.model.ForumCommentData;
 import com.google.gwt.sample.elearning.shared.model.ForumData;
 import com.google.gwt.sample.elearning.shared.model.Lecture;
+import com.google.gwt.sample.elearning.shared.model.UserData;
+import com.google.gwt.sample.elearning.shared.types.UserRoleTypes;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import org.apache.commons.io.IOUtils;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,10 +40,15 @@ public class ForumServiceImpl extends RemoteServiceServlet implements ForumServi
     fileOutputStream.close();
   }
 
-  public List<ForumData> getUserAvailableForums(long userId) {
+  public List<ForumData> getUserAvailableForums(UserData user) {
     List<ForumData> forums = new ArrayList<>();
     LectureServiceImpl lectureService = new LectureServiceImpl();
-    List<Lecture> lectures = lectureService.getAllLecturesByStudent(userId);
+    List<Lecture> lectures = new ArrayList<>();
+    if(user.getRole().equals(UserRoleTypes.USER)) {
+      lectures = lectureService.getAllLecturesByStudent(user.getId());
+    } else if(user.getRole().equals(UserRoleTypes.PROFESSOR)){
+      lectures = lectureService.getAllLecturesByProfessor(user.getId());
+    }
 
     for (Lecture lecture : lectures) {
       forums.add(getForumByLectureId(lecture.getId()));
